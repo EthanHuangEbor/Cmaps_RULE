@@ -14,6 +14,10 @@ data/raw/*.zip
 data/processed/
 models/
 reports/tables/*.csv
+reports/tables/**
 reports/figures/*.png
 reports/figures/*.pdf
 reports/figures/*.svg
+reports/figures/**
+*.joblib
+*.pt
