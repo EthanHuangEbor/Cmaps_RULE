@@ -1,0 +1,131 @@
+from __future__ import annotations
+
+import argparse
+from pathlib import Path
+
+import pandas as pd
+import torch
+
+from rul_prediction import data
+from rul_prediction.metrics import regression_report
+from rul_prediction.models_deep import predict, train_model
+
+
+def run(args: argparse.Namespace) -> None:
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    model_dir = out_dir / "models"
+    model_dir.mkdir(parents=True, exist_ok=True)
+
+    prepared = data.prepare_data(
+        args.data_dir,
+        subset=args.subset,
+        max_rul=args.max_rul,
+        validation_fraction=args.validation_fraction,
+        seed=args.seed,
+    )
+    x_train, y_train, _, _ = data.make_sequence_windows(
+        prepared.train, prepared.feature_columns, args.window_size, args.stride
+    )
+    x_validation, y_validation, _, _ = data.make_sequence_windows(
+        prepared.validation, prepared.feature_columns, args.window_size, args.stride
+    )
+    x_test, y_test, test_units, test_cycles = data.make_last_windows(
+        prepared.test, prepared.feature_columns, args.window_size
+    )
+
+    metrics_rows: list[dict[str, object]] = []
+    predictions_rows: list[pd.DataFrame] = []
+    history_rows: list[pd.DataFrame] = []
+    torch_device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
+
+    for model_name in args.models:
+        result = train_model(
+            model_name,
+            x_train,
+            y_train,
+            x_validation,
+            y_validation,
+            hidden_size=args.hidden_size,
+            dropout=args.dropout,
+            batch_size=args.batch_size,
+            epochs=args.epochs,
+            learning_rate=args.learning_rate,
+            patience=args.patience,
+            seed=args.seed,
+            device=torch_device,
+        )
+        torch.save(result.model.state_dict(), model_dir / f"{model_name}_seed{args.seed}.pt")
+
+        validation_pred = predict(result.model, x_validation, torch.device(torch_device), args.batch_size)
+        test_pred = predict(result.model, x_test, torch.device(torch_device), args.batch_size)
+
+        for split, y_true, y_pred in [
+            ("validation", y_validation, validation_pred),
+            ("test", y_test, test_pred),
+        ]:
+            metrics_rows.append(
+                {
+                    "subset": args.subset,
+                    "split": split,
+                    "model": model_name,
+                    "seed": args.seed,
+                    "window_size": args.window_size,
+                    "max_rul": args.max_rul,
+                    **regression_report(y_true, y_pred),
+                }
+            )
+
+        predictions_rows.append(
+            pd.DataFrame(
+                {
+                    "subset": args.subset,
+                    "model": model_name,
+                    "seed": args.seed,
+                    "unit": test_units,
+                    "cycle": test_cycles,
+                    "y_true": y_test,
+                    "y_pred": test_pred,
+                    "error": test_pred - y_test,
+                }
+            )
+        )
+        history_df = pd.DataFrame(result.history)
+        history_df["model"] = model_name
+        history_df["seed"] = args.seed
+        history_rows.append(history_df)
+
+    pd.DataFrame(metrics_rows).to_csv(out_dir / "metrics.csv", index=False)
+    pd.concat(predictions_rows, ignore_index=True).to_csv(out_dir / "predictions.csv", index=False)
+    pd.concat(history_rows, ignore_index=True).to_csv(out_dir / "training_history.csv", index=False)
+    pd.DataFrame({"feature": prepared.feature_columns}).to_csv(out_dir / "selected_features.csv", index=False)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Train deep sequence models for C-MAPSS RUL.")
+    parser.add_argument("--data-dir", default="data/raw")
+    parser.add_argument("--subset", default="FD001")
+    parser.add_argument("--out-dir", default="reports/tables/fd001_deep")
+    parser.add_argument("--models", nargs="+", default=["lstm", "gru", "cnn"], choices=["lstm", "gru", "cnn"])
+    parser.add_argument("--max-rul", type=int, default=130)
+    parser.add_argument("--window-size", type=int, default=30)
+    parser.add_argument("--stride", type=int, default=1)
+    parser.add_argument("--validation-fraction", type=float, default=0.2)
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--batch-size", type=int, default=128)
+    parser.add_argument("--learning-rate", type=float, default=1e-3)
+    parser.add_argument("--patience", type=int, default=10)
+    parser.add_argument("--hidden-size", type=int, default=64)
+    parser.add_argument("--dropout", type=float, default=0.2)
+    parser.add_argument("--device", default=None)
+    return parser.parse_args()
+
+
+def main() -> None:
+    run(parse_args())
+
+
+if __name__ == "__main__":
+    main()
+

@@ -1,0 +1,19 @@
+data_dir: data/raw
+subset: FD001
+out_dir: reports/tables/fd001_deep
+models:
+  - lstm
+  - gru
+  - cnn
+max_rul: 130
+window_size: 30
+stride: 1
+validation_fraction: 0.2
+seed: 42
+epochs: 100
+batch_size: 128
+learning_rate: 0.001
+patience: 10
+hidden_size: 64
+dropout: 0.2
+

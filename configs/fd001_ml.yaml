@@ -1,0 +1,9 @@
+data_dir: data/raw
+subset: FD001
+out_dir: reports/tables/fd001_ml
+max_rul: 130
+window_size: 30
+stride: 1
+validation_fraction: 0.2
+seed: 42
+

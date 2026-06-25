@@ -1,0 +1,17 @@
+ablations:
+  window_size:
+    values: [20, 30, 50]
+    fixed:
+      subset: FD001
+      max_rul: 130
+  max_rul:
+    values: [100, 130]
+    fixed:
+      subset: FD001
+      window_size: 30
+  subset:
+    values: [FD001, FD003]
+    fixed:
+      max_rul: 130
+      window_size: 30
+
