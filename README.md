@@ -3,11 +3,17 @@
 This project implements an 8-week starter research workflow for turbofan engine
 Remaining Useful Life (RUL) prediction on the NASA C-MAPSS data set.
 
-Core question:
+Original core question:
 
 > Under the same preprocessing, split, and metrics, do LSTM/GRU/1D-CNN models
 > outperform traditional machine learning baselines for C-MAPSS RUL prediction,
 > and where do those advantages or failures appear?
+
+Current upgrade question:
+
+> Do RUL models remain useful when judged by late-life safety, optimistic
+> overestimation risk, uncertainty calibration, cross-subset transfer, sensor
+> perturbation robustness, and maintenance-trigger decision cost?
 
 ## Project Outputs
 
@@ -15,7 +21,10 @@ Core question:
 - Traditional baselines: Ridge, Random Forest, XGBoost when available, otherwise
   scikit-learn `GradientBoostingRegressor`.
 - Deep sequence models: LSTM, GRU, and 1D-CNN in PyTorch.
-- Metrics: RMSE, MAE, NASA S-score, critical-zone RMSE, overestimation ratio.
+- Metrics: RMSE, MAE, NASA S-score, critical-zone RMSE, overestimation ratio,
+  and overestimation magnitude.
+- Safety-, uncertainty-, robustness-, domain-shift-, and maintenance-policy
+  evaluation scripts for the next paper iteration.
 - Report templates for a technical report, paper outline, and mentor outreach.
 
 ## Data
@@ -97,6 +106,28 @@ The current stage report is available at
 `reports\current_report_draft.md`. As of 2026-06-25, the strongest focused
 finding is that FD003 GRU with `window50_h64_l1` improves aggregate RMSE, while
 `safety_w1p5_h64_l1_w30` lowers overestimation risk.
+
+## Safety and Policy-Oriented Upgrade
+
+The next manuscript iteration is documented in
+`docs\research_upgrade_plan.md`, with a focused comparison against Asif et al.
+2022 in `docs\asif_2022_gap_analysis.md`.
+
+Fast smoke commands:
+
+```powershell
+$env:PYTHONPATH="src"
+python scripts\run_uncertainty.py --data-dir data\raw --subset FD001 --method mc_dropout --model gru --epochs 1 --patience 1 --mc-samples 3 --batch-size 512 --out-dir reports\tables\smoke_uncertainty
+python scripts\run_decision_simulation.py --predictions reports\tables\smoke_uncertainty\predictions.csv --out-dir reports\tables\smoke_decision
+python scripts\run_domain_shift.py --data-dir data\raw --source-subset FD001 --target-subset FD003 --model ridge --out-dir reports\tables\smoke_domain
+python scripts\run_sensor_robustness.py --data-dir data\raw --subset FD001 --model ridge --noise-levels 0.05 --mask-fractions 0.1 --out-dir reports\tables\smoke_robustness
+python scripts\make_upgrade_figures.py --metrics reports\tables\smoke_uncertainty\metrics.csv --interval-metrics reports\tables\smoke_uncertainty\interval_metrics.csv --decision-metrics reports\tables\smoke_decision\decision_metrics.csv --robustness-metrics reports\tables\smoke_robustness\robustness_metrics.csv --out-dir reports\figures\smoke_upgrade
+```
+
+Full experiments should replace the smoke settings with three seeds, longer
+training, and the intended FD subsets. The local data currently include FD001
+and FD003; add official FD002/FD004 files under `data\raw` before running
+multi-condition stress tests.
 
 ## arXiv Draft Workflow
 

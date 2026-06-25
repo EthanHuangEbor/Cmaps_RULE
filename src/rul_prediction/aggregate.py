@@ -13,6 +13,7 @@ METRICS = [
     "critical_rmse_30",
     "critical_rmse_50",
     "overestimation_ratio",
+    "overestimation_magnitude",
 ]
 
 

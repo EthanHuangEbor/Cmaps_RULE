@@ -1,6 +1,6 @@
 import math
 
-from rul_prediction.metrics import critical_zone_rmse, mae, overestimation_ratio, rmse
+from rul_prediction.metrics import critical_zone_rmse, mae, overestimation_magnitude, overestimation_ratio, rmse
 
 
 def test_basic_metrics():
@@ -10,4 +10,4 @@ def test_basic_metrics():
     assert rmse(y_true, y_pred) > 0
     assert critical_zone_rmse(y_true, y_pred, threshold=30) > 0
     assert math.isclose(overestimation_ratio(y_true, y_pred), 2 / 3)
-
+    assert math.isclose(overestimation_magnitude(y_true, y_pred), 1.0)

@@ -53,6 +53,13 @@ def overestimation_ratio(y_true: Any, y_pred: Any) -> float:
     return float(np.mean(y_pred_arr > y_true_arr))
 
 
+def overestimation_magnitude(y_true: Any, y_pred: Any) -> float:
+    y_true_arr = _as_1d(y_true)
+    y_pred_arr = _as_1d(y_pred)
+    over_errors = np.maximum(y_pred_arr - y_true_arr, 0.0)
+    return float(np.mean(over_errors))
+
+
 def regression_report(y_true: Any, y_pred: Any) -> dict[str, float]:
     return {
         "rmse": rmse(y_true, y_pred),
@@ -61,5 +68,5 @@ def regression_report(y_true: Any, y_pred: Any) -> dict[str, float]:
         "critical_rmse_30": critical_zone_rmse(y_true, y_pred, threshold=30),
         "critical_rmse_50": critical_zone_rmse(y_true, y_pred, threshold=50),
         "overestimation_ratio": overestimation_ratio(y_true, y_pred),
+        "overestimation_magnitude": overestimation_magnitude(y_true, y_pred),
     }
-
