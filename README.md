@@ -98,6 +98,26 @@ The current stage report is available at
 finding is that FD003 GRU with `window50_h64_l1` improves aggregate RMSE, while
 `safety_w1p5_h64_l1_w30` lowers overestimation risk.
 
+## arXiv Draft Workflow
+
+The paper draft lives in `reports\paper\main.tex`. The arXiv-oriented figure
+package is generated from existing experiment outputs:
+
+```powershell
+python -m rul_prediction.aggregate --root reports\tables\deep_ablations --out-dir reports\tables\deep_ablations\summary
+python -m rul_prediction.error_analysis --root reports\tables\deep_ablations --out-dir reports\tables\deep_ablations\summary
+python scripts\make_arxiv_figures.py
+```
+
+The generated paper figures are written to `reports\paper\figures`, and summary
+CSVs such as `arxiv_metric_summary.csv`, `safety_tradeoff_summary.csv`, and
+`paired_bootstrap_rmse.csv` are written to `reports\paper`.
+
+Before any public upload, compile the LaTeX source from a clean directory and
+check that the source package contains only TeX/BibTeX or BBL files and the
+referenced figure PDFs. Do not upload raw NASA data, model checkpoints, joblib
+files, reviewer notes, or local build artifacts as arXiv source files.
+
 ## Suggested 8-Week Path
 
 1. Research question, NASA data notes, and three reading cards.

@@ -1,0 +1,9 @@
+artifact_id,source_data,caption_claim
+figure_01_data_overview,data/raw train/test/RUL files,C-MAPSS subset scope and sensor trajectory context
+figure_02_model_comparison,reports/tables/*/summary_metrics.csv,Aggregate model comparison under RMSE
+figure_03_predicted_vs_true,reports/tables/**/predictions.csv,Prediction calibration against official test RUL
+figure_04_critical_residuals,reports/tables/**/predictions.csv,Residual behavior inside and outside RUL <= 50
+figure_05_hardest_engines,reports/tables/**/predictions.csv,Engine-level failure cases
+figure_06_safety_tradeoff,reports/paper/arxiv_metric_summary.csv,Critical error and overestimation trade-off
+figure_07_learning_curves,reports/tables/**/training_history.csv,Deep model optimization dynamics
+figure_08_feature_importance,reports/paper/rf_feature_importance_summary.csv,Tree-model feature importance

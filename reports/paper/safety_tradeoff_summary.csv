@@ -1,0 +1,3 @@
+subset,best_rmse_model,best_rmse,best_critical_rmse50_model,best_critical_rmse50,lowest_over_ratio_model,lowest_over_ratio
+FD001,Gradient Boosting,12.81370316322021,GRU safety-w2,4.863028563746762,GRU safety-w2,0.4666666666666666
+FD003,GRU window50,12.95654581903872,Random Forest,4.761971324153413,GRU safety-w2,0.43

@@ -1,0 +1,24 @@
+C-MAPSS RUL arXiv source package
+
+Included files:
+- main.tex
+- references.bib
+- main.bbl
+- figures/figure_01_data_overview.pdf
+- figures/figure_02_model_comparison.pdf
+- figures/figure_03_predicted_vs_true.pdf
+- figures/figure_04_critical_residuals.pdf
+- figures/figure_05_hardest_engines.pdf
+- figures/figure_06_safety_tradeoff.pdf
+- figures/figure_07_learning_curves.pdf
+- figures/figure_08_feature_importance.pdf
+
+Excluded by design:
+- raw NASA C-MAPSS data
+- model checkpoints and joblib files
+- local LaTeX build intermediates
+- reviewer reports and response drafts
+- large experiment tables not referenced by LaTeX
+
+Missing referenced figures:
+None
