@@ -82,9 +82,21 @@ python scripts\run_ablation.py --deep-epochs 40 --skip-existing
 python scripts\run_deep_ablation_matrix.py --subsets FD001 FD003 --seeds 42 --models gru --skip-existing
 ```
 
+To rerun only selected deep-ablation jobs, use `--jobs`:
+
+```powershell
+python scripts\run_deep_ablation_matrix.py --subsets FD001 --seeds 42 43 44 --models gru --jobs safety_w1p5_h64_l1_w30 --skip-existing
+python scripts\run_deep_ablation_matrix.py --subsets FD003 --seeds 42 43 44 --models gru --jobs window50_h64_l1 capacity_h128_l1_w30 safety_w1p5_h64_l1_w30 --skip-existing
+```
+
 Aggregated outputs are written under `reports\tables\matrix\summary` and
 `reports\tables\ablations\summary`. Focused deep ablations are written under
 `reports\tables\deep_ablations\summary`.
+
+The current stage report is available at
+`reports\current_report_draft.md`. As of 2026-06-25, the strongest focused
+finding is that FD003 GRU with `window50_h64_l1` improves aggregate RMSE, while
+`safety_w1p5_h64_l1_w30` lowers overestimation risk.
 
 ## Suggested 8-Week Path
 

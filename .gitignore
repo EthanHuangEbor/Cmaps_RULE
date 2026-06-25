@@ -20,5 +20,6 @@ reports/figures/*.pdf
 reports/figures/*.svg
 reports/figures/**
 reports/reference/
+reports/logs/
 *.joblib
 *.pt

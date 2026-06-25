@@ -23,6 +23,12 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=60)
     parser.add_argument("--patience", type=int, default=8)
     parser.add_argument("--models", nargs="+", default=["gru"], choices=["lstm", "gru", "cnn"])
+    parser.add_argument(
+        "--jobs",
+        nargs="+",
+        default=None,
+        help="Optional subset of ablation job names to run. By default all predefined jobs are run.",
+    )
     parser.add_argument("--skip-existing", action="store_true")
     args = parser.parse_args()
 
@@ -153,6 +159,13 @@ def main() -> None:
             "over_weight": "2",
         },
     ]
+    if args.jobs is not None:
+        requested_jobs = set(args.jobs)
+        available_jobs = {job["name"] for job in jobs}
+        unknown_jobs = sorted(requested_jobs - available_jobs)
+        if unknown_jobs:
+            raise ValueError(f"Unknown job names: {', '.join(unknown_jobs)}")
+        jobs = [job for job in jobs if job["name"] in requested_jobs]
 
     for subset in args.subsets:
         for seed in args.seeds:
