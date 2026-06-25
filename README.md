@@ -69,6 +69,21 @@ python -m rul_prediction.train_deep --data-dir data\raw --subset FD001 --out-dir
 python -m rul_prediction.plots --metrics reports\tables\fd001_ml\metrics.csv reports\tables\fd001_deep\metrics.csv --predictions reports\tables\fd001_ml\predictions.csv reports\tables\fd001_deep\predictions.csv --out-dir reports\figures
 ```
 
+## Research Upgrade Runs
+
+The next phase focuses on reproducibility, FD003 transfer, ablations, and a
+safety-aware GRU loss.
+
+```powershell
+python scripts\run_research_matrix.py --subsets FD001 --seeds 42 43 44 --deep-epochs 60 --skip-safety --skip-existing
+python scripts\run_research_matrix.py --subsets FD003 --seeds 42 43 44 --deep-epochs 60 --skip-safety --skip-existing
+python scripts\run_research_matrix.py --subsets FD001 FD003 --seeds 42 43 44 --deep-epochs 60 --skip-ml --skip-deep --skip-existing
+python scripts\run_ablation.py --deep-epochs 40 --skip-existing
+```
+
+Aggregated outputs are written under `reports\tables\matrix\summary` and
+`reports\tables\ablations\summary`.
+
 ## Suggested 8-Week Path
 
 1. Research question, NASA data notes, and three reading cards.

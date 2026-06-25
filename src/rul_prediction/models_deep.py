@@ -106,6 +106,40 @@ def predict(model: nn.Module, x: np.ndarray, device: torch.device, batch_size: i
     return np.concatenate(preds)
 
 
+def compute_rul_loss(
+    y_pred: torch.Tensor,
+    y_true: torch.Tensor,
+    *,
+    loss_type: str = "mse",
+    critical_threshold: float = 50.0,
+    critical_weight: float = 2.0,
+    over_weight: float = 2.0,
+) -> torch.Tensor:
+    """Compute a RUL training loss.
+
+    `mse` is the neutral baseline. The safety-aware variants are intentionally
+    simple and transparent so they can be analyzed in a student research report.
+    """
+    squared_error = (y_pred - y_true) ** 2
+    loss_type = loss_type.lower()
+    weights = torch.ones_like(squared_error)
+    if loss_type == "mse":
+        pass
+    elif loss_type == "critical_mse":
+        critical_mask = (y_true <= critical_threshold).float()
+        weights = weights + (critical_weight - 1.0) * critical_mask
+    elif loss_type == "asymmetric_mse":
+        over_mask = (y_pred > y_true).float()
+        weights = weights + (over_weight - 1.0) * over_mask
+    elif loss_type == "safety_mse":
+        critical_mask = (y_true <= critical_threshold).float()
+        over_mask = (y_pred > y_true).float()
+        weights = weights + (critical_weight - 1.0) * critical_mask + (over_weight - 1.0) * over_mask
+    else:
+        raise ValueError(f"Unsupported loss_type: {loss_type}")
+    return torch.mean(weights * squared_error)
+
+
 def train_model(
     model_type: str,
     x_train: np.ndarray,
@@ -121,6 +155,10 @@ def train_model(
     patience: int = 10,
     seed: int = 42,
     device: str | None = None,
+    loss_type: str = "mse",
+    critical_threshold: float = 50.0,
+    critical_weight: float = 2.0,
+    over_weight: float = 2.0,
 ) -> TrainResult:
     set_torch_seed(seed)
     torch_device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
@@ -133,7 +171,6 @@ def train_model(
     train_loader = DataLoader(SequenceDataset(x_train, y_train), batch_size=batch_size, shuffle=True)
     validation_loader = DataLoader(SequenceDataset(x_validation, y_validation), batch_size=batch_size)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-    loss_fn = nn.MSELoss()
 
     best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
     best_loss = float("inf")
@@ -147,7 +184,14 @@ def train_model(
             batch_x = batch_x.to(torch_device)
             batch_y = batch_y.to(torch_device)
             optimizer.zero_grad()
-            loss = loss_fn(model(batch_x), batch_y)
+            loss = compute_rul_loss(
+                model(batch_x),
+                batch_y,
+                loss_type=loss_type,
+                critical_threshold=critical_threshold,
+                critical_weight=critical_weight,
+                over_weight=over_weight,
+            )
             loss.backward()
             optimizer.step()
             train_losses.append(float(loss.detach().cpu()))
@@ -158,7 +202,14 @@ def train_model(
             for batch_x, batch_y in validation_loader:
                 batch_x = batch_x.to(torch_device)
                 batch_y = batch_y.to(torch_device)
-                loss = loss_fn(model(batch_x), batch_y)
+                loss = compute_rul_loss(
+                    model(batch_x),
+                    batch_y,
+                    loss_type=loss_type,
+                    critical_threshold=critical_threshold,
+                    critical_weight=critical_weight,
+                    over_weight=over_weight,
+                )
                 validation_losses.append(float(loss.detach().cpu()))
 
         train_loss = float(np.mean(train_losses))
@@ -176,4 +227,3 @@ def train_model(
 
     model.load_state_dict(best_state)
     return TrainResult(model=model, history=history, best_validation_loss=best_loss)
-

@@ -13,17 +13,24 @@ from rul_prediction.features import window_summary_features
 from rul_prediction.metrics import regression_report
 
 
-def build_models(seed: int, n_jobs: int = 1) -> dict[str, object]:
+def build_models(
+    seed: int,
+    n_jobs: int = 1,
+    model_names: list[str] | None = None,
+    rf_n_estimators: int = 300,
+    gb_n_estimators: int = 300,
+) -> dict[str, object]:
+    requested = set(model_names or ["ridge", "random_forest", "gradient_boosting", "xgboost"])
     models: dict[str, object] = {
         "ridge": Ridge(alpha=1.0),
         "random_forest": RandomForestRegressor(
-            n_estimators=300,
+            n_estimators=rf_n_estimators,
             random_state=seed,
             n_jobs=n_jobs,
             min_samples_leaf=2,
         ),
         "gradient_boosting": GradientBoostingRegressor(
-            n_estimators=300,
+            n_estimators=gb_n_estimators,
             learning_rate=0.05,
             max_depth=3,
             random_state=seed,
@@ -44,7 +51,7 @@ def build_models(seed: int, n_jobs: int = 1) -> dict[str, object]:
         )
     except Exception:
         pass
-    return models
+    return {name: model for name, model in models.items() if name in requested}
 
 
 def run(args: argparse.Namespace) -> None:
@@ -74,7 +81,15 @@ def run(args: argparse.Namespace) -> None:
 
     metrics_rows: list[dict[str, object]] = []
     predictions_rows: list[pd.DataFrame] = []
-    models = build_models(args.seed, n_jobs=args.n_jobs)
+    models = build_models(
+        args.seed,
+        n_jobs=args.n_jobs,
+        model_names=args.models,
+        rf_n_estimators=args.rf_n_estimators,
+        gb_n_estimators=args.gb_n_estimators,
+    )
+    if not models:
+        raise ValueError("No requested ML models are available in this environment.")
 
     for model_name, model in models.items():
         model.fit(train_features, y_train)
@@ -91,6 +106,7 @@ def run(args: argparse.Namespace) -> None:
                     "subset": args.subset,
                     "split": split,
                     "model": model_name,
+                    "seed": args.seed,
                     "window_size": args.window_size,
                     "max_rul": args.max_rul,
                     **report,
@@ -102,6 +118,9 @@ def run(args: argparse.Namespace) -> None:
                         {
                             "subset": args.subset,
                             "model": model_name,
+                            "seed": args.seed,
+                            "window_size": args.window_size,
+                            "max_rul": args.max_rul,
                             "unit": units,
                             "cycle": cycles,
                             "y_true": y_true,
@@ -131,6 +150,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--validation-fraction", type=float, default=0.2)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--n-jobs", type=int, default=1, help="Parallel workers for supported ML models.")
+    parser.add_argument(
+        "--models",
+        nargs="+",
+        default=["ridge", "random_forest", "gradient_boosting", "xgboost"],
+        choices=["ridge", "random_forest", "gradient_boosting", "xgboost"],
+    )
+    parser.add_argument("--rf-n-estimators", type=int, default=300)
+    parser.add_argument("--gb-n-estimators", type=int, default=300)
     return parser.parse_args()
 
 

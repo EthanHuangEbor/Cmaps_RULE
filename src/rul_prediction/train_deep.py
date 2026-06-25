@@ -11,6 +11,10 @@ from rul_prediction.metrics import regression_report
 from rul_prediction.models_deep import predict, train_model
 
 
+def display_model_name(model_name: str, loss_type: str) -> str:
+    return model_name if loss_type == "mse" else f"{model_name}_{loss_type}"
+
+
 def run(args: argparse.Namespace) -> None:
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -40,6 +44,7 @@ def run(args: argparse.Namespace) -> None:
     torch_device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
 
     for model_name in args.models:
+        reported_model = display_model_name(model_name, args.loss)
         result = train_model(
             model_name,
             x_train,
@@ -54,8 +59,12 @@ def run(args: argparse.Namespace) -> None:
             patience=args.patience,
             seed=args.seed,
             device=torch_device,
+            loss_type=args.loss,
+            critical_threshold=args.critical_threshold,
+            critical_weight=args.critical_weight,
+            over_weight=args.over_weight,
         )
-        torch.save(result.model.state_dict(), model_dir / f"{model_name}_seed{args.seed}.pt")
+        torch.save(result.model.state_dict(), model_dir / f"{reported_model}_seed{args.seed}.pt")
 
         validation_pred = predict(result.model, x_validation, torch.device(torch_device), args.batch_size)
         test_pred = predict(result.model, x_test, torch.device(torch_device), args.batch_size)
@@ -68,10 +77,14 @@ def run(args: argparse.Namespace) -> None:
                 {
                     "subset": args.subset,
                     "split": split,
-                    "model": model_name,
+                    "model": reported_model,
                     "seed": args.seed,
                     "window_size": args.window_size,
                     "max_rul": args.max_rul,
+                    "loss": args.loss,
+                    "critical_threshold": args.critical_threshold,
+                    "critical_weight": args.critical_weight,
+                    "over_weight": args.over_weight,
                     **regression_report(y_true, y_pred),
                 }
             )
@@ -80,8 +93,14 @@ def run(args: argparse.Namespace) -> None:
             pd.DataFrame(
                 {
                     "subset": args.subset,
-                    "model": model_name,
+                    "model": reported_model,
                     "seed": args.seed,
+                    "window_size": args.window_size,
+                    "max_rul": args.max_rul,
+                    "loss": args.loss,
+                    "critical_threshold": args.critical_threshold,
+                    "critical_weight": args.critical_weight,
+                    "over_weight": args.over_weight,
                     "unit": test_units,
                     "cycle": test_cycles,
                     "y_true": y_test,
@@ -91,8 +110,9 @@ def run(args: argparse.Namespace) -> None:
             )
         )
         history_df = pd.DataFrame(result.history)
-        history_df["model"] = model_name
+        history_df["model"] = reported_model
         history_df["seed"] = args.seed
+        history_df["loss"] = args.loss
         history_rows.append(history_df)
 
     pd.DataFrame(metrics_rows).to_csv(out_dir / "metrics.csv", index=False)
@@ -119,6 +139,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--hidden-size", type=int, default=64)
     parser.add_argument("--dropout", type=float, default=0.2)
     parser.add_argument("--device", default=None)
+    parser.add_argument(
+        "--loss",
+        default="mse",
+        choices=["mse", "critical_mse", "asymmetric_mse", "safety_mse"],
+        help="Training loss. Safety-aware losses are intended for GRU/LSTM follow-up experiments.",
+    )
+    parser.add_argument("--critical-threshold", type=float, default=50.0)
+    parser.add_argument("--critical-weight", type=float, default=2.0)
+    parser.add_argument("--over-weight", type=float, default=2.0)
     return parser.parse_args()
 
 
@@ -128,4 +157,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
