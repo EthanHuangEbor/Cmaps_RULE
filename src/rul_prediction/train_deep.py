@@ -59,10 +59,15 @@ def run(args: argparse.Namespace) -> None:
             patience=args.patience,
             seed=args.seed,
             device=torch_device,
+            num_layers=args.num_layers,
             loss_type=args.loss,
             critical_threshold=args.critical_threshold,
             critical_weight=args.critical_weight,
             over_weight=args.over_weight,
+            scheduler=args.scheduler,
+            scheduler_factor=args.scheduler_factor,
+            scheduler_patience=args.scheduler_patience,
+            min_learning_rate=args.min_learning_rate,
         )
         torch.save(result.model.state_dict(), model_dir / f"{reported_model}_seed{args.seed}.pt")
 
@@ -81,6 +86,11 @@ def run(args: argparse.Namespace) -> None:
                     "seed": args.seed,
                     "window_size": args.window_size,
                     "max_rul": args.max_rul,
+                    "hidden_size": args.hidden_size,
+                    "num_layers": args.num_layers,
+                    "dropout": args.dropout,
+                    "learning_rate": args.learning_rate,
+                    "scheduler": args.scheduler,
                     "loss": args.loss,
                     "critical_threshold": args.critical_threshold,
                     "critical_weight": args.critical_weight,
@@ -97,6 +107,11 @@ def run(args: argparse.Namespace) -> None:
                     "seed": args.seed,
                     "window_size": args.window_size,
                     "max_rul": args.max_rul,
+                    "hidden_size": args.hidden_size,
+                    "num_layers": args.num_layers,
+                    "dropout": args.dropout,
+                    "learning_rate": args.learning_rate,
+                    "scheduler": args.scheduler,
                     "loss": args.loss,
                     "critical_threshold": args.critical_threshold,
                     "critical_weight": args.critical_weight,
@@ -113,6 +128,10 @@ def run(args: argparse.Namespace) -> None:
         history_df["model"] = reported_model
         history_df["seed"] = args.seed
         history_df["loss"] = args.loss
+        history_df["hidden_size"] = args.hidden_size
+        history_df["num_layers"] = args.num_layers
+        history_df["dropout"] = args.dropout
+        history_df["scheduler"] = args.scheduler
         history_rows.append(history_df)
 
     pd.DataFrame(metrics_rows).to_csv(out_dir / "metrics.csv", index=False)
@@ -137,8 +156,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument("--patience", type=int, default=10)
     parser.add_argument("--hidden-size", type=int, default=64)
+    parser.add_argument("--num-layers", type=int, default=1)
     parser.add_argument("--dropout", type=float, default=0.2)
     parser.add_argument("--device", default=None)
+    parser.add_argument("--scheduler", default="none", choices=["none", "reduce_on_plateau"])
+    parser.add_argument("--scheduler-factor", type=float, default=0.5)
+    parser.add_argument("--scheduler-patience", type=int, default=4)
+    parser.add_argument("--min-learning-rate", type=float, default=1e-5)
     parser.add_argument(
         "--loss",
         default="mse",

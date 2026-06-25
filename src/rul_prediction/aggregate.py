@@ -30,7 +30,21 @@ def read_metrics(paths: list[Path]) -> pd.DataFrame:
 def aggregate_metrics(metrics: pd.DataFrame) -> pd.DataFrame:
     group_cols = [
         col
-        for col in ["subset", "split", "model", "window_size", "max_rul", "loss"]
+        for col in [
+            "subset",
+            "split",
+            "model",
+            "window_size",
+            "max_rul",
+            "hidden_size",
+            "num_layers",
+            "dropout",
+            "learning_rate",
+            "scheduler",
+            "loss",
+            "critical_weight",
+            "over_weight",
+        ]
         if col in metrics.columns
     ]
     present_metrics = [metric for metric in METRICS if metric in metrics.columns]
@@ -64,4 +78,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

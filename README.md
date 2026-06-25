@@ -79,10 +79,12 @@ python scripts\run_research_matrix.py --subsets FD001 --seeds 42 43 44 --deep-ep
 python scripts\run_research_matrix.py --subsets FD003 --seeds 42 43 44 --deep-epochs 60 --skip-safety --skip-existing
 python scripts\run_research_matrix.py --subsets FD001 FD003 --seeds 42 43 44 --deep-epochs 60 --skip-ml --skip-deep --skip-existing
 python scripts\run_ablation.py --deep-epochs 40 --skip-existing
+python scripts\run_deep_ablation_matrix.py --subsets FD001 FD003 --seeds 42 --models gru --skip-existing
 ```
 
 Aggregated outputs are written under `reports\tables\matrix\summary` and
-`reports\tables\ablations\summary`.
+`reports\tables\ablations\summary`. Focused deep ablations are written under
+`reports\tables\deep_ablations\summary`.
 
 ## Suggested 8-Week Path
 

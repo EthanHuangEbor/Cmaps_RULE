@@ -155,10 +155,15 @@ def train_model(
     patience: int = 10,
     seed: int = 42,
     device: str | None = None,
+    num_layers: int = 1,
     loss_type: str = "mse",
     critical_threshold: float = 50.0,
     critical_weight: float = 2.0,
     over_weight: float = 2.0,
+    scheduler: str = "none",
+    scheduler_factor: float = 0.5,
+    scheduler_patience: int = 4,
+    min_learning_rate: float = 1e-5,
 ) -> TrainResult:
     set_torch_seed(seed)
     torch_device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
@@ -167,10 +172,23 @@ def train_model(
         input_size=x_train.shape[2],
         hidden_size=hidden_size,
         dropout=dropout,
+        num_layers=num_layers,
     ).to(torch_device)
     train_loader = DataLoader(SequenceDataset(x_train, y_train), batch_size=batch_size, shuffle=True)
     validation_loader = DataLoader(SequenceDataset(x_validation, y_validation), batch_size=batch_size)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    lr_scheduler = None
+    scheduler = scheduler.lower()
+    if scheduler == "reduce_on_plateau":
+        lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode="min",
+            factor=scheduler_factor,
+            patience=scheduler_patience,
+            min_lr=min_learning_rate,
+        )
+    elif scheduler != "none":
+        raise ValueError(f"Unsupported scheduler: {scheduler}")
 
     best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
     best_loss = float("inf")
@@ -214,7 +232,17 @@ def train_model(
 
         train_loss = float(np.mean(train_losses))
         validation_loss = float(np.mean(validation_losses))
-        history.append({"epoch": epoch, "train_loss": train_loss, "validation_loss": validation_loss})
+        if lr_scheduler is not None:
+            lr_scheduler.step(validation_loss)
+        current_lr = float(optimizer.param_groups[0]["lr"])
+        history.append(
+            {
+                "epoch": epoch,
+                "train_loss": train_loss,
+                "validation_loss": validation_loss,
+                "learning_rate": current_lr,
+            }
+        )
 
         if validation_loss < best_loss:
             best_loss = validation_loss
