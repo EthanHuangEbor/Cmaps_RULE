@@ -29,14 +29,29 @@ Date: 2026-06-25
 - [x] Source package includes `main.tex`, `references.bib`, `main.bbl`, `source_manifest.txt`, and referenced figure PDFs.
 - [x] Source package excludes raw NASA data, model checkpoints, joblib files, local build intermediates, reviewer reports, and large experiment tables.
 - [x] Source package independently compiles from `reports/paper/arxiv_upload/main.tex`.
+- [x] Zip contents match the clean `reports/paper/arxiv_upload` directory.
 
 ## Reproducibility and Scope
 
 - [x] README includes the arXiv figure-generation workflow.
 - [x] Raw C-MAPSS data are referenced but not redistributed.
 - [x] Code availability points to the public GitHub repository.
+- [x] Stable arXiv draft tag is used: `arxiv-draft-2026-06-25`.
 - [x] Manuscript claims are scoped to FD001/FD003 and do not claim state-of-the-art performance.
 - [x] AI assistance disclosure is included.
+
+## Review and Rebuttal Record
+
+- [x] Round 1 reviewer report exists: `reports/paper/reviewer_round1.md`.
+- [x] Round 1 response exists: `reports/paper/response_round1.md`.
+- [x] Round 2 reviewer report exists: `reports/paper/reviewer_round2.md`.
+- [x] Round 2 response exists: `reports/paper/response_round2.md`.
+- [x] Round 2 decision: Accept for arXiv-readiness re-review; no P0/P1 blockers.
+
+## Artifact Hashes
+
+- [x] `reports/paper/arxiv_upload.zip` SHA256: `708684A3AD00070F91DEB2FA5D760EB96B0199D18CAD006EB72029C90F455E76`.
+- [x] `reports/paper/build/main.pdf` SHA256: `A173C82AEBED8485908E6785707EFE50F0BB12B6BF070400D80084AB77E047FC`.
 
 ## Remaining Human Submission Tasks
 
@@ -45,3 +60,4 @@ Date: 2026-06-25
 - [ ] Verify all BibTeX metadata manually before public submission.
 - [ ] Confirm author affiliation and author order.
 - [ ] Fill arXiv web metadata, abstract, comments, and code URL.
+- [ ] Do one final human visual skim of the PDF before uploading.
