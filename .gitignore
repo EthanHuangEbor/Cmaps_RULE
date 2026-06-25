@@ -6,6 +6,8 @@ __pycache__/
 .venv/
 venv/
 *.egg-info/
+work/
+scratch/
 
 data/raw/*.txt
 data/raw/*.zip
@@ -15,4 +17,3 @@ reports/tables/*.csv
 reports/figures/*.png
 reports/figures/*.pdf
 reports/figures/*.svg
-

@@ -56,9 +56,9 @@ scikit-learn gradient boosting.
 This creates toy data and verifies the pipeline shape. It is not a research run.
 
 ```powershell
-python scripts\make_demo_data.py --out-dir data\raw --subset FD001
-python -m rul_prediction.train_ml --data-dir data\raw --subset FD001 --out-dir reports\tables\demo_ml --window-size 20
-python -m rul_prediction.train_deep --data-dir data\raw --subset FD001 --out-dir reports\tables\demo_deep --models lstm --epochs 2 --window-size 20
+python scripts\make_demo_data.py --out-dir work\demo_raw --subset FD001
+python -m rul_prediction.train_ml --data-dir work\demo_raw --subset FD001 --out-dir work\demo_results\ml --window-size 20
+python -m rul_prediction.train_deep --data-dir work\demo_raw --subset FD001 --out-dir work\demo_results\deep --models lstm --epochs 2 --window-size 20
 ```
 
 ## Real FD001 Baseline Run
