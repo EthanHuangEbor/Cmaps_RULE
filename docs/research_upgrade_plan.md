@@ -94,3 +94,24 @@ python scripts/run_decision_simulation.py --predictions reports/tables/smoke_unc
 python scripts/run_domain_shift.py --source-subset FD001 --target-subset FD003 --model gradient_boosting --out-dir reports/tables/smoke_domain
 python scripts/run_sensor_robustness.py --subset FD001 --model gradient_boosting --out-dir reports/tables/smoke_robustness
 ```
+
+## 2026-06-26 GPU Handoff Checkpoint
+
+FD002 representative 3-seed experiments are complete for ML baselines, GRU, and
+Safety-GRU. The CPU run was stopped before FD004 so the remaining computation
+can continue on a GPU laptop.
+
+Key FD002 finding: GRU is best by aggregate RMSE among completed representative
+models, while Safety-GRU improves critical-zone and overestimation-risk metrics
+at the cost of worse aggregate RMSE. This is direct evidence for the upgraded
+paper thesis that accuracy and safety-oriented ranking can diverge.
+
+Next priority on GPU:
+
+1. Finish FD004 representative matrix with RF/GB/GRU/Safety-GRU.
+2. Run FD001-FD004 systematic GRU safety-loss ablation.
+3. Regenerate matrix and deep-ablation summaries.
+4. Add uncertainty/decision experiments on FD001 and FD004.
+5. Rewrite the paper around FD001-FD004 safety-oriented benchmark evidence.
+
+See `reports/gpu_handoff_2026-06-26.md` for exact commands.

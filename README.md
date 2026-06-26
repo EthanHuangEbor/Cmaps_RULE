@@ -288,3 +288,12 @@ keep the paper framed as a reproducible student research benchmark.
 
 下一阶段重点是巩固 FD001/FD003 证据，明确 FD002/FD004 的实验定位，继续完善
 不确定性与鲁棒性实验，并将论文表述保持在“可复现学生研究基准”的合理范围内。
+
+## GPU Handoff Status
+
+As of 2026-06-26, FD002 representative 3-seed results are complete for ML
+baselines, GRU, and Safety-GRU. FD004 is intentionally left for a GPU laptop.
+The handoff file `reports/gpu_handoff_2026-06-26.md` records the current FD002
+summary, what was stopped, and the exact commands for continuing FD004,
+safety-loss ablations, uncertainty, decision, domain-shift, and robustness
+experiments.
