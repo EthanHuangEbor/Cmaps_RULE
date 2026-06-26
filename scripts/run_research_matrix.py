@@ -22,6 +22,7 @@ def main() -> None:
     parser.add_argument("--seeds", nargs="+", type=int, default=[42, 43, 44])
     parser.add_argument("--window-size", type=int, default=30)
     parser.add_argument("--max-rul", type=int, default=130)
+    parser.add_argument("--deep-models", nargs="+", default=["lstm", "gru", "cnn"], choices=["lstm", "gru", "cnn"])
     parser.add_argument("--deep-epochs", type=int, default=60)
     parser.add_argument("--patience", type=int, default=8)
     parser.add_argument("--n-jobs", type=int, default=4)
@@ -77,10 +78,10 @@ def main() -> None:
                         subset,
                         "--out-dir",
                         str(deep_out),
+                        "--job-name",
+                        f"deep_default_w{args.window_size}",
                         "--models",
-                        "lstm",
-                        "gru",
-                        "cnn",
+                        *args.deep_models,
                         "--seed",
                         str(seed),
                         "--epochs",
@@ -108,6 +109,8 @@ def main() -> None:
                         subset,
                         "--out-dir",
                         str(safety_out),
+                        "--job-name",
+                        f"safety_w2_h64_l1_w{args.window_size}",
                         "--models",
                         "gru",
                         "--loss",

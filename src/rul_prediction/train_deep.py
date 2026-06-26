@@ -83,6 +83,7 @@ def run(args: argparse.Namespace) -> None:
                     "subset": args.subset,
                     "split": split,
                     "model": reported_model,
+                    "job_name": args.job_name,
                     "seed": args.seed,
                     "window_size": args.window_size,
                     "max_rul": args.max_rul,
@@ -104,6 +105,7 @@ def run(args: argparse.Namespace) -> None:
                 {
                     "subset": args.subset,
                     "model": reported_model,
+                    "job_name": args.job_name,
                     "seed": args.seed,
                     "window_size": args.window_size,
                     "max_rul": args.max_rul,
@@ -126,6 +128,7 @@ def run(args: argparse.Namespace) -> None:
         )
         history_df = pd.DataFrame(result.history)
         history_df["model"] = reported_model
+        history_df["job_name"] = args.job_name
         history_df["seed"] = args.seed
         history_df["loss"] = args.loss
         history_df["hidden_size"] = args.hidden_size
@@ -145,6 +148,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--data-dir", default="data/raw")
     parser.add_argument("--subset", default="FD001")
     parser.add_argument("--out-dir", default="reports/tables/fd001_deep")
+    parser.add_argument("--job-name", default="", help="Optional experiment/job label for aggregation and traceability.")
     parser.add_argument("--models", nargs="+", default=["lstm", "gru", "cnn"], choices=["lstm", "gru", "cnn"])
     parser.add_argument("--max-rul", type=int, default=130)
     parser.add_argument("--window-size", type=int, default=30)

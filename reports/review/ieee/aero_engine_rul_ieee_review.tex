@@ -1,0 +1,204 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\FigureSlot}[3]{%
+\begin{figure*}[!t]
+\centering
+\IfFileExists{#1}{%
+  \includegraphics[width=0.98\textwidth]{#1}%
+}{%
+  \fbox{%
+    \begin{minipage}[c][1.65in][c]{0.94\textwidth}
+    \centering
+    \small Placeholder for \texttt{\detokenize{#1}}.\\
+    Generate this figure using \texttt{gpt\_image2\_figure\_prompts.md}, then save it at the path above.
+    \end{minipage}
+  }%
+}%
+\caption{#2}
+\label{#3}
+\end{figure*}
+}
+
+\title{Machine Learning and Deep Learning for Aero-Engine Health Management and Remaining Useful Life Prediction: From C-MAPSS Benchmarks to Safety-Oriented, Transferable, Uncertainty-Aware, and Decision-Centric Evaluation}
+
+\author{\IEEEauthorblockN{Yibo Huang}
+\IEEEauthorblockA{Project: Cmaps\_RULE\\
+Email: 24376333@buaa.edu.cn}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Remaining useful life (RUL) prediction for aero-engines is a central problem in prognostics and health management (PHM). The field has long been shaped by the NASA C-MAPSS turbofan benchmark, but recent work increasingly asks whether benchmark accuracy alone is sufficient for safety-sensitive maintenance. This review reformats and condenses a verified literature synthesis for an IEEE-style manuscript. It focuses on 2022--2025 aero-engine and machinery RUL studies, while retaining foundational sources on C-MAPSS, N-CMAPSS, convolutional and recurrent baselines, domain adaptation, uncertainty quantification, and maintenance decision models. The evidence suggests that traditional machine learning, LSTM/GRU/CNN sequence models, attention and Transformer architectures, temporal convolutional networks, graph neural networks, transfer learning, Bayesian and ensemble uncertainty methods, and policy-oriented maintenance evaluation now form a connected research landscape. However, many papers still emphasize RMSE and the NASA score, with limited reporting of critical-zone behavior, optimistic overestimation risk, uncertainty calibration, sensor robustness, cross-condition generalization, or downstream maintenance cost. Based on the current Cmaps\_RULE project, this paper argues for a safety- and policy-oriented RUL research path: strong classical and deep baselines on FD001/FD003, explicit late-life risk metrics, uncertainty calibration, sensor robustness stress tests, and decision simulation that translates prediction errors into maintenance consequences.
+\end{abstract}
+
+\begin{IEEEkeywords}
+aero-engine remaining useful life, turbofan engine, C-MAPSS, PHM, safety-aware evaluation, uncertainty quantification, domain adaptation, predictive maintenance
+\end{IEEEkeywords}
+
+\section{Introduction}
+Remaining useful life prediction estimates the time or cycles remaining before a component reaches a defined failure threshold. In aero-engine PHM, RUL prediction is not merely a time-series regression task: it supports inspection timing, spare-part planning, maintenance scheduling, risk control, and operational cost management. The classic PHM view already links diagnostics, prognostics, and condition-based maintenance as a decision chain rather than isolated model outputs \cite{Jardine2006CBM}. The NASA C-MAPSS turbofan degradation benchmark made run-to-failure simulation data widely reusable for aero-engine RUL research \cite{Saxena2008CMAPSS,NASA_PCoE_CMAPSS}, and N-CMAPSS later provided a richer benchmark grounded in real flight profiles and more detailed operating histories \cite{AriasChao2021NCMAPSS}.
+
+The research field has nevertheless reached a point where simply adding another neural architecture to FD001 is unlikely to be a strong contribution. Classic convolutional and recurrent baselines remain important \cite{Babu2016DCNN,Zheng2017LSTM,Li2018DCNN}. Recent studies explore LSTM variants, CNN--LSTM hybrids, attention, Transformers, temporal convolutions, graph structures, domain adaptation, and probabilistic predictions \cite{Asif2022CMAPSS,Li2022CNNLSTM,Zhang2022DAST,Wang2022GGCN,Liu2023SAETCN,Chen2024Transformer,Zhang2024TATFA,Zhou2024MSTGAT}. Yet many evaluations still rely mainly on aggregate RMSE, MAE, and the NASA scoring function. For safety-oriented maintenance, these metrics are necessary but incomplete: an optimistic late-life prediction can be more hazardous than an equally sized conservative error.
+
+\FigureSlot{figures/fig01_cmapss_benchmark_map.png}{C-MAPSS and N-CMAPSS benchmark landscape for aero-engine RUL research. The figure should visually separate simulated run-to-failure subsets, operating-condition complexity, fault-mode complexity, and the caution that C-MAPSS is not real fleet telemetry.}{fig:cmapss-landscape}
+
+This manuscript positions the current \texttt{D:\textbackslash Project\textbackslash Cmaps\_RULE} repository as a safety- and policy-oriented aero-engine RUL scaffold. The repository already contains classical machine learning baselines, deep sequence models, a safety-aware GRU variant, uncertainty and decision-simulation prototypes, sensor robustness tools, and domain-shift diagnostics. The most credible paper contribution is therefore not ``a new universal SOTA model,'' but a tighter evaluation protocol for critical-zone RUL, overestimation risk, uncertainty calibration, and maintenance decision cost.
+
+\section{Datasets and Benchmark Protocols}
+C-MAPSS remains the dominant directly comparable benchmark. FD001 corresponds to single operating condition and single fault mode, FD002 to multiple operating conditions and single fault mode, FD003 to single operating condition and multiple fault modes, and FD004 to multiple operating conditions and multiple fault modes. These distinctions matter because FD001 and FD003 can support a controlled study of fault-mode complexity under a single operating condition, whereas FD002 and FD004 are more relevant for cross-condition generalization.
+
+Protocol choices are often as important as model architecture. RUL capping, sliding-window length, train-validation splitting by engine unit, sensor filtering, normalization, and test-window selection can all change results. A fair benchmark should fit scalers only on training data, split validation data by engine rather than by randomly sampled windows, and evaluate each test engine consistently with the official RUL labels. If these choices are not specified, a reported model improvement may reflect data leakage, different preprocessing, or a different label convention rather than a superior architecture.
+
+\FigureSlot{figures/fig02_phm_rul_pipeline.png}{End-to-end PHM pipeline for benchmark RUL modeling: raw multivariate sensors, preprocessing, windowing, model training, point or probabilistic RUL output, safety-aware evaluation, and maintenance decision simulation.}{fig:phm-pipeline}
+
+For the current project, the primary experimental scope is FD001/FD003. This scope should be stated clearly: results on these subsets do not establish performance under multiple operating conditions, real flight profiles, or operational maintenance policies. N-CMAPSS is a natural future target, but it should not be implied by evidence that only comes from C-MAPSS FD001/FD003.
+
+\section{Traditional Machine Learning for Aero-Engine RUL}
+Traditional machine learning is still a serious baseline for C-MAPSS. Ridge regression, random forests, gradient boosting, and related tabular regressors can exploit engineered window features such as means, standard deviations, last values, slopes, and deltas. These models are stable, computationally inexpensive, and interpretable relative to many deep sequence models. Recent comparative work continues to include classical machine-learning regressors for turbofan RUL \cite{Omer2024MLRegression,Wang2023RFMLP}.
+
+In Cmaps\_RULE, feature-engineered gradient boosting and random forest models are not weak baselines; they are part of the central argument. If a tree ensemble achieves lower aggregate RMSE than a GRU on FD001, the paper should not claim that deep learning is automatically superior. Instead, it can ask whether model rankings change under critical-zone RMSE, overestimation ratio, overestimation magnitude, and safety-aware score. That framing is more defensible for PHM because it treats the baseline not as a formality but as a practical comparator.
+
+\begin{table*}[!t]
+\centering
+\caption{Literature roles for an IEEE-style C-MAPSS RUL review. Direct baselines are candidates for benchmark comparison; direction-supporting papers justify evaluation dimensions beyond point accuracy.}
+\label{tab:literature-roles}
+\begin{tabularx}{\textwidth}{@{}p{0.18\textwidth}Y Y Y@{}}
+\toprule
+Role & Representative sources & Main value & Caution for use \\
+\midrule
+Direct C-MAPSS baselines & CNN/LSTM/GRU, attention, Transformer, graph, TCN, and classical ML studies \cite{Babu2016DCNN,Zheng2017LSTM,Li2018DCNN,Asif2022CMAPSS,Zhang2022DAST,Wang2022GGCN,Liu2023SAETCN,Chen2024Transformer,Zhang2024TATFA,Zhou2024MSTGAT,Omer2024MLRegression} & Support model-family comparison on FD001--FD004 or closely related turbofan benchmarks & Exact preprocessing, FD subset, and metric protocols must be checked before numerical comparison \\
+Direction-supporting work & Domain adaptation, UQ, XAI, and maintenance decision studies \cite{DaCosta2020DDA,Lyu2022MRDA,Ding2022MSDA,Hu2023BayesianUQ,Wang2024UQ,Xiang2024BayesianGT,Lee2023DRL,DePater2022Alarm,Mitici2023DynamicPdM,Dogga2024XAI,Baptista2024GRULIME} & Motivate transfer, calibration, risk, explanation, and maintenance-policy evaluation & Some papers use non-aero-engine datasets or abstract maintenance models; they should not be presented as direct C-MAPSS baselines \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\FigureSlot{figures/fig03_taxonomy_six_lines.png}{Taxonomy of six technical lines: feature-engineered machine learning, LSTM/GRU/CNN sequence learning, attention/Transformer/TCN/GNN architectures, transfer and domain adaptation, uncertainty and safety-aware RUL, and maintenance decision evaluation.}{fig:taxonomy}
+
+\section{Deep Sequence Models}
+Deep sequence models became the standard neural baseline because RUL degradation is inherently temporal. CNNs capture local temporal patterns and cross-sensor interactions; LSTMs and GRUs model longer temporal dependencies; hybrid CNN--LSTM designs combine local feature extraction with recurrent temporal aggregation. Foundational C-MAPSS studies established these families as direct baselines \cite{Babu2016DCNN,Zheng2017LSTM,Li2018DCNN}.
+
+Recent work continues to refine this family. Asif et al. emphasized preprocessing, piecewise RUL labeling, and LSTM modeling on C-MAPSS \cite{Asif2022CMAPSS}. CNN--LSTM variants with attention mechanisms have been proposed for turbofan RUL \cite{Li2022CNNLSTM}. GRU-based work includes bidirectional GRU with temporal self-attention \cite{Zhang2022BiGRUTSA} and inverse GRU variants \cite{Shi2023InvGRU}. These papers are useful because they are closer to the current repository's LSTM/GRU/CNN stack than more elaborate Transformer or graph methods.
+
+\FigureSlot{figures/fig04_ml_vs_deep_protocol.png}{Fair protocol comparison between feature-engineered machine learning and raw-window deep sequence models, emphasizing that the pipeline differs before the model layer.}{fig:ml-vs-deep}
+
+For a safety-oriented paper, the deep model section should not only report whether GRU beats LSTM or CNN. It should also measure whether safety-aware losses reduce optimistic overestimation in the late-life region, whether improvements are stable across seeds, and whether aggregate RMSE improvements survive paired bootstrap analysis. A small but reproducible change in overestimation risk can be more meaningful than a fragile aggregate RMSE difference.
+
+\section{Attention, Transformer, TCN, and Graph Models}
+Attention and Transformer models address a real limitation of basic recurrent networks: not all cycles or sensors are equally informative, and long-range temporal interactions can be difficult to retain. Dual-aspect self-attention and Transformer-based RUL models have become active directions \cite{Zhang2022DAST,Chen2024Transformer,Zhang2024TATFA}. TCN-based methods offer convolutional temporal modeling with stable parallel computation \cite{Liu2023SAETCN}. Graph neural networks and graph attention methods explicitly model relations among sensors and temporal patterns \cite{Wang2022GGCN,Zhou2024MSTGAT}. Multi-task learning and spatial-temporal feature fusion further expand this design space \cite{Zhou2023Multitask,Du2025STF2,Kim2025KoopmanTransformer}.
+
+\FigureSlot{figures/fig05_sequence_model_evolution.png}{Evolution of aero-engine RUL model families from engineered features to CNN, LSTM/GRU, attention, Transformer, TCN, and GNN architectures.}{fig:model-evolution}
+
+The main risk is equating architectural novelty with maintenance relevance. A complex Transformer can improve benchmark scores without improving calibrated uncertainty, robustness to sensor masking, or decision cost. Therefore, advanced architectures should be treated as candidates in a broader evaluation protocol rather than as the research contribution by themselves.
+
+\section{Transfer Learning and Domain Shift}
+Cross-condition generalization is essential because aero-engine degradation patterns depend on operating conditions, fault modes, and sensor distributions. Domain adaptation for RUL has a foundational line of work in deep domain adaptation and adversarial representation learning \cite{Ganin2016DANN,DaCosta2020DDA}. Recent studies extend this logic through multisource adaptation, self-supervised adaptation, and cross-dataset machinery RUL transfer \cite{Lyu2022MRDA,Ding2022MSDA,LeXuan2024SSDA}.
+
+\FigureSlot{figures/fig06_domain_shift_adaptation.png}{Domain-shift diagram for C-MAPSS: FD001/FD003 source-target transfer, FD002/FD004 cross-condition transfer, sensor-distribution shift, and the difference between stress testing and true adaptation.}{fig:domain-shift}
+
+The distinction between domain-shift testing and domain adaptation should be explicit. Testing a model trained on FD001 against FD003 exposes generalization failure, but it is not necessarily domain adaptation. True adaptation requires a defined source-target setting, a rule for target labels or unlabeled target data, an alignment loss or adaptation mechanism, and leakage-safe validation. For the current project, domain-shift tools are valuable as diagnostics, while full adaptation is a future extension.
+
+\section{Uncertainty, Risk, and Safety-Aware Evaluation}
+Point estimates are insufficient for safety-sensitive RUL decisions. Bayesian approximations, Monte Carlo dropout, deep ensembles, Bayesian neural networks, and probabilistic degradation models are increasingly used to quantify predictive uncertainty \cite{Gal2016MCDropout,Lakshminarayanan2017DeepEnsembles,Hu2023BayesianUQ,Wang2024UQ}. Risk-aware RUL studies further connect uncertainty to asymmetric loss and decision consequences \cite{Xiang2024BayesianGT}.
+
+Let $y_i$ be the true RUL and $\hat{y}_i$ the predicted RUL. A common aggregate metric is
+\begin{equation}
+\mathrm{RMSE}=\sqrt{\frac{1}{n}\sum_{i=1}^{n}(\hat{y}_i-y_i)^2}.
+\end{equation}
+For safety-aware evaluation, define a critical set $\mathcal{C}_{\tau}=\{i:y_i\leq \tau\}$ and report $\mathrm{RMSE}_{\mathcal{C}_{\tau}}$, overestimation ratio $\Pr(\hat{y}_i>y_i\mid i\in \mathcal{C}_{\tau})$, and overestimation magnitude. If $e_i=\hat{y}_i-y_i$, the NASA score can be written as an asymmetric penalty,
+\begin{equation}
+s_i=\begin{cases}
+\exp(-e_i/13)-1, & e_i<0,\\
+\exp(e_i/10)-1, & e_i\geq 0,
+\end{cases}
+\end{equation}
+where positive error corresponds to optimistic overestimation under this convention.
+
+\FigureSlot{figures/fig07_uncertainty_calibration.png}{Uncertainty-calibration concept for RUL: point prediction, prediction interval, coverage, interval width, critical-zone coverage, and uncertainty-error correlation.}{fig:uncertainty}
+
+\FigureSlot{figures/fig08_overestimation_safety.png}{Asymmetric safety interpretation of RUL errors in the late-life zone: conservative early maintenance versus optimistic delayed maintenance.}{fig:overestimation}
+
+\begin{table*}[!t]
+\centering
+\caption{Recommended evaluation layer for a safety- and policy-oriented C-MAPSS paper.}
+\label{tab:evaluation-layer}
+\begin{tabularx}{\textwidth}{@{}p{0.20\textwidth}Y Y@{}}
+\toprule
+Layer & Metrics or artifacts & Why it matters \\
+\midrule
+Point accuracy & RMSE, MAE, NASA score & Maintains comparability with C-MAPSS literature \\
+Critical-zone behavior & RMSE for $y\leq 30$ and $y\leq 50$, hardest engines, per-engine residual plots & Focuses evaluation on late-life decisions rather than early-life plateau accuracy \\
+Overestimation risk & Overestimation ratio, overestimation magnitude, asymmetric score & Distinguishes unsafe optimism from conservative early maintenance \\
+Uncertainty calibration & PICP, MPIW, Winkler score, critical-zone PICP, uncertainty-error correlation & Tests whether probability outputs are useful for risk-aware policies \\
+Robustness & Sensor masking, Gaussian noise, sensor dropout, domain-shift stress tests & Tests whether model conclusions survive plausible input degradation \\
+Decision simulation & Late events, early events, lead time, wasted life, total cost, regret & Converts prediction errors into maintenance-policy consequences \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+\section{Maintenance Decision-Oriented RUL Prediction}
+Decision-oriented evaluation asks how predictions change maintenance actions. Aircraft-engine maintenance scheduling, alarm-based policies, probabilistic RUL planning, and reinforcement-learning policies show that RUL estimates should eventually feed cost and action models \cite{DePater2022Alarm,Lee2023DRL,Mitici2023DynamicPdM,Wang2024Scheduling,Xie2023PdMPolicy}. These papers do not mean that a C-MAPSS project can claim deployable aircraft maintenance policy. They do show how benchmark-derived predictions can be evaluated through hypothetical cost functions and trigger rules.
+
+\FigureSlot{figures/fig09_maintenance_decision_loop.png}{Maintenance decision loop: RUL forecast, uncertainty, threshold or policy rule, maintenance action, early/late cost, and feedback to evaluation.}{fig:decision-loop}
+
+A minimal decision simulation can compare four policies: trigger when the point estimate falls below a threshold; trigger when the mean minus one standard deviation falls below the threshold; trigger when the lower prediction interval bound falls below the threshold; and trigger with a fixed conservative bias. The output should include late events, early events, mean lead time, wasted life, total cost, and critical-zone regret. This transforms RUL prediction from a pure model-ranking exercise into a policy-sensitive PHM evaluation.
+
+\section{Explainability and Sensor Robustness}
+Explainability and robustness are essential because aero-engine RUL models use multivariate sensor sequences. A model may depend heavily on a small number of sensors; it may also degrade under sensor masking, noise, dropout, or cross-subset distribution shift. Recent XAI work for aero-engine RUL includes interpretable AI-assisted analysis, aircraft-engine RUL explanation, and GRU-LIME combinations \cite{Protopapadakis2022XAI,Dogga2024XAI,Baptista2024GRULIME,Youness2023XAI}.
+
+\FigureSlot{figures/fig10_sensor_robustness_xai.png}{Sensor robustness and explainability workflow: feature importance or occlusion identifies influential sensors, then masking/noise stress tests check whether importance predicts fragility.}{fig:sensor-xai}
+
+For Cmaps\_RULE, sensor robustness should be connected to safety metrics. Reporting only RMSE degradation under sensor masking is incomplete; the paper should also report critical-zone RMSE and overestimation changes. If a model becomes optimistically biased when high-importance sensors are masked, that is a safety-relevant finding. Explanation is therefore useful not as decoration, but as a way to design robustness stress tests.
+
+\section{Research Gaps}
+The verified literature matrix points to six gaps. First, C-MAPSS papers still overuse aggregate point-prediction metrics and underreport late-life behavior. Second, advanced architectures are often evaluated without enough evidence about seed stability, statistical uncertainty, preprocessing fairness, or negative results. Third, domain shift and domain adaptation are sometimes conflated. Fourth, uncertainty studies do not always report calibration in the region where maintenance decisions matter most. Fifth, maintenance decision research and benchmark RUL modeling remain partially disconnected. Sixth, explainability and sensor robustness are often appendices rather than core PHM evidence.
+
+\section{Positioning of the Current Project}
+The strongest positioning for Cmaps\_RULE is a reproducible evaluation scaffold rather than a new architecture paper. The present repository already contains Ridge, Random Forest, Gradient Boosting, LSTM, GRU, CNN, safety-aware GRU, uncertainty, decision simulation, sensor robustness, and domain-shift tools. The most defensible first paper is a focused FD001/FD003 study: compare strong classical and deep baselines under aggregate and safety-aware metrics, then analyze whether loss weighting reduces overestimation risk without overstating aggregate accuracy.
+
+\FigureSlot{figures/fig11_project_positioning_roadmap.png}{Project positioning map: current mature evidence, prototype modules, and staged roadmap from safety-aware benchmark paper to uncertainty, decision simulation, robustness, and domain adaptation extensions.}{fig:project-position}
+
+The following paper ideas are especially publishable:
+\begin{enumerate}
+\item Critical-zone RUL evaluation on C-MAPSS FD001/FD003, showing when aggregate RMSE rankings differ from late-life rankings.
+\item Overestimation-risk and safety-aware loss analysis, comparing MSE, critical MSE, asymmetric MSE, and safety-weighted GRU variants.
+\item Uncertainty calibration for aero-engine RUL, comparing MC dropout, deep ensembles, and tree-based bootstrap or quantile baselines.
+\item Maintenance decision-cost evaluation, translating point and interval predictions into threshold policies and cost trade-offs.
+\item Sensor robustness and explanation, linking feature importance to masking/noise fragility and safety-relevant error shifts.
+\end{enumerate}
+
+\section{Future Experimental Plan}
+The first experimental stage should keep the scope narrow: FD001/FD003, fixed preprocessing, engine-level validation, three or more random seeds, and the same evaluation set for all models. The main tables should report RMSE, MAE, NASA score, critical RMSE, overestimation ratio, and overestimation magnitude. Paired bootstrap confidence intervals should be used to avoid overclaiming small differences.
+
+The second stage should formalize uncertainty. GRU MC dropout and deep ensembles can be compared with random-forest bootstrapping or gradient-boosted quantile models. The key metrics should include PICP, MPIW, Winkler score, critical-zone PICP, and uncertainty-error correlation. The third stage should connect those intervals to maintenance trigger policies and cost functions. The fourth stage should expand robustness and domain-shift evaluation, first as stress testing and then, if needed, as explicit domain adaptation.
+
+\section{Conclusion}
+Aero-engine RUL research is moving from benchmark accuracy toward safety-aware, transferable, uncertainty-aware, and decision-centric PHM evaluation. C-MAPSS remains useful, but its value now depends on disciplined protocols and honest scope boundaries. For the current Cmaps\_RULE project, the most credible contribution is not to claim universal SOTA performance. It is to show how classical and deep models behave under late-life risk metrics, overestimation penalties, uncertainty calibration, sensor robustness, and maintenance decision simulation. This direction can turn an existing benchmark project into a publishable safety- and policy-oriented RUL manuscript.
+
+\section*{AI Disclosure}
+This paper was prepared with the assistance of AI-powered academic writing tools. The AI pipeline included literature search strategy design, structure planning, draft writing, citation verification, and formatting. All content, arguments, and conclusions were directed and reviewed by the author(s). The authors take full responsibility for the accuracy and integrity of this work.
+
+\section*{Data and Code Availability}
+The manuscript is based on the local Cmaps\_RULE project and the NASA C-MAPSS benchmark. The project repository is available at \url{https://github.com/EthanHuangEbor/Cmaps_RULE.git}. C-MAPSS should be described as simulated run-to-failure turbofan degradation data, not as real operational fleet telemetry. The literature matrix and BibTeX file are stored in the accompanying review directory.
+
+\section*{Limitations}
+This manuscript is a review and project-positioning paper, not a claim of operational deployment. Several recent papers are used as methodological direction support rather than direct numeric baselines when their exact FD subset, preprocessing, or full metric table was not verified from full text. Future experimental claims should be restricted to protocols actually executed in the repository.
+
+\nocite{*}
+\bibliographystyle{IEEEtran}
+\bibliography{../references}
+
+\end{document}

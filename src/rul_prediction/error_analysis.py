@@ -6,11 +6,25 @@ from pathlib import Path
 import pandas as pd
 
 
+def infer_job_name(path: Path) -> str:
+    parent = path.parent.name
+    if parent in {"ml", "deep", "deep_safety_gru"}:
+        return parent
+    if path.parent.parent.name.startswith("seed_"):
+        return parent
+    return ""
+
+
 def read_predictions(paths: list[Path]) -> pd.DataFrame:
     frames: list[pd.DataFrame] = []
     for path in paths:
         df = pd.read_csv(path)
         df["source_file"] = str(path)
+        inferred_job = infer_job_name(path)
+        if "job_name" not in df.columns:
+            df["job_name"] = inferred_job
+        else:
+            df["job_name"] = df["job_name"].fillna("").replace("", inferred_job)
         frames.append(df)
     if not frames:
         raise FileNotFoundError("No predictions.csv files found.")
@@ -31,6 +45,7 @@ def main() -> None:
     group_cols = [
         col
         for col in [
+            "job_name",
             "subset",
             "model",
             "seed",
@@ -42,6 +57,7 @@ def main() -> None:
             "learning_rate",
             "scheduler",
             "loss",
+            "critical_threshold",
             "critical_weight",
             "over_weight",
         ]

@@ -1,0 +1,56 @@
+This is BibTeX, Version 0.99e (TeX Live 2026)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: aero_engine_rul_ieee_review.aux
+The style file: IEEEtran.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: ../references.bib
+-- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+
+Done.
+You've used 55 entries,
+            4087 wiz_defined-function locations,
+            1209 strings with 21949 characters,
+and the built_in function-call counts, 39395 in all, are:
+= -- 3530
+> -- 965
+< -- 177
++ -- 486
+- -- 220
+* -- 1997
+:= -- 6517
+add.period$ -- 111
+call.type$ -- 55
+change.case$ -- 56
+chr.to.int$ -- 246
+cite$ -- 55
+duplicate$ -- 3008
+empty$ -- 2917
+format.name$ -- 260
+if$ -- 9060
+int.to.chr$ -- 0
+int.to.str$ -- 55
+missing$ -- 543
+newline$ -- 298
+num.names$ -- 55
+pop$ -- 1213
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 3206
+stack$ -- 0
+substring$ -- 965
+swap$ -- 2336
+text.length$ -- 95
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 55
+warning$ -- 0
+while$ -- 127
+width$ -- 57
+write$ -- 722
