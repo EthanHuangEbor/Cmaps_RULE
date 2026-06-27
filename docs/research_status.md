@@ -15,34 +15,64 @@ overestimation risk.
   the earlier report package.
 - FD002/FD004: completed representative 3-seed matrix for ML baselines, GRU,
   and Safety-GRU.
-- FD002: GRU is strongest by aggregate RMSE, while Safety-GRU improves
-  critical-zone error and overestimation metrics.
-- FD004: Random Forest is strongest by aggregate RMSE, while Safety-GRU improves
-  late-life and overestimation-risk metrics.
+- FD001-FD004: completed the systematic GRU safety-loss ablation:
+  4 subsets x 3 seeds x 8 jobs = 96 training jobs. The aggregated deep-ablation
+  table has 192 split-level rows, and metrics/predictions/training-history
+  files are complete for every job.
+- FD002: the representative matrix shows GRU as strongest by aggregate RMSE,
+  while Safety-GRU improves critical-zone error and overestimation metrics.
+- FD004: the representative matrix shows Random Forest as strongest by
+  aggregate RMSE, while Safety-GRU improves late-life and overestimation-risk
+  metrics.
+- The full ablation strengthens the main thesis: the aggregate RMSE winner is
+  usually not the winner for NASA S-score, critical-zone RMSE, or optimistic
+  overestimation risk.
 
 The detailed current roadmap and FD002/FD004 table are in
 `reports/progress_roadmap_2026-06-27.md`.
 
-## Next Required Experiment
+## Latest Ablation Findings
 
-Run the systematic GRU safety-loss ablation across all four subsets:
+The paper-relevant summaries are tracked in:
 
-```powershell
-.\.venv\Scripts\python.exe scripts\run_deep_ablation_matrix.py --subsets FD001 FD002 FD003 FD004 --seeds 42 43 44 --models gru --jobs baseline_lr1e-3_h64_l1_w30 critical_w2_h64_l1_w30 critical_w3_h64_l1_w30 asymmetric_w2_h64_l1_w30 asymmetric_w3_h64_l1_w30 safety_w1p5_h64_l1_w30 safety_w2_h64_l1_w30 safety_w3_h64_l1_w30 --epochs 60 --patience 8 --skip-existing
-```
+- `reports/paper/deep_ablation_test_summary.csv`
+- `reports/paper/deep_ablation_best_by_metric.csv`
+- `reports/paper/deep_ablation_tradeoff_summary.csv`
 
-Then regenerate deep-ablation summaries:
+Key test-split findings:
 
-```powershell
-.\.venv\Scripts\python.exe -m rul_prediction.aggregate --root reports\tables\deep_ablations --out-dir reports\tables\deep_ablations\summary
-.\.venv\Scripts\python.exe -m rul_prediction.error_analysis --root reports\tables\deep_ablations --out-dir reports\tables\deep_ablations\summary
-```
+- FD001: RMSE is best for `asymmetric_w2_h64_l1_w30`, while
+  `safety_w3_h64_l1_w30` is best for NASA S-score, Critical RMSE30/50,
+  overestimation ratio, and overestimation magnitude with about a 2.6% RMSE
+  cost.
+- FD002: RMSE is best for `critical_w2_h64_l1_w30`. Safety/asymmetric losses
+  reduce late-life or overestimation risk, but the best risk reductions require
+  about 7-21% higher RMSE depending on the metric.
+- FD003: `critical_w3_h64_l1_w30` is best for both RMSE and NASA S-score, but
+  other safety/asymmetric variants still win individual late-life and
+  overestimation metrics.
+- FD004: baseline GRU is best for RMSE, while `safety_w2_h64_l1_w30` or
+  `safety_w3_h64_l1_w30` are best for safety-oriented metrics. The NASA S-score
+  best improves by about 56.5% at about 1.2% RMSE cost; the strongest
+  late-life/overestimation reductions cost about 12.7% RMSE.
+
+## Next Required Analysis
+
+Do not start a new primary experiment until the ablation is converted into
+paper tables and figures. The next work should be:
+
+- Turn the three `reports/paper/deep_ablation_*.csv` files into manuscript
+  tables.
+- Add paired seed-level uncertainty or bootstrap checks for the most important
+  RMSE-vs-risk comparisons.
+- Draft the results section around subset-dependent safety trade-offs, not
+  around SOTA architecture claims.
 
 ## Deferred Work
 
 Uncertainty, decision simulation, domain shift, sensor robustness, and XAI are
 implemented as scaffolds, but should stay secondary until the four-subset
-safety-loss ablation is complete.
+safety-loss ablation is converted into paper-ready evidence.
 
 ## Scope Boundaries
 
