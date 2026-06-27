@@ -26,12 +26,13 @@ English:
 
 The current manuscript positioning is modest: this project does not claim a new
 state-of-the-art architecture. Its contribution is a reproducible, safety-aware
-benchmarking workflow for C-MAPSS FD001/FD003, with extension hooks for FD002,
-FD004, uncertainty, robustness, and decision simulation.
+benchmarking workflow for C-MAPSS FD001-FD004, with FD001/FD003 used for the
+broader model matrix and FD002/FD004 used as representative multi-condition
+stress tests.
 
 当前论文定位保持克制：本项目不宣称提出新的 SOTA 架构，而是提供一个可复现
-的、安全感知的 C-MAPSS FD001/FD003 评估流程，并为 FD002/FD004、不确定性、
-鲁棒性和维护决策模拟保留扩展接口。
+的、安全感知的 C-MAPSS FD001-FD004 评估流程；其中 FD001/FD003 用于较完整的
+模型矩阵，FD002/FD004 用作多工况代表性压力测试。
 
 ## What Is Included / 仓库内容
 
@@ -96,13 +97,18 @@ Place the files under `data/raw/`:
 data/raw/train_FD001.txt
 data/raw/test_FD001.txt
 data/raw/RUL_FD001.txt
+data/raw/train_FD002.txt
+data/raw/test_FD002.txt
+data/raw/RUL_FD002.txt
 data/raw/train_FD003.txt
 data/raw/test_FD003.txt
 data/raw/RUL_FD003.txt
+data/raw/train_FD004.txt
+data/raw/test_FD004.txt
+data/raw/RUL_FD004.txt
 ```
 
-FD002 and FD004 can also be placed in the same directory for multi-condition
-experiments. The official C-MAPSS txt files are intentionally ignored by Git.
+The official C-MAPSS txt files are intentionally ignored by Git.
 
 请从 NASA PCoE 官方页面下载 C-MAPSS 数据，并将文件放入 `data/raw/`。官方
 txt 数据不会随仓库分发。项目提供 `scripts/make_demo_data.py` 用于生成合成
@@ -282,18 +288,19 @@ simulation, and XAI helpers.
 
 ## Current Direction / 当前推进方向
 
-The next project phase is to consolidate FD001/FD003 evidence, add clearer
-FD002/FD004 positioning, improve uncertainty and robustness experiments, and
-keep the paper framed as a reproducible student research benchmark.
+The next project phase is to run the systematic FD001-FD004 safety-loss
+ablation, then rewrite the manuscript around safety trade-offs between
+aggregate RMSE, late-life error, and optimistic overestimation risk.
 
-下一阶段重点是巩固 FD001/FD003 证据，明确 FD002/FD004 的实验定位，继续完善
-不确定性与鲁棒性实验，并将论文表述保持在“可复现学生研究基准”的合理范围内。
+下一阶段重点是运行 FD001-FD004 系统 safety-loss 消融实验，并围绕整体 RMSE、
+临近失效误差和过度乐观高估风险之间的 trade-off 重写论文。
 
-## GPU Handoff Status
+## Current Progress Snapshot
 
-As of 2026-06-26, FD002 representative 3-seed results are complete for ML
-baselines, GRU, and Safety-GRU. FD004 is intentionally left for a GPU laptop.
-The handoff file `reports/gpu_handoff_2026-06-26.md` records the current FD002
-summary, what was stopped, and the exact commands for continuing FD004,
-safety-loss ablations, uncertainty, decision, domain-shift, and robustness
-experiments.
+As of 2026-06-27, FD002 and FD004 representative 3-seed matrices are complete
+for ML baselines, GRU, and Safety-GRU. Generated experiment outputs remain
+local-only under `reports/tables/`.
+
+The current status, FD002/FD004 result table, interpretation, and next
+experiment commands are consolidated in
+`reports/progress_roadmap_2026-06-27.md`.

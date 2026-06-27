@@ -28,7 +28,7 @@ of Aircraft Turbofan Engine on C-MAPSS Dataset," IEEE Access, 2022. DOI:
 
 ## Where We Must Improve Before Submission
 
-- Add FD002/FD004 or clearly explain why only FD001/FD003 are used.
+- FD002/FD004 representative evidence is now complete; clearly mark it as a representative GRU/Safety-GRU stress matrix rather than a full architecture search.
 - Treat label construction and preprocessing as experimental variables, not
   fixed background choices.
 - Add uncertainty calibration so the model can express when it is unreliable.
@@ -43,3 +43,4 @@ Do not compete with Asif et al. on "best LSTM RMSE". The stronger claim is:
 > that model ranking changes when RUL systems are evaluated by late-life safety,
 > optimistic overestimation, uncertainty calibration, sensor robustness, and
 > maintenance-trigger decision cost.
+
