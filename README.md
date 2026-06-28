@@ -1,93 +1,110 @@
-# NASA C-MAPSS RUL Prediction / NASA C-MAPSS 剩余寿命预测研究
+# NASA C-MAPSS RUL Prediction / NASA C-MAPSS 剩余寿命预测
 
-This repository is a reproducible research codebase for Remaining Useful Life
-(RUL) prediction on the NASA C-MAPSS turbofan engine benchmark. It started as a
-classical-versus-deep-learning comparison and is now moving toward a
-safety-aware and policy-oriented evaluation of RUL models.
+This repository contains a reproducible research workflow for Remaining Useful Life (RUL) prediction on the NASA C-MAPSS turbofan benchmark. The project has evolved from a model-comparison scaffold into two connected research tracks.
 
-本仓库是一个面向 NASA C-MAPSS 涡扇发动机退化数据集的剩余寿命
-（Remaining Useful Life, RUL）预测研究项目。项目最初比较传统机器学习和深度
-序列模型，现在进一步关注临近失效阶段的安全风险、过度乐观预测、不确定性、
-跨子集迁移、传感器扰动鲁棒性和维护决策成本。
+本仓库是一个面向 NASA C-MAPSS 涡扇发动机退化数据集的剩余寿命（Remaining Useful Life, RUL）预测研究项目。当前项目已经从基础模型比较推进到两条相互衔接的研究主线。
 
-## Research Question / 研究问题
+1. **Paper 1: Safety-oriented C-MAPSS evaluation.** A benchmark-style paper showing that aggregate RMSE is not enough for model selection across FD001-FD004.
+2. **Paper 2: Cycle-consistent safety-oriented Dual-LSTM.** A method-response paper testing whether a Dual-LSTM training branch can shape late-life and overestimation-risk behavior under the Paper 1 protocol.
 
-English:
+## Current Status / 当前进度
 
-> Do RUL models remain useful when judged not only by aggregate RMSE, but also
-> by late-life safety, optimistic overestimation risk, uncertainty calibration,
-> cross-subset transfer, sensor robustness, and maintenance-trigger decisions?
+Latest synced main-branch state: `6e0c7d3 Complete Paper 2 Dual-LSTM full matrix`.
 
-中文：
+当前 `main` 分支已经同步到 `6e0c7d3 Complete Paper 2 Dual-LSTM full matrix`。
 
-> 当评价标准不再只是整体 RMSE，而是进一步包含临近失效安全性、过度乐观预测
-> 风险、不确定性校准、跨子集迁移、传感器鲁棒性和维护触发决策时，RUL 模型
-> 是否仍然具有实际研究价值？
+## Paper 1: Safety-Oriented Evaluation / 第一篇：安全导向评估
 
-The current manuscript positioning is modest: this project does not claim a new
-state-of-the-art architecture. Its contribution is a reproducible, safety-aware
-benchmarking workflow for C-MAPSS FD001-FD004, with FD001/FD003 used for the
-broader model matrix and FD002/FD004 used as representative multi-condition
-stress tests.
+Working title:
 
-当前论文定位保持克制：本项目不宣称提出新的 SOTA 架构，而是提供一个可复现
-的、安全感知的 C-MAPSS FD001-FD004 评估流程；其中 FD001/FD003 用于较完整的
-模型矩阵，FD002/FD004 用作多工况代表性压力测试。
+> Safety-Oriented Evaluation of Classical and Deep Sequence Models for Aero-Engine RUL Prediction on C-MAPSS
 
-## What Is Included / 仓库内容
+Core question:
 
-- Classical baselines: Ridge, Random Forest, optional XGBoost, and a
-  scikit-learn Gradient Boosting fallback.
-- Deep sequence models: LSTM, GRU, and 1D-CNN implemented with PyTorch.
-- Metrics: RMSE, MAE, NASA S-score, critical-zone RMSE, overestimation ratio,
-  and overestimation magnitude.
-- Safety-aware losses: critical-zone, asymmetric, and combined safety MSE
-  variants.
-- Experiment runners for multi-seed matrices, focused ablations, uncertainty,
-  domain shift, sensor robustness, and maintenance decision simulation.
-- Paper artifacts under `reports/paper/` and literature-review artifacts under
-  `reports/review/`.
+> On FD001-FD004, is the aggregate RMSE-best model also the best model for late-life error and optimistic overestimation risk?
 
-中文概览：
+Current answer: **no**. RMSE-best, critical-zone-best, overestimation-risk-best, and SARBI-best rankings often differ.
 
-- 传统基线：Ridge、Random Forest、可选 XGBoost，以及 scikit-learn
-  Gradient Boosting 备用模型。
-- 深度模型：基于 PyTorch 的 LSTM、GRU 和 1D-CNN。
-- 指标：RMSE、MAE、NASA S-score、critical-zone RMSE、overestimation ratio
-  和 overestimation magnitude。
-- 安全感知损失：critical-zone、asymmetric 以及 combined safety MSE。
-- 实验脚本：多随机种子矩阵、集中消融、不确定性、domain shift、传感器扰动
-  鲁棒性和维护决策模拟。
-- 论文材料位于 `reports/paper/`，综述材料位于 `reports/review/`。
+当前结论：**不是**。在 FD001-FD004 上，整体 RMSE 最优模型、临近失效误差最优模型、过度乐观预测风险最优模型，以及 SARBI 综合指标最优模型经常并不一致。
+
+Completed evidence:
+
+- Representative FD001-FD004 matrix for Ridge, Random Forest, Gradient Boosting, GRU, and Safety-GRU.
+- Full GRU safety-loss ablation: 4 subsets x 3 seeds x 8 jobs = 96 jobs.
+- Leakage-aware protocol: engine-level validation split, train-only scaling, capped RUL labels, 30-cycle windows, last-window test evaluation, seeds 42/43/44.
+- Metrics: RMSE, MAE, NASA S-score, Critical RMSE30/50, overestimation ratio, and overestimation magnitude.
+- SARBI reporting layer: a transparent relative composite score combining aggregate accuracy, late-life error, and optimistic-risk behavior.
+- Bootstrap checks for RMSE-best versus SARBI-best comparisons.
+
+Key files:
+
+- `docs/research_status.md`
+- `reports/progress_roadmap_2026-06-28.md`
+- `reports/paper/main.tex`
+- `reports/paper/figure_table_manifest.md`
+- `reports/paper/paper_value_trace.csv`
+- `scripts/make_safety_benchmark_outputs.py`
+- `scripts/audit_paper_submission.py`
+
+## Paper 2: Dual-LSTM Method Response / 第二篇：Dual-LSTM 方法回应
+
+Working title:
+
+> Cycle-Consistent Safety-Oriented Dual-LSTM for Aero-Engine RUL Prediction
+
+Paper 2 is separate from Paper 1. It is a method-response project that uses Paper 1's safety-oriented protocol to evaluate a cycle-consistent Dual-LSTM.
+
+第二篇与第一篇分开定位。它不是 Paper 1 的一部分，而是基于 Paper 1 的安全导向评估协议，测试 cycle-consistent Dual-LSTM 是否能改善临近失效和过度乐观预测风险。
+
+Implemented method:
+
+- Current-window RUL branch: `X_t -> z_t -> y_hat_t`.
+- Target-conditioned transition branch: `(z_t, horizon k) -> z_hat_{t+k}`.
+- Cycle consistency between predicted future state and actual future-window supervision during training.
+- Latent consistency and monotonic regularization.
+- Test-time inference uses only the current last window; future windows are training-only regularization signals.
+
+Completed evidence:
+
+- Full matrix: FD001-FD004 x 3 seeds x 4 jobs = 48 jobs.
+- Jobs: LSTM baseline, Dual-LSTM no-cycle, Dual-LSTM cycle, and Dual-LSTM cycle safety-w2.
+- Output schema remains compatible with existing aggregation: `metrics.csv`, `predictions.csv`, `training_history.csv`, `selected_features.csv`.
+- Claim gates in `reports/paper2/claim_evidence_map.csv` are marked pass.
+- Paper-facing figures and tables are generated under `reports/paper2/`.
+
+Key files:
+
+- `docs/dual_lstm_method_spec.md`
+- `src/rul_prediction/models_dual_lstm.py`
+- `src/rul_prediction/train_dual_lstm.py`
+- `scripts/run_dual_lstm_matrix.py`
+- `scripts/make_dual_lstm_paper2_outputs.py`
+- `scripts/make_paper2_analysis_outputs.py`
+- `scripts/make_paper2_submission_package.py`
+- `reports/paper2/main.tex`
+- `reports/paper2/submission_readiness_checklist.md`
 
 ## Repository Layout / 目录结构
 
 ```text
 configs/                  Experiment defaults and ablation plans
-data/raw/                 Local C-MAPSS files; official txt data are ignored
-docs/                     Research plans and gap analysis notes
+data/raw/                 Local NASA C-MAPSS files; official txt/PDF data ignored
+docs/                     Research status, method specs, and gap analysis
 notebooks/                Notebook guidance
-reports/paper/            Manuscript source, generated paper figures, tables, reviews
-reports/review/           Literature review manuscript, figures, bibliography, review notes
+reports/paper/            Paper 1 manuscript, figures, tables, value traces
+reports/paper2/           Paper 2 Dual-LSTM manuscript, figures, tables, audits
+reports/review/           Literature review manuscript and supporting figures
 reports/tables/           Local generated experiment outputs; ignored by Git
 reports/figures/          Local generated figures; ignored by Git
-scripts/                  Data helpers, experiment runners, paper figure builders
+scripts/                  Data helpers, experiment runners, paper-output builders
 src/rul_prediction/       Python package
 tests/                    Lightweight unit tests
-work/                     Scratch/smoke-test outputs; ignored by Git
+work/                     Scratch and smoke-test outputs; ignored by Git
 ```
-
-`reports/tables/`, `reports/figures/`, `work/`, virtual environments, Python
-caches, and official C-MAPSS raw text files are treated as local generated or
-local-only assets.
-
-`reports/tables/`、`reports/figures/`、`work/`、虚拟环境、Python 缓存以及官方
-C-MAPSS 原始 txt 数据都被视为本地生成或本地自备内容。
 
 ## Data / 数据
 
-Download the official Turbofan Engine Degradation Simulation Data Set from the
-NASA Prognostics Center of Excellence data repository:
+Download the official Turbofan Engine Degradation Simulation Data Set from the NASA Prognostics Center of Excellence data repository:
 
 <https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/>
 
@@ -108,11 +125,9 @@ data/raw/test_FD004.txt
 data/raw/RUL_FD004.txt
 ```
 
-The official C-MAPSS txt files are intentionally ignored by Git.
+Official NASA data files are not redistributed by this repository. Synthetic toy data generated by `scripts/make_demo_data.py` are only for smoke tests and must not be used as research evidence.
 
-请从 NASA PCoE 官方页面下载 C-MAPSS 数据，并将文件放入 `data/raw/`。官方
-txt 数据不会随仓库分发。项目提供 `scripts/make_demo_data.py` 用于生成合成
-toy data，只适合 smoke test，不能作为论文实验依据。
+本仓库不分发 NASA 官方原始数据。`scripts/make_demo_data.py` 生成的合成 toy data 只用于 smoke test，不能作为正式论文实验依据。
 
 ## Setup / 环境安装
 
@@ -122,26 +137,16 @@ Python 3.10 or newer is required.
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -U pip
-python -m pip install -e .
-```
-
-For development tests:
-
-```powershell
 python -m pip install -e ".[dev]"
 ```
 
-If `xgboost` is unavailable, the baseline workflow still runs with
-scikit-learn Gradient Boosting.
+If `xgboost` is unavailable, the classical baseline workflow still runs with scikit-learn Gradient Boosting.
 
-中文说明：建议使用 Python 3.10+，通过 editable install 安装本项目。若本机
-安装 XGBoost 不方便，传统基线脚本会自动使用 scikit-learn 的 Gradient
-Boosting 作为备用方案。
+如果本机暂时无法安装 XGBoost，传统基线仍可使用 scikit-learn Gradient Boosting 继续运行。
 
 ## Quick Smoke Test / 快速烟雾测试
 
-This verifies the pipeline shape with synthetic toy data. It is not a research
-experiment.
+This verifies the pipeline shape with synthetic data. It is not a research run.
 
 ```powershell
 python scripts\make_demo_data.py --out-dir work\demo_raw --subset FD001
@@ -149,109 +154,54 @@ python -m rul_prediction.train_ml --data-dir work\demo_raw --subset FD001 --out-
 python -m rul_prediction.train_deep --data-dir work\demo_raw --subset FD001 --out-dir work\demo_results\deep --models lstm --epochs 2 --window-size 20
 ```
 
-中文说明：上述命令只检查数据流、训练入口和输出格式是否能跑通。合成数据不能
-用于论文结果。
+## Paper 1 Commands / 第一篇相关命令
 
-## Core Experiments / 核心实验
-
-### FD001 baseline / FD001 基线
+Representative matrix:
 
 ```powershell
-python -m rul_prediction.train_ml --data-dir data\raw --subset FD001 --out-dir reports\tables\fd001_ml
-python -m rul_prediction.train_deep --data-dir data\raw --subset FD001 --out-dir reports\tables\fd001_deep --models lstm gru cnn
-python -m rul_prediction.plots --metrics reports\tables\fd001_ml\metrics.csv reports\tables\fd001_deep\metrics.csv --predictions reports\tables\fd001_ml\predictions.csv reports\tables\fd001_deep\predictions.csv --out-dir reports\figures
+python scripts\run_research_matrix.py --subsets FD001 FD002 FD003 FD004 --seeds 42 43 44 --deep-models gru --deep-epochs 60 --skip-existing
 ```
 
-### Multi-seed matrix / 多随机种子矩阵
+Focused GRU safety-loss ablation:
 
 ```powershell
-python scripts\run_research_matrix.py --subsets FD001 --seeds 42 43 44 --deep-epochs 60 --skip-safety --skip-existing
-python scripts\run_research_matrix.py --subsets FD003 --seeds 42 43 44 --deep-epochs 60 --skip-safety --skip-existing
-python scripts\run_research_matrix.py --subsets FD001 FD003 --seeds 42 43 44 --deep-epochs 60 --skip-ml --skip-deep --skip-existing
+python scripts\run_deep_ablation_matrix.py --subsets FD001 FD002 FD003 FD004 --seeds 42 43 44 --models gru --skip-existing
 ```
 
-Use `--deep-models` to restrict the deep models in the matrix run:
+Regenerate Paper 1 tables and figures from local experiment outputs:
 
 ```powershell
-python scripts\run_research_matrix.py --subsets FD001 --seeds 42 --deep-models gru --deep-epochs 60 --skip-existing
-```
-
-### Focused deep ablations / 深度模型集中消融
-
-```powershell
-python scripts\run_deep_ablation_matrix.py --subsets FD001 FD003 --seeds 42 --models gru --skip-existing
-```
-
-Run selected jobs only:
-
-```powershell
-python scripts\run_deep_ablation_matrix.py --subsets FD001 --seeds 42 43 44 --models gru --jobs safety_w1p5_h64_l1_w30 --skip-existing
-python scripts\run_deep_ablation_matrix.py --subsets FD003 --seeds 42 43 44 --models gru --jobs window50_h64_l1 capacity_h128_l1_w30 safety_w1p5_h64_l1_w30 --skip-existing
-```
-
-Recent experiment runners write `job_name` into metrics, predictions, and
-training histories so that aggregate tables can distinguish focused ablation
-settings.
-
-新的实验脚本会在 metrics、predictions 和 training history 中写入 `job_name`，
-便于聚合结果时区分不同消融任务。
-
-## Safety and Policy-Oriented Extensions / 安全与维护决策扩展
-
-Fast smoke commands:
-
-```powershell
-$env:PYTHONPATH="src"
-python scripts\run_uncertainty.py --data-dir data\raw --subset FD001 --method mc_dropout --model gru --epochs 1 --patience 1 --mc-samples 3 --batch-size 512 --out-dir reports\tables\smoke_uncertainty
-python scripts\run_decision_simulation.py --predictions reports\tables\smoke_uncertainty\predictions.csv --out-dir reports\tables\smoke_decision
-python scripts\run_domain_shift.py --data-dir data\raw --source-subset FD001 --target-subset FD003 --model ridge --out-dir reports\tables\smoke_domain
-python scripts\run_sensor_robustness.py --data-dir data\raw --subset FD001 --model ridge --noise-levels 0.05 --mask-fractions 0.1 --out-dir reports\tables\smoke_robustness
-python scripts\make_upgrade_figures.py --metrics reports\tables\smoke_uncertainty\metrics.csv --interval-metrics reports\tables\smoke_uncertainty\interval_metrics.csv --decision-metrics reports\tables\smoke_decision\decision_metrics.csv --robustness-metrics reports\tables\smoke_robustness\robustness_metrics.csv --out-dir reports\figures\smoke_upgrade
-```
-
-Full experiments should replace smoke settings with longer training, multiple
-seeds, and the intended FD subsets.
-
-完整实验应使用更长训练轮数、多随机种子和目标 FD 子集替代 smoke 参数。
-
-## Paper and Review Artifacts / 论文与综述材料
-
-Paper draft:
-
-- `reports/paper/main.tex`
-- `reports/paper/references.bib`
-- `reports/paper/figures/`
-- `reports/paper/arxiv_metric_summary.csv`
-- `reports/paper/safety_tradeoff_summary.csv`
-- `reports/paper/paired_bootstrap_rmse.csv`
-
-Literature review:
-
-- `reports/review/aero_engine_dl_review.md`
-- `reports/review/literature_matrix.csv`
-- `reports/review/references.bib`
-- `reports/review/figures/`
-- `reports/review/ieee/aero_engine_rul_ieee_review.tex`
-- `reports/review/ieee/aero_engine_rul_ieee_review.pdf`
-
-论文草稿位于 `reports/paper/`。综述稿和 IEEE 风格排版材料位于
-`reports/review/`。这些材料记录了项目当前研究推进状态，不代表已经过正式
-同行评审。
-
-## arXiv Figure and Source Workflow / arXiv 图表与源码包流程
-
-```powershell
-python -m rul_prediction.aggregate --root reports\tables\deep_ablations --out-dir reports\tables\deep_ablations\summary
-python -m rul_prediction.error_analysis --root reports\tables\deep_ablations --out-dir reports\tables\deep_ablations\summary
-python scripts\make_arxiv_figures.py
+python scripts\make_safety_benchmark_outputs.py
+python scripts\audit_paper_submission.py
 python scripts\package_arxiv_source.py
 ```
 
-The figure builder reads local experiment outputs under `reports/tables/` and
-writes manuscript figures and summary CSVs under `reports/paper/`.
+Paper 1 generated experiment outputs under `reports/tables/` are local-only and ignored by Git. Paper-facing summaries are kept under `reports/paper/`.
 
-图表生成脚本会读取本地 `reports/tables/` 中的实验输出，并将论文图表和摘要
-CSV 写入 `reports/paper/`。
+`reports/tables/` 中的完整实验输出是本地生成内容，不进入 Git；论文使用的摘要表和图表位于 `reports/paper/`。
+
+## Paper 2 Commands / 第二篇相关命令
+
+Full Dual-LSTM matrix:
+
+```powershell
+python scripts\run_dual_lstm_matrix.py --subsets FD001 FD002 FD003 FD004 --seeds 42 43 44 --jobs lstm_baseline_h64_l1_w30 dual_no_cycle_h64_l1_w30 dual_cycle_h64_l1_w30 dual_cycle_safety_w2_h64_l1_w30 --epochs 30 --patience 5 --skip-existing
+```
+
+Regenerate Paper 2 paper-facing outputs:
+
+```powershell
+python scripts\make_dual_lstm_paper2_outputs.py --root reports\tables\dual_lstm --out-dir reports\paper2
+python scripts\make_paper2_analysis_outputs.py --paper2-dir reports\paper2 --dual-root reports\tables\dual_lstm --paper1-dir reports\paper --out-dir reports\paper2
+python scripts\make_paper2_submission_package.py
+```
+
+After a local LaTeX installation is available:
+
+```powershell
+.\reports\paper2\build_paper2.ps1
+.\reports\paper2\package_paper2_source.ps1
+```
 
 ## Testing / 测试
 
@@ -259,48 +209,43 @@ CSV 写入 `reports/paper/`。
 python -m pytest -q
 ```
 
-The test suite currently focuses on lightweight unit coverage for metrics,
-windowing, losses, uncertainty utilities, robustness perturbations, decision
-simulation, and XAI helpers.
+The test suite covers metrics, data windowing, safety losses, uncertainty utilities, robustness perturbations, decision simulation, XAI helpers, Dual-LSTM data/model behavior, and arXiv source packaging.
 
-当前测试主要覆盖轻量单元逻辑：指标、窗口化、损失函数、不确定性工具、传感器
-扰动、维护决策模拟和 XAI 辅助函数。
+当前测试覆盖指标、窗口化、安全损失、不确定性工具、鲁棒性扰动、维护决策模拟、XAI 辅助函数、Dual-LSTM 数据/模型行为，以及 arXiv source packaging。
 
-## Research Integrity / 研究完整性说明
+## Research Integrity / 研究边界
 
 - Fit scalers only on training engines, then transform validation/test data.
 - Split train/validation by engine ID, not by individual windows.
+- Use last-window test evaluation for C-MAPSS test engines.
 - Never mix synthetic smoke data with official C-MAPSS experiment results.
 - Report late-life and overestimation metrics alongside RMSE and MAE.
-- Treat C-MAPSS as a simulation benchmark, not direct evidence for real fleet
-  maintenance policy.
-- Do not claim state-of-the-art performance without broader model selection,
-  stronger baselines, and independent validation.
+- Treat SARBI as a transparent reporting index, not as a physical safety formula or certification criterion.
+- Treat C-MAPSS as a simulated benchmark, not real fleet telemetry.
+- Do not claim aviation safety certification or new architecture SOTA from these results alone.
 
-中文要点：
+研究边界：
 
 - 归一化器只能在训练发动机上拟合，再用于 validation/test。
-- train/validation 应按 engine ID 切分，而不是按窗口随机切分。
+- train/validation 按 engine ID 切分，不按窗口随机切分。
+- C-MAPSS test engine 使用 last-window evaluation。
 - 合成 smoke data 不能混入正式 C-MAPSS 实验结果。
-- 除 RMSE/MAE 外，应同时报告临近失效和过度乐观预测指标。
-- C-MAPSS 是仿真基准，不等同于真实机队维护策略验证。
-- 若没有更强基线、更全面调参和独立验证，不应宣称 SOTA。
+- 除 RMSE/MAE 外，需要同时报告临近失效和过度乐观预测风险指标。
+- SARBI 是透明报告指标，不是物理安全公式或认证标准。
+- C-MAPSS 是仿真 benchmark，不是真实机队遥测数据。
+- 仅凭当前结果不宣称航空安全认证，也不宣称新架构 SOTA。
 
-## Current Direction / 当前推进方向
+## Next Work / 下一步
 
-The next project phase is to run the systematic FD001-FD004 safety-loss
-ablation, then rewrite the manuscript around safety trade-offs between
-aggregate RMSE, late-life error, and optimistic overestimation risk.
+Paper 1:
 
-下一阶段重点是运行 FD001-FD004 系统 safety-loss 消融实验，并围绕整体 RMSE、
-临近失效误差和过度乐观高估风险之间的 trade-off 重写论文。
+- Audit manuscript numeric values against `reports/paper/paper_value_trace.csv`.
+- Rebuild and inspect `reports/paper/main.tex` after a TeX engine is available.
+- Keep uncertainty, maintenance decision simulation, domain shift, robustness, and XAI as future-work scaffolds until Paper 1 stabilizes.
 
-## Current Progress Snapshot
+Paper 2:
 
-As of 2026-06-27, FD002 and FD004 representative 3-seed matrices are complete
-for ML baselines, GRU, and Safety-GRU. Generated experiment outputs remain
-local-only under `reports/tables/`.
-
-The current status, FD002/FD004 result table, interpretation, and next
-experiment commands are consolidated in
-`reports/progress_roadmap_2026-06-27.md`.
+- Read `reports/paper2/main.tex` for voice, target-journal fit, and claim tone.
+- Compile `reports/paper2/main.tex` and `reports/paper2/supplement.tex`.
+- Check figures visually and decide final submission packaging details.
+- Keep novelty claims narrow: cycle-consistent Dual-LSTM is a safety-oriented method response under this protocol, not a universal replacement for Paper 1 baselines.
