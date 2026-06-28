@@ -61,6 +61,10 @@ def aggregate_metrics(metrics: pd.DataFrame) -> pd.DataFrame:
             "critical_threshold",
             "critical_weight",
             "over_weight",
+            "pair_horizon",
+            "lambda_cycle",
+            "lambda_latent",
+            "lambda_mono",
         ]
         if col in metrics.columns
     ]

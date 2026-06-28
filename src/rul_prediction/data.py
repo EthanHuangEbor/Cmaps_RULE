@@ -23,6 +23,19 @@ class PreparedData:
     scaler: StandardScaler
 
 
+@dataclass(frozen=True)
+class PairedSequenceWindows:
+    x_current: np.ndarray
+    y_current: np.ndarray
+    x_future: np.ndarray
+    y_future: np.ndarray
+    horizon: np.ndarray
+    units_current: np.ndarray
+    units_future: np.ndarray
+    cycles_current: np.ndarray
+    cycles_future: np.ndarray
+
+
 def _subset_path(data_dir: str | Path, subset: str, prefix: str) -> Path:
     subset = subset.upper()
     return Path(data_dir) / f"{prefix}_{subset}.txt"
@@ -174,6 +187,65 @@ def make_sequence_windows(
         np.asarray(labels, dtype=np.float32),
         np.asarray(units, dtype=np.int32),
         np.asarray(cycles, dtype=np.int32),
+    )
+
+
+def make_paired_sequence_windows(
+    df: pd.DataFrame,
+    feature_columns: list[str],
+    window_size: int = 30,
+    stride: int = 1,
+    pair_horizon: int = 1,
+    label_column: str = "rul",
+) -> PairedSequenceWindows:
+    if pair_horizon < 1:
+        raise ValueError("pair_horizon must be at least 1.")
+    x_current: list[np.ndarray] = []
+    y_current: list[float] = []
+    x_future: list[np.ndarray] = []
+    y_future: list[float] = []
+    horizons: list[int] = []
+    units_current: list[int] = []
+    units_future: list[int] = []
+    cycles_current: list[int] = []
+    cycles_future: list[int] = []
+
+    for unit, group in df.sort_values(["unit", "cycle"]).groupby("unit"):
+        values = group[feature_columns].to_numpy(dtype=np.float32)
+        labels = group[label_column].to_numpy(dtype=np.float32)
+        cycles = group["cycle"].to_numpy(dtype=np.int32)
+        if len(group) < window_size + pair_horizon:
+            continue
+        end_indices = list(range(window_size, len(group) + 1, stride))
+        index_by_cycle = {int(cycles[end_idx - 1]): end_idx for end_idx in end_indices}
+        for end_idx in end_indices:
+            current_cycle = int(cycles[end_idx - 1])
+            future_cycle = current_cycle + pair_horizon
+            future_end_idx = index_by_cycle.get(future_cycle)
+            if future_end_idx is None:
+                continue
+            x_current.append(values[end_idx - window_size : end_idx])
+            y_current.append(float(labels[end_idx - 1]))
+            x_future.append(values[future_end_idx - window_size : future_end_idx])
+            y_future.append(float(labels[future_end_idx - 1]))
+            horizons.append(pair_horizon)
+            units_current.append(int(unit))
+            units_future.append(int(unit))
+            cycles_current.append(current_cycle)
+            cycles_future.append(future_cycle)
+
+    if not x_current:
+        raise ValueError("No paired sequence windows were created. Reduce window_size or pair_horizon.")
+    return PairedSequenceWindows(
+        x_current=np.stack(x_current).astype(np.float32),
+        y_current=np.asarray(y_current, dtype=np.float32),
+        x_future=np.stack(x_future).astype(np.float32),
+        y_future=np.asarray(y_future, dtype=np.float32),
+        horizon=np.asarray(horizons, dtype=np.float32),
+        units_current=np.asarray(units_current, dtype=np.int32),
+        units_future=np.asarray(units_future, dtype=np.int32),
+        cycles_current=np.asarray(cycles_current, dtype=np.int32),
+        cycles_future=np.asarray(cycles_future, dtype=np.int32),
     )
 
 
