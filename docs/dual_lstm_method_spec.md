@@ -68,12 +68,39 @@ FD001 seed 42 test snapshot:
 
 Interpretation: the prototype is technically viable and meets the gate for small validation. The result should not yet be written as a stable scientific claim because it is one subset and one seed only.
 
-## Next Gate
+## Small Validation Result
 
-Run small validation only after Paper 1 remains stable:
+Command:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts\run_dual_lstm_matrix.py --subsets FD001 FD004 --seeds 42 43 44 --jobs lstm_baseline_h64_l1_w30 dual_no_cycle_h64_l1_w30 dual_cycle_h64_l1_w30 dual_cycle_safety_w2_h64_l1_w30 --epochs 30 --patience 5 --skip-existing
+.\.venv\Scripts\python.exe scripts\run_dual_lstm_matrix.py --subsets FD001 FD004 --seeds 42 43 44 --jobs lstm_baseline_h64_l1_w30 dual_no_cycle_h64_l1_w30 dual_cycle_h64_l1_w30 dual_cycle_safety_w2_h64_l1_w30 --epochs 30 --patience 5
 ```
 
-Proceed to the full FD001-FD004 matrix only if FD001/FD004 small validation shows a repeatable improvement in at least one safety-risk metric with explainable RMSE cost.
+Generated small paper-facing files:
+
+- `reports/paper/dual_lstm_small_validation_seed_metrics.csv`
+- `reports/paper/dual_lstm_small_validation_summary.csv`
+- `reports/paper/dual_lstm_small_validation_rmse_vs_risk_best.csv`
+
+FD001/FD004 three-seed test means:
+
+| Subset | Job | RMSE | Critical RMSE50 | Overestimation ratio | Overestimation magnitude |
+| --- | --- | ---: | ---: | ---: | ---: |
+| FD001 | LSTM baseline | 14.98 | 5.83 | 0.63 | 7.17 |
+| FD001 | Dual-LSTM cycle | 14.86 | 5.96 | 0.65 | 7.37 |
+| FD001 | Dual-LSTM cycle safety-w2 | 14.88 | 5.39 | 0.49 | 4.23 |
+| FD004 | LSTM baseline | 23.40 | 22.01 | 0.51 | 9.20 |
+| FD004 | Dual-LSTM cycle | 22.32 | 19.19 | 0.55 | 9.00 |
+| FD004 | Dual-LSTM cycle safety-w2 | 22.38 | 15.11 | 0.44 | 5.96 |
+
+Interpretation: the small validation gate is passed. The cycle branch improves RMSE relative to the LSTM baseline on both tested subsets. Adding the safety loss gives up little aggregate RMSE relative to the cycle-only job while substantially reducing critical-zone and optimistic-overestimation risk, especially on FD004. This remains a small validation result, not a final Paper 2 claim.
+
+## Next Gate
+
+Proceed to a full matrix only after Paper 1 remains stable:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run_dual_lstm_matrix.py --subsets FD001 FD002 FD003 FD004 --seeds 42 43 44 --jobs lstm_baseline_h64_l1_w30 dual_no_cycle_h64_l1_w30 dual_cycle_h64_l1_w30 dual_cycle_safety_w2_h64_l1_w30 --epochs 30 --patience 5 --skip-existing
+```
+
+Full matrix gate target: FD001-FD004 x 3 seeds x 4 jobs = 48 jobs, followed by the same aggregate/error-analysis checks used here. Continue to avoid claims that Dual-LSTM is first-ever RUL work; the intended claim is safety-oriented cycle-consistency under a leakage-aware C-MAPSS protocol.
