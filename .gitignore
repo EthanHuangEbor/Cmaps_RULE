@@ -27,6 +27,7 @@ data/raw/*.pdf
 .matplotlib-cache/
 
 # Paper 2 generated submission bundles and oversized raster exports
+reports/paper/build/source/
 reports/paper2/build/
 reports/paper2/submission_source/
 reports/paper2/paper2_submission_source.zip

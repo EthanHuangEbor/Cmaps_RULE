@@ -11,16 +11,23 @@ certification claim.
 
 Working title:
 
-> Safety-Oriented Evaluation of Classical and Deep Sequence Models for
-> Aero-Engine RUL Prediction on C-MAPSS
+> Safety-Oriented Model Selection for Aero-Engine RUL Prediction: Ranking
+> Discordance and Risk-Profile Shaping on C-MAPSS
 
 Central research question:
 
-> On FD001-FD004, is the aggregate RMSE-best model also the best model for
-> late-life error and optimistic overestimation risk?
+> On FD001-FD004, does the aggregate RMSE-best model remain the best model when
+> late-life error, optimistic overestimation risk, uncertainty, and
+> maintenance-decision proxies are considered?
 
 Current answer: no. RMSE-best, critical-zone-best, overestimation-risk-best, and
 SARBI-best rankings often differ.
+
+The project now has a dual deliverable boundary: it can become a student
+conference/workshop paper if the safety-oriented model-selection argument is
+kept tight, and it can also stand as a multi-model NASA C-MAPSS reproduction
+repo if stronger-model extensions are treated as benchmark coverage rather than
+architecture-first novelty claims.
 
 ## Completed Evidence
 
@@ -98,19 +105,22 @@ single best model claim.
 
 ## Next Required Analysis
 
-Do not start a new primary Paper 1 experiment until the submission package is
-stable. The next work should be:
+Do not start a new primary paper experiment until the submission package and
+repository documentation are stable. The next work should be:
 
 - Audit manuscript values against `reports/paper/paper_value_trace.csv`.
 - Rebuild and inspect the paper PDF once a TeX engine is available locally.
-- Keep Paper 2 Dual-LSTM prototype work on a separate branch and out of the
-  Paper 1 contribution claims.
+- Treat Paper 2 Dual-LSTM as a risk-profile shaping extension under the Paper 1
+  protocol, not as a separate universal SOTA method claim.
+- Add one stronger sequence baseline first, preferably TCN, before expanding to
+  lightweight Transformer and uncertainty-aware variants.
 
 ## Deferred Work
 
 Uncertainty, maintenance-decision simulation, domain shift, robustness, and XAI
-remain future-work scaffolds. They should not be promoted to the first paper's
-main contribution until the safety-oriented benchmark paper is stable.
+remain staged extensions. They should not be promoted to the main contribution
+until the safety-oriented benchmark paper is stable and their outputs are
+available under the same FD001-FD004 protocol.
 
 ## Scope Boundaries
 

@@ -55,7 +55,7 @@ The full Paper 2 matrix contains 48 complete jobs: four subsets, three seeds, an
 \subsection{Cycle consistency gives a modest representation signal}
 Cycle-only Dual-LSTM improved RMSE relative to the LSTM baseline on three of four subsets by point estimate, with changes ranging from -4.6\% to +0.4\%. However, paired bootstrap intervals exclude zero for only one of four subset-level RMSE contrasts, so this result should be described as a modest representation signal rather than a decisive RMSE win (Table~\ref{tab:cycle}).
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \caption{Cycle-only Dual-LSTM versus LSTM baseline. Values are candidate minus baseline. Negative values indicate lower error for cycle-only Dual-LSTM.}
 \label{tab:cycle}
@@ -70,12 +70,12 @@ FD003 & +0.4\% & 0.06 & [-1.09, 1.17] & uncertain \\
 FD004 & -4.6\% & -1.08 & [-1.97, -0.31] & improvement \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \subsection{Safety weighting shifts optimistic-risk behavior}
 The strongest Paper 2 result is not aggregate RMSE. Cycle+safety-w2 reduced Critical RMSE50 on all four subsets by point estimate, with relative changes from -21.3\% to -7.5\%. It also reduced overestimation magnitude on all four subsets, with changes from -42.6\% to -29.1\%; the overestimation-magnitude bootstrap interval excludes zero on all four subsets (Table~\ref{tab:safety}). FD002 is the main trade-off case: risk metrics improve, but RMSE increases relative to cycle-only Dual-LSTM.
 
-\begin{table}[t]
+\begin{table*}[t]
 \centering
 \caption{Cycle+safety-w2 versus cycle-only Dual-LSTM. Relative changes are computed from three-seed test means. The final column gives the paired-bootstrap 95\% CI for overestimation-magnitude difference.}
 \label{tab:safety}
@@ -90,7 +90,7 @@ FD003 & -2.7\% & -20.9\% & -29.1\% & [-2.57, -1.28] \\
 FD004 & +0.3\% & -21.3\% & -33.7\% & [-3.63, -2.49] \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \begin{figure*}[t]
 \centering
