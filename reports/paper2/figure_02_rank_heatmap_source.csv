@@ -1,0 +1,17 @@
+row_label,rmse,critical_rmse_50,overestimation_ratio,overestimation_magnitude
+FD001 LSTM,3.0,2.0,3.0,3.0
+FD001 No-cycle,4.0,4.0,2.0,2.0
+FD001 Cycle,1.0,3.0,4.0,4.0
+FD001 Cycle+safety,2.0,1.0,1.0,1.0
+FD002 LSTM,3.0,2.0,2.0,2.0
+FD002 No-cycle,1.0,3.0,3.0,3.0
+FD002 Cycle,2.0,4.0,4.0,4.0
+FD002 Cycle+safety,4.0,1.0,1.0,1.0
+FD003 LSTM,2.0,3.0,3.0,3.0
+FD003 No-cycle,4.0,4.0,4.0,4.0
+FD003 Cycle,3.0,2.0,2.0,2.0
+FD003 Cycle+safety,1.0,1.0,1.0,1.0
+FD004 LSTM,4.0,4.0,2.0,4.0
+FD004 No-cycle,3.0,3.0,3.0,3.0
+FD004 Cycle,1.0,2.0,4.0,2.0
+FD004 Cycle+safety,2.0,1.0,1.0,1.0

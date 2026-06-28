@@ -1,0 +1,9 @@
+claim_id,claim,evidence_file,gate,status
+P2-C1,Dual-LSTM full matrix covers FD001-FD004 with 3 seeds and 4 jobs.,reports/paper2/dual_lstm_seed_metrics.csv,"Exactly 48 test rows, 96 metric rows, expected seeds 42/43/44, and complete metrics/predictions/history/feature files.",pass
+P2-C2,Cycle consistency is the RMSE-oriented representation control.,reports/paper2/dual_lstm_full_summary.csv,Dual-LSTM cycle RMSE should improve over LSTM baseline on at least 2 of 4 subsets.,pass
+P2-C3,Cycle safety-w2 shifts the risk profile toward lower late-life or optimistic overestimation risk.,reports/paper2/dual_lstm_rmse_vs_risk_best.csv,Risk improvement on at least 3 of 4 subsets before manuscript claim.,pass
+P2-C4,All conclusions are benchmark-limited and do not claim aviation certification or first-ever Dual-LSTM RUL.,reports/paper2/positioning_memo.md,Boundary statement present before writing manuscript.,pass
+P2-C5,Cycle+safety-w2 reduces late-life or overestimation risk relative to cycle-only Dual-LSTM.,reports/paper2/dual_lstm_statistical_audit.csv,Paired seed-engine bootstrap and effect-size table support direction and uncertainty.,pass
+P2-C6,Paper 2 is a method-response paper rather than a full Paper 1 portfolio replacement.,reports/paper2/paper1_paper2_comparison.csv,Bridge table compares Paper2 best jobs against Paper1 representative and GRU-ablation best results.,pass
+P2-C7,Main figures are traceable to Paper2 CSV outputs and the Dual-LSTM interface.,reports/paper2/figure_manifest.md,Figure manifest links every figure to source data and review risk.,pass
+P2-C8,"The manuscript skeleton keeps novelty, safety, and certification claims bounded.",reports/paper2/manuscript_skeleton.md,Skeleton includes boundary and missing-input sections.,pass
