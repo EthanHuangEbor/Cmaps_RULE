@@ -10,9 +10,14 @@ plain "deep learning versus classical ML" comparison. The central question is:
 > Do model rankings change when RUL predictors are judged by aggregate accuracy,
 > late-life error, optimistic overestimation risk, and policy-oriented metrics?
 
-The current evidence covers FD001-FD004. FD001 and FD003 contain the broader
-model comparison used in the earlier report. FD002 and FD004 now have a
-representative 3-seed stress matrix with ML baselines, GRU, and Safety-GRU.
+The current evidence now covers FD001-FD004 at two levels:
+
+- A representative model matrix for ML baselines, GRU, and Safety-GRU.
+- A systematic GRU safety-loss ablation across all four C-MAPSS subsets.
+
+The strongest paper thread is no longer "which model has the lowest RMSE". It
+is the empirically reproducible mismatch between aggregate RMSE rankings and
+late-life / overestimation-risk rankings.
 
 ## Completed Assets
 
@@ -24,13 +29,15 @@ representative 3-seed stress matrix with ML baselines, GRU, and Safety-GRU.
 - Deep baselines: LSTM, GRU, and 1D-CNN for the primary FD001/FD003 matrix.
 - Safety-aware GRU variants using critical-zone, asymmetric, and combined
   safety losses.
+- Full FD001-FD004 GRU safety-loss ablation: 4 subsets x 3 seeds x 8 jobs = 96
+  jobs.
 - Metrics: RMSE, MAE, NASA S-score, Critical RMSE30/50, overestimation ratio,
   and overestimation magnitude.
 - Runners for matrix experiments, deep ablations, uncertainty, decisions,
   domain shift, sensor robustness, and figure generation.
 
 Generated tables, trained models, and raw NASA files remain local-only and are
-ignored by Git.
+ignored by Git. Paper-scale summaries are tracked under `reports/paper/`.
 
 ## Latest FD002/FD004 Representative Results
 
@@ -50,40 +57,87 @@ GRU-only deep baselines.
 | FD004 | ML | Ridge | 24.188 | 0.150 | 19.920 | 4198.092 | 24.113 | 26.455 | 0.563 | 11.985 |
 | FD004 | safety_w2_h64_l1_w30 | Safety-GRU | 21.931 | 1.151 | 16.326 | 3377.626 | 11.190 | 14.620 | 0.394 | 5.509 |
 
+## Latest Four-Subset Safety-Loss Ablation
+
+Completed on 2026-06-27 with seeds 42/43/44, GRU, window size 30, hidden size
+64, one recurrent layer, epochs 60, and patience 8.
+
+Validation status:
+
+- `metrics.csv`: 96 files.
+- `predictions.csv`: 96 files.
+- `training_history.csv`: 96 files.
+- `combined_metrics.csv`: 192 rows.
+- Unique subset/seed/job combinations: 96.
+- Minimum seeds per subset/job/split: 3.
+- Missing expected files: 0.
+
+Runtime note: FD001/FD003 were run before CUDA PyTorch was installed in this
+local venv. FD002/FD004 were run after switching to `torch 2.12.1+cu126` on an
+RTX 4060 Laptop GPU. The experiment definitions, seeds, data splits, and output
+schema are unchanged.
+
+Paper-scale outputs:
+
+- `reports/paper/deep_ablation_test_summary.csv`
+- `reports/paper/deep_ablation_best_by_metric.csv`
+- `reports/paper/deep_ablation_tradeoff_summary.csv`
+
+### Test-Split Trade-Off Summary
+
+| Subset | RMSE-best job | Safety-risk winner pattern | Main interpretation |
+|---|---|---|---|
+| FD001 | `asymmetric_w2_h64_l1_w30` | `safety_w3_h64_l1_w30` wins NASA S-score, Critical RMSE30/50, overestimation ratio, and overestimation magnitude. | Safety loss reduces risk metrics with about 2.6% RMSE cost. |
+| FD002 | `critical_w2_h64_l1_w30` | Safety/asymmetric variants split the risk-metric wins. | Risk reductions are real but cost about 7-21% RMSE depending on the metric. |
+| FD003 | `critical_w3_h64_l1_w30` | RMSE and NASA S-score align, but other variants still win late-life and overestimation metrics. | This is the subset-dependent nuance; do not overclaim universal improvement. |
+| FD004 | `baseline_lr1e-3_h64_l1_w30` | `safety_w2_h64_l1_w30` wins NASA S-score; `safety_w3_h64_l1_w30` wins critical and overestimation metrics. | Strongest evidence that RMSE-optimal GRU is not safety-risk optimal. |
+
+Selected effect sizes from `deep_ablation_tradeoff_summary.csv`:
+
+- FD001: `safety_w3_h64_l1_w30` reduces overestimation magnitude by about
+  40.4% relative to the RMSE-best job, at about 2.6% higher RMSE.
+- FD002: `safety_w3_h64_l1_w30` reduces overestimation magnitude by about
+  53.6%, at about 20.6% higher RMSE.
+- FD003: `critical_w3_h64_l1_w30` is both RMSE and NASA S-score best, but
+  `safety_w3_h64_l1_w30` still reduces overestimation magnitude by about 29.3%
+  at about 11.9% higher RMSE.
+- FD004: `safety_w2_h64_l1_w30` reduces NASA S-score by about 56.5% at about
+  1.2% higher RMSE; `safety_w3_h64_l1_w30` reduces Critical RMSE30 by about
+  32.6% and overestimation magnitude by about 49.4% at about 12.7% higher
+  RMSE.
+
 ## Interpretation
 
-- FD002: GRU is the aggregate RMSE winner among representative models, while
-  Safety-GRU gives the best late-life and overestimation-risk profile.
-- FD004: Random Forest is the aggregate RMSE winner. Safety-GRU is not the
-  aggregate winner, but it substantially improves Critical RMSE30/50 and
-  overestimation risk compared with ordinary GRU.
-- Across FD002/FD004, aggregate accuracy and safety-oriented risk metrics rank
-  models differently. This is the strongest current paper thread.
+- FD002/FD004 representative results already showed that aggregate accuracy and
+  safety-oriented risk metrics rank models differently.
+- The full FD001-FD004 ablation confirms that this is not a one-off artifact,
+  but it is subset dependent.
+- The manuscript should present safety losses as trade-off mechanisms. They can
+  reduce dangerous overestimation and late-life error while worsening aggregate
+  RMSE.
+- FD003 is useful precisely because it is mixed: it prevents the paper from
+  sounding like a universal improvement claim.
 
-## Next Priority: Four-Subset Safety-Loss Ablation
+## Next Priority: Manuscript Tables and Figures
 
-The next core experiment is the systematic GRU safety-loss ablation across
-FD001-FD004. This tests whether the observed safety trade-off is stable across
-subsets and loss types.
+Do not launch a new primary experiment until the current evidence is converted
+into paper-ready artifacts. Next steps:
 
-```powershell
-.\.venv\Scripts\python.exe scripts\run_deep_ablation_matrix.py --subsets FD001 FD002 FD003 FD004 --seeds 42 43 44 --models gru --jobs baseline_lr1e-3_h64_l1_w30 critical_w2_h64_l1_w30 critical_w3_h64_l1_w30 asymmetric_w2_h64_l1_w30 asymmetric_w3_h64_l1_w30 safety_w1p5_h64_l1_w30 safety_w2_h64_l1_w30 safety_w3_h64_l1_w30 --epochs 60 --patience 8 --skip-existing
-```
+- Build compact tables from `reports/paper/deep_ablation_test_summary.csv` and
+  `reports/paper/deep_ablation_tradeoff_summary.csv`.
+- Generate one multi-panel figure showing RMSE vs safety-risk trade-offs across
+  FD001-FD004.
+- Add seed-level confidence intervals or paired checks for the most important
+  comparisons.
+- Rewrite the results section around the claim: RMSE-optimal model selection can
+  understate late-life and optimistic-overestimation risk.
 
-After it finishes:
-
-```powershell
-.\.venv\Scripts\python.exe -m rul_prediction.aggregate --root reports\tables\deep_ablations --out-dir reports\tables\deep_ablations\summary
-.\.venv\Scripts\python.exe -m rul_prediction.error_analysis --root reports\tables\deep_ablations --out-dir reports\tables\deep_ablations\summary
-```
-
-## Decision Rules for the Ablation
+## Decision Rules
 
 - Do not choose models by RMSE alone.
 - Report RMSE/MAE together with NASA S-score, Critical RMSE30/50,
   overestimation ratio, and overestimation magnitude.
-- Treat safety losses as trade-off mechanisms: they may reduce dangerous
-  overestimation and late-life error while worsening aggregate RMSE.
+- Treat safety losses as trade-off mechanisms, not as a guaranteed improvement.
 - Keep claims scoped to C-MAPSS simulated benchmark data.
 
 ## Paper Direction
@@ -103,7 +157,7 @@ Contribution statement:
 The next manuscript rewrite should move from the old FD001/FD003-only framing
 to FD001-FD004 safety-loss trade-off evidence. Uncertainty, decision
 simulation, domain shift, and sensor robustness should remain secondary until
-the four-subset ablation is complete.
+this core argument is paper-ready.
 
 ## Scope Boundaries
 
