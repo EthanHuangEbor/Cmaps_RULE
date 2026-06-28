@@ -3,15 +3,11 @@ C-MAPSS RUL arXiv source package
 Included files:
 - main.tex
 - references.bib
-- main.bbl
-- figures/figure_01_data_overview.pdf
-- figures/figure_02_model_comparison.pdf
-- figures/figure_03_predicted_vs_true.pdf
-- figures/figure_04_critical_residuals.pdf
-- figures/figure_05_hardest_engines.pdf
-- figures/figure_06_safety_tradeoff.pdf
-- figures/figure_07_learning_curves.pdf
-- figures/figure_08_feature_importance.pdf
+- figures/figure_09_metric_rank_heatmap.pdf
+- figures/figure_10_rmse_vs_critical_rmse50.pdf
+- figures/figure_11_rmse_vs_overestimation_magnitude.pdf
+- figures/figure_12_ablation_rmse_vs_overestimation.pdf
+- figures/figure_13_sarbi_weight_sensitivity.pdf
 
 Excluded by design:
 - raw NASA C-MAPSS data
@@ -21,4 +17,7 @@ Excluded by design:
 - large experiment tables not referenced by LaTeX
 
 Missing referenced figures:
+None
+
+Skipped files:
 None
