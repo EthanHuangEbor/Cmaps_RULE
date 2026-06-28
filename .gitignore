@@ -24,3 +24,4 @@ reports/logs/
 *.joblib
 *.pt
 data/raw/*.pdf
+.matplotlib-cache/

@@ -10,8 +10,6 @@
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{xurl}
 \usepackage{hyperref}
@@ -26,59 +24,85 @@
 \graphicspath{{figures/}}
 \newcommand{\cmaps}{C-MAPSS}
 \newcommand{\rul}{RUL}
+\newcommand{\sarbi}{SARBI}
 
-\title{\textbf{Safety-Aware Evaluation and Improvement of Classical and Deep Sequence Models for Turbofan Engine RUL Prediction on C-MAPSS}}
+\title{\textbf{Safety-Oriented Evaluation of Classical and Deep Sequence Models for Aero-Engine RUL Prediction on C-MAPSS}}
 \author{Ethan Huang\\Beihang University}
-\date{June 25, 2026}
+\date{June 28, 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Remaining useful life (RUL) estimation is a core prognostics and health management task for aero-engine maintenance. Recent C-MAPSS studies often compare classical regressors, convolutional models, and recurrent neural networks primarily through aggregate accuracy. This paper revisits that benchmark setting from a safety-aware perspective. Using the NASA C-MAPSS FD001 and FD003 subsets, we compare Ridge regression, Random Forest, Gradient Boosting, LSTM, GRU, and 1D-CNN pipelines under leakage-controlled preprocessing, engine-level validation splitting, capped RUL labels, and three random seeds. We further evaluate focused GRU variants, including longer temporal windows, larger hidden capacity, learning-rate changes, and lightweight safety-aware losses that upweight late-life samples and overestimation errors. Results show that tree ensembles remain strong on the simpler FD001 subset, while a 50-cycle GRU obtains the numerically lowest FD003 RMSE among the evaluated configurations; a paired bootstrap comparison with Gradient Boosting is not statistically resolved. More importantly, model ranking changes under safety-oriented metrics: safety-weighted GRUs improve FD001 critical-zone RMSE and reduce FD003 overestimation frequency, even when they do not dominate aggregate RMSE. The study argues that C-MAPSS RUL reports should include critical-zone error and overestimation behavior alongside RMSE, MAE, and NASA score. The contribution is scoped as a reproducible student research benchmark rather than a new state-of-the-art method.
+Remaining useful life (RUL) prediction for aero-engines is often evaluated by aggregate error metrics such as RMSE and the NASA score. These metrics are useful, but they do not by themselves show whether the model that is most accurate on average is also safest near end of life or least prone to optimistic overestimation. This paper reframes NASA C-MAPSS RUL prediction as a safety-oriented benchmark problem rather than a new state-of-the-art architecture claim. Across FD001--FD004, we compare Ridge regression, Random Forest, Gradient Boosting, GRU, and a lightweight Safety-GRU under engine-level validation splits, train-only scaling, capped RUL labels, 30-cycle windows, last-window test evaluation, and three random seeds. We report RMSE, MAE, NASA score, critical-zone RMSE at RUL $\leq 30$ and $\leq 50$, overestimation ratio, and overestimation magnitude, and define a relative composite index, SARBI, to summarize aggregate accuracy, late-life error, and optimistic-risk behavior without replacing the raw metrics. The results show systematic rank discordance. In the representative matrix, FD002 and FD004 select Safety-GRU under SARBI even though GRU and Random Forest are RMSE-best, respectively; FD001 and FD003 also show separations between RMSE-best and critical or overestimation-risk winners. A 96-job GRU safety-loss ablation confirms that critical, asymmetric, and combined safety losses can move the risk profile, but with subset-dependent RMSE costs. The contribution is a reproducible, benchmark-level evaluation protocol and risk-trade-off evidence for C-MAPSS, not a certified aviation safety method.
 \end{abstract}
 
-\noindent\textbf{Keywords:} remaining useful life; prognostics and health management; C-MAPSS; turbofan engine; safety-aware learning; GRU
+\noindent\textbf{Keywords:} remaining useful life; prognostics and health management; C-MAPSS; turbofan engine; safety-oriented evaluation; overestimation risk; GRU
 
 \section{Introduction}
 
-Remaining useful life (RUL) prediction estimates how many operating cycles remain before a component reaches failure. In prognostics and health management (PHM), accurate RUL estimation supports maintenance scheduling, fleet availability, and risk control for expensive engineering assets \citep{Jardine2006}. For aircraft engines, this task is not a standard symmetric regression problem. Underestimating RUL can cause premature maintenance and cost, but overestimating RUL may delay inspection or replacement and is therefore more hazardous. A model with slightly worse global accuracy can still be preferable if it behaves more conservatively near end of life.
+Remaining useful life (RUL) prediction estimates how many operating cycles remain before a component reaches failure. In prognostics and health management, RUL estimates support inspection planning, spare-parts allocation, and maintenance scheduling for high-value engineering assets \citep{Jardine2006}. For aero-engine applications, however, RUL error is not naturally symmetric. Underestimating RUL can waste useful life and increase maintenance cost, whereas overestimating RUL may delay intervention and is therefore the more safety-relevant failure mode.
 
-The NASA C-MAPSS turbofan degradation benchmark remains a common testbed for RUL methods \citep{NASA_PCoE,Saxena2008}. It contains simulated engine trajectories with operating settings and sensor channels. Many papers use the benchmark to compare classical machine learning, convolutional neural networks (CNNs), and recurrent neural networks such as LSTM and GRU models \citep{Babu2016,Zheng2017,Goel2026}. Those comparisons are useful, but they can hide two practical questions: whether a method remains reliable near failure, and whether it tends to produce optimistic RUL estimates.
+NASA C-MAPSS remains a central simulation benchmark for aero-engine RUL research \citep{NASA_PCoE,Saxena2008}. Recent work has improved feature extraction through CNNs, recurrent networks, temporal convolution, attention, Transformer variants, and Koopman or spatiotemporal designs \citep{Babu2016,Zheng2017,Li2018,Liu2023SAETCN,Fan2024STAR,Kim2025KoopmanTransformer}. Parallel work has explored Bayesian or risk-aware prediction intervals \citep{Hu2023Bayesian,Xiang2024BayesianGated} and maintenance decision models built on RUL forecasts \citep{DePater2022,Mitici2023}. These directions are valuable, but C-MAPSS comparisons still often emphasize aggregate RMSE and the NASA score as the main ranking axes.
 
-This paper follows the comparative spirit of recent C-MAPSS benchmark work \citep{Goel2026}, but changes the emphasis. Rather than asking only which architecture has the lowest RMSE, we ask:
-
-\begin{quote}
-Under a consistent, leakage-controlled protocol, do deep sequence models improve safety-relevant RUL behavior compared with strong classical baselines, especially in the critical late-life region?
-\end{quote}
-
-We evaluate FD001 and FD003 because both use one operating condition, while FD003 adds a second fault mode. This pair keeps the operating-condition complexity controlled while increasing degradation heterogeneity. Our experiments include classical feature-engineered models, deep sequence models, three random seeds, safety metrics, window-length ablations, and a lightweight safety-aware GRU loss.
+This paper asks a narrower and more diagnostic question: under a consistent C-MAPSS protocol, is the aggregate RMSE-best model also the best model for late-life error and optimistic overestimation risk? The expected answer is not simply that one model family wins. Strong classical baselines remain competitive. Lightweight safety losses do not make GRUs universally more accurate. Instead, the central phenomenon is ranking mismatch: the model that minimizes average error can differ from the model that reduces critical-zone error or optimistic RUL predictions.
 
 The contributions are:
 \begin{enumerate}
-    \item A reproducible comparison of classical and deep RUL pipelines on FD001/FD003 using engine-level splits, train-only scaler fitting, capped RUL labels, and matched metrics.
-    \item A safety-aware evaluation protocol that reports NASA score, critical-zone RMSE, and overestimation ratio in addition to RMSE and MAE.
-    \item A focused GRU study showing how window length and safety-aware loss affect aggregate accuracy, late-life error, and optimistic prediction risk.
-    \item A diagnostic figure package covering data distributions, prediction scatter, residuals, engine-level failures, learning curves, and feature importance.
+    \item A leakage-aware FD001--FD004 C-MAPSS evaluation protocol with engine-level validation splits, train-only scaling, capped labels, last-window test evaluation, and three random seeds.
+    \item A safety-oriented metric set combining RMSE, MAE, NASA score, critical RMSE30/50, overestimation ratio, and overestimation magnitude.
+    \item A relative composite index, SARBI, that summarizes accuracy, late-life error, and optimistic-risk behavior while keeping every raw metric visible.
+    \item A four-subset empirical analysis showing that RMSE-best and risk-best rankings frequently diverge for both representative classical/deep models and GRU safety-loss ablations.
 \end{enumerate}
 
-\section{Background and Related Work}
+\section{Related Work and Positioning}
 
-\subsection{C-MAPSS RUL Benchmarking}
+\subsection{Architecture-driven C-MAPSS RUL studies}
 
-C-MAPSS simulates turbofan engine degradation and provides run-to-failure trajectories for training plus truncated test trajectories with final RUL labels \citep{NASA_PCoE,Saxena2008}. FD001 has one operating condition and one fault mode. FD003 has one operating condition and two fault modes. Because both subsets contain 100 training and 100 test engines, they offer a compact benchmark for comparing how methods respond to fault-mode complexity without adding multi-condition normalization issues.
+Early deep C-MAPSS studies established CNN and recurrent baselines for sequence-regression RUL prediction \citep{Babu2016,Zheng2017,Li2018}. More recent work has introduced temporal convolution and attention mechanisms, including SAE-TCN models and hierarchical Transformer variants \citep{Liu2023SAETCN,Fan2024STAR}, as well as spatiotemporal Koopman dual-branch Transformer designs \citep{Kim2025KoopmanTransformer}. These models target richer degradation representation, long-range temporal dependencies, and sensor interactions. Their limitation for the present question is not that the architectures are weak, but that architectural improvement alone does not answer whether aggregate accuracy rankings align with late-life and overestimation-risk rankings.
 
-The benchmark is not real fleet telemetry. It is a controlled simulation dataset, which makes reproducible method comparison possible but limits direct operational claims. For that reason, all claims in this paper are scoped to C-MAPSS FD001/FD003 and should not be read as maintenance policy validation.
+\subsection{Uncertainty and decision-aware prognostics}
 
-\subsection{Classical and Deep RUL Models}
+Bayesian and risk-aware RUL methods explicitly recognize that point predictions are incomplete \citep{Hu2023Bayesian,Xiang2024BayesianGated}. Predictive maintenance studies go one step closer to operational value by connecting RUL distributions to alarm or scheduling decisions \citep{DePater2022,Mitici2023}. These studies motivate the safety orientation of this paper. At the same time, C-MAPSS lacks real fleet logistics, spare-parts constraints, and certified maintenance costs. We therefore do not claim a deployable decision policy. We restrict the contribution to benchmark-level evidence about error distribution and ranking discordance.
 
-Classical pipelines usually convert a sensor window into tabular statistics and train regressors such as Ridge regression, Random Forest, or Gradient Boosting. Ridge regression is a linear baseline \citep{Hoerl1970}. Random Forest and Gradient Boosting provide nonlinear tabular baselines that often remain difficult to beat on engineered degradation features \citep{Breiman2001,Friedman2001}.
+\begin{table*}[t]
+\centering
+\caption{Positioning relative to recent C-MAPSS and PHM work. This paper does not compete by adding a new architecture; it contributes a safety-oriented evaluation protocol and ranking-discordance evidence.}
+\label{tab:positioning}
+\small
+\begin{tabularx}{\textwidth}{p{0.18\textwidth}p{0.24\textwidth}X}
+\toprule
+Line of work & Main strength & Remaining gap addressed here \\
+\midrule
+CNN, LSTM, GRU baselines \citep{Babu2016,Zheng2017,Li2018} & Establish deep sequence models for C-MAPSS RUL prediction & Often evaluated mainly by aggregate accuracy and NASA score \\
+TCN, attention, Transformer, Koopman variants \citep{Liu2023SAETCN,Fan2024STAR,Kim2025KoopmanTransformer} & Stronger temporal and sensor-interaction modeling & Architecture gains can obscure whether safety-risk rankings change \\
+Bayesian and risk-aware prediction \citep{Hu2023Bayesian,Xiang2024BayesianGated} & Addresses uncertainty beyond point estimates & Interval quality and point-risk behavior still need transparent diagnostics \\
+Maintenance decision models \citep{DePater2022,Mitici2023} & Connects prognostics to planning and cost & C-MAPSS does not contain real fleet scheduling or certified cost data \\
+This work & FD001--FD004 leakage-aware protocol, strong classical baselines, multi-seed metrics, SARBI, rank-discordance analysis & Scoped to benchmark evidence; not a new SOTA model or aviation safety certification \\
+\bottomrule
+\end{tabularx}
+\end{table*}
 
-Deep learning approaches instead consume ordered multivariate windows. CNN-based regressors can learn local temporal patterns automatically \citep{Babu2016,Li2018}. LSTMs and GRUs use gated recurrent states to model temporal dependencies \citep{Hochreiter1997,Chung2014,Zheng2017}. In C-MAPSS comparisons, deep models often benefit from careful windowing and optimization, but they are also sensitive to preprocessing, subset selection, and hyperparameter choices.
+\section{Methods}
 
-\subsection{Safety-Oriented Evaluation}
+\subsection{Data and leakage-aware protocol}
 
-RMSE and MAE summarize average error, but they are symmetric: an error of $+20$ cycles and $-20$ cycles contributes similarly. In RUL prediction, the sign matters because $\hat{y}>y$ means the model predicts more remaining life than actually exists. The NASA score partly captures this asymmetry:
+We use the official NASA C-MAPSS FD001--FD004 subsets \citep{NASA_PCoE,Saxena2008}. Training trajectories run to failure, and test trajectories are truncated with official final RUL labels. Training and validation splits are made at the engine level, so windows from the same engine never appear in both splits. Scalers are fit only on the training engines and then applied to validation and test engines. RUL labels are capped at 130 cycles, and all reported test metrics use the final available 30-cycle window from each test engine. The primary random seeds are 42, 43, and 44.
+
+\subsection{Models and safety-loss ablation}
+
+The representative matrix compares Ridge regression, Random Forest, Gradient Boosting, GRU, and Safety-GRU. Classical models use window-level statistics; GRU models consume scaled sensor windows. Safety-GRU keeps the GRU architecture fixed and changes only the training loss:
+\begin{equation}
+\mathcal{L}=\frac{1}{N}\sum_i w_i(\hat{y}_i-y_i)^2,
+\end{equation}
+\begin{equation}
+ w_i = 1 + (\alpha-1)\mathbb{I}[y_i\leq 50] + (\beta-1)\mathbb{I}[\hat{y}_i>y_i].
+\end{equation}
+This loss upweights late-life samples and optimistic predictions. It is a benchmark intervention, not a certified safety mechanism. The deep ablation contains eight GRU jobs on each subset and seed: baseline MSE, critical losses, asymmetric losses, and combined safety losses, for 4 subsets $\times$ 3 seeds $\times$ 8 jobs = 96 training jobs.
+
+\subsection{Safety-oriented metrics}
+
+We report seven lower-is-better metrics. RMSE and MAE measure aggregate accuracy. The NASA score penalizes overestimation more strongly than underestimation:
 \begin{equation}
 S = \sum_i
 \begin{cases}
@@ -87,301 +111,176 @@ S = \sum_i
 \end{cases}
 \quad d_i=\hat{y}_i-y_i.
 \end{equation}
-The smaller denominator for overestimation makes late predictions more costly. We also report critical-zone RMSE for $y\leq 50$ cycles and overestimation ratio, the fraction of test predictions with $\hat{y}>y$.
+Critical-zone RMSE is computed for $y\leq30$ and $y\leq50$. Overestimation ratio is the fraction of predictions with $\hat{y}>y$, and overestimation magnitude is the mean positive error $\max(\hat{y}-y,0)$.
 
-Table~\ref{tab:related-work} summarizes how this paper is positioned relative to representative work. The main distinction is not a new architecture, but a stricter safety-oriented reporting package.
+\subsection{Safety-Aware Relative Benchmark Index}
 
-\begin{table*}[t]
-\centering
-\caption{Related work positioning. The present work emphasizes evaluation design and safety-relevant diagnostics rather than claiming a new state-of-the-art architecture.}
-\label{tab:related-work}
-\small
-\begin{tabularx}{\textwidth}{p{0.15\textwidth}p{0.16\textwidth}p{0.15\textwidth}p{0.18\textwidth}X}
-\toprule
-Study & Main model family & C-MAPSS focus & Typical metrics & Distinction relative to this work \\
-\midrule
-\citet{Babu2016} & Deep CNN & RUL regression & RMSE / score & Early CNN sequence-regression formulation \\
-\citet{Zheng2017} & LSTM & RUL sequence modeling & RMSE / score & Classic recurrent RUL baseline \\
-\citet{Li2018} & Deep CNN & RUL prognosis & RMSE / score & Stronger convolutional prognostics pipeline \\
-\citet{Goel2026} & Classical / CNN / LSTM & Comparative benchmark & Accuracy-focused comparison & Recent comparative framing used as structural reference \\
-This work & Classical / LSTM / GRU / CNN & FD001 and FD003 & RMSE, MAE, NASA score, critical RMSE, overestimation & Safety-aware metrics, GRU ablations, reproducible diagnostics \\
-\bottomrule
-\end{tabularx}
-\end{table*}
-
-\section{Methodology}
-
-\subsection{Data and Labels}
-
-We use the official NASA PCoE C-MAPSS files for FD001 and FD003 \citep{NASA_PCoE}. The raw data contain engine unit ID, cycle index, three operating settings, and sensor channels. Training trajectories run until failure. Test trajectories are truncated, and the official RUL file gives the remaining cycles at the last observed test cycle.
-
-For each training engine, uncapped RUL at cycle $t$ is computed as:
+To summarize model behavior without hiding raw metrics, we define the Safety-Aware Relative Benchmark Index (SARBI). For metric $M_k$ on subset $d$, seed $r$, and model $m$, let $M^{ref}_{k,d}$ be the subset-specific median of a pre-registered reference portfolio. For the representative matrix, the reference portfolio is Ridge, Random Forest, Gradient Boosting, and plain GRU. NASA score is first normalized per test engine. We then compute
 \begin{equation}
-y_t = T_{\mathrm{fail}} - t.
+ z_k = \log\frac{M_{k,m,d,r}+\epsilon}{M^{ref}_{k,d}+\epsilon}.
 \end{equation}
-Following common C-MAPSS practice, we use a capped label for train, validation, and test targets:
+The accuracy, critical-zone, and optimistic-risk blocks are
 \begin{equation}
-y_t^{\mathrm{cap}} = \min(y_t, 130).
+A = 0.5z_{RMSE}+0.5z_{MAE},
 \end{equation}
-Capping reduces the effect of early-life regions where sensor degradation may be weak and exact far-future RUL is less informative. For test engines, the official final RUL file is first expanded backward over the observed test trajectory and then clipped at the same $R_{\max}=130$ cap; the reported test metric uses only the final window for each engine.
-
-\subsection{Leakage-Controlled Preprocessing}
-
-The training engines are split into training and validation engines by unit ID, using a validation fraction of 0.2. The same engine is never allowed to contribute windows to both splits. Candidate inputs include the three operating settings and 21 sensor channels; near-constant columns are removed using a variance threshold of $10^{-10}$ computed on the fitting split. Feature scalers are fit only on the fitting split and then applied to validation and test data. Test evaluation follows the official-style protocol: each test engine contributes its final available window to the reported test metrics.
-
-\begin{algorithm}[t]
-\caption{Leakage-Controlled Window Construction and Evaluation}
-\label{alg:windowing}
-\begin{algorithmic}[1]
-\Require Raw train/test trajectories, official test RUL file, window length $L$, cap $R_{\max}$
-\State Compute capped train RUL labels $y_t=\min(T_{\mathrm{fail}}-t,R_{\max})$
-\State Split train engine IDs into fit and validation IDs
-\State Fit sensor scaler using fit-engine rows only
-\State Transform fit, validation, and test rows using the fit scaler
-\For{each train or validation engine}
-    \State Build sliding windows $X_{t-L+1:t}$ with target $y_t$
-\EndFor
-\For{each test engine}
-    \State Keep only the final available window
-\State Set capped target from official RUL file
-\EndFor
-\State Train models on fit windows, tune by validation loss, report official-style test metrics
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Model Families}
-
-Table~\ref{tab:model-pipeline} lists the evaluated families. Classical models use window-level statistics: mean, standard deviation, last value, delta, and linear slope for each retained sensor. Deep models consume raw scaled sensor windows of shape $[L, C]$. The default window length is $L=30$ cycles.
-
-\begin{table*}[t]
-\centering
-\caption{Model and input representation. Classical models receive engineered statistics; deep models receive ordered sensor windows.}
-\label{tab:model-pipeline}
-\small
-\begin{tabularx}{\textwidth}{p{0.16\textwidth}p{0.25\textwidth}p{0.22\textwidth}X}
-\toprule
-Family & Models & Input representation & Main purpose \\
-\midrule
-Linear baseline & Ridge & Window statistics & Detect whether a simple linear mapping is sufficient \\
-Tree ensembles & Random Forest, Gradient Boosting & Window statistics & Strong nonlinear tabular baselines \\
-Recurrent models & LSTM, GRU & Raw 30-cycle sensor sequence & Preserve temporal order and gated memory \\
-Convolutional model & 1D-CNN & Raw 30-cycle sensor sequence & Capture local temporal degradation patterns \\
-Focused GRU variants & Window 20/50, hidden 128, scheduler, safety loss & Raw sensor sequence & Test temporal context, capacity, and safety-oriented training \\
-\bottomrule
-\end{tabularx}
-\end{table*}
-
-\begin{algorithm}[t]
-\caption{Classical Feature-Engineered Training Pipeline}
-\label{alg:classical}
-\begin{algorithmic}[1]
-\Require Scaled sensor windows $X$, targets $y$
-\For{each window and each sensor channel}
-    \State Compute mean, standard deviation, last value, first-to-last delta, and least-squares slope
-\EndFor
-\State Concatenate all statistics into a tabular vector
-\State Train Ridge, Random Forest, and Gradient Boosting regressors
-\State Select hyperparameters by validation performance where applicable
-\State Evaluate each model on one final window per test engine
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Safety-Aware GRU Objective}
-
-The safety-aware GRU keeps the same architecture as the default GRU unless otherwise stated. It changes the loss weight for samples in the late-life region and for overestimation errors:
 \begin{equation}
-\mathcal{L} =
-\frac{1}{N}\sum_i w_i(\hat{y}_i-y_i)^2,
+C = 0.5z_{RMSE30}+0.5z_{RMSE50},
 \end{equation}
-where
 \begin{equation}
-w_i = 1 + (\alpha-1)\mathbb{I}[y_i\leq 50]
-        +(\beta-1)\mathbb{I}[\hat{y}_i>y_i].
+R = 0.5z_{NASA/n}+0.25z_{OverRatio}+0.25z_{OverMag}.
 \end{equation}
-The main safety-aware settings use $\alpha=\beta=1.5$ and $\alpha=\beta=2.0$, denoted safety-w1.5 and safety-w2. This objective is not presented as an optimal safety loss. It is a minimal intervention used to test whether training can move the model toward lower critical-zone error or lower overestimation frequency.
-
-\begin{algorithm}[t]
-\caption{Safety-Aware GRU Training Objective}
-\label{alg:safety-gru}
-\begin{algorithmic}[1]
-\Require GRU predictor $f_\theta$, batch $(X_i,y_i)$, critical threshold $\tau=50$, weights $\alpha,\beta$
-\State Predict $\hat{y}_i=f_\theta(X_i)$
-\State Set $w_i \gets 1$
-\State Add $\alpha-1$ if $y_i \leq \tau$
-\State Add $\beta-1$ if $\hat{y}_i > y_i$
-\State Minimize $\frac{1}{N}\sum_i w_i(\hat{y}_i-y_i)^2$ with Adam
-\State Use validation loss for early stopping
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Training Protocol}
-
-Deep models are trained in PyTorch with Adam, batch size 128, learning rate $10^{-3}$ unless ablated, and early stopping with patience 10 in the main matrix. The default recurrent hidden size is 64 with one recurrent layer and dropout 0.2. CNN uses two temporal convolution layers with dropout. Classical baselines use Ridge with $\alpha=1.0$, Random Forest with 300 trees and minimum leaf size 2, and scikit-learn Gradient Boosting with 300 estimators, learning rate 0.05, and max depth 3. Main results are reported over seeds 42, 43, and 44. Focused GRU experiments include $L\in\{20,30,50\}$, learning rate $5\times 10^{-4}$, ReduceLROnPlateau, hidden size 128, and safety-aware losses. Models are selected by validation loss or fixed validation protocol and evaluated once on the held-out test engines. Some wide-sweep runs are treated as exploratory when fewer than three seeds are complete; the main text emphasizes complete three-seed configurations.
+The per-seed score is
+\begin{equation}
+\operatorname{SARBI}_{m,d,r}=\exp\left(\frac{A+C+R}{3}\right),
+\end{equation}
+and model-level SARBI is the geometric mean across seeds. Values below 1 indicate improvement relative to the reference portfolio. Ranking consistency is reported separately using top-1 agreement and Spearman rank correlation between RMSE ranks and each risk metric rank.
 
 \section{Results}
 
-\subsection{Dataset and Diagnostic Overview}
+\subsection{Representative FD001--FD004 matrix}
 
-Figure~\ref{fig:data-overview} shows trajectory-length distributions, capped RUL distribution, and representative sensor trajectories. The training RUL cap produces a large early-life plateau at 130 cycles; late-life regions contain fewer samples but are operationally more important.
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.98\textwidth]{figure_01_data_overview.pdf}
-\caption{Data overview for FD001 and FD003. The figure reports train/test trajectory lengths, capped training RUL distribution, and representative standardized sensor-3 trajectories.}
-\label{fig:data-overview}
-\end{figure*}
-
-\subsection{Overall Model Comparison}
-
-Table~\ref{tab:main-results} summarizes selected complete three-seed test results, matching the settings visualized in Figure~\ref{fig:model-comparison}. On FD001, Gradient Boosting and Random Forest have the best aggregate RMSE among the evaluated models. The plain GRU and LSTM underperform those tree baselines in global RMSE, while the CNN configuration fails badly. On FD003, the GRU with a 50-cycle window obtains the numerically lowest RMSE among the evaluated configurations, narrowly ahead of Gradient Boosting. A paired bootstrap over seed--engine pairs gives an RMSE difference of $-0.25$ cycles for GRU window50 minus Gradient Boosting with a 95\% interval of $[-1.45, 1.00]$, so the apparent FD003 advantage should not be treated as statistically resolved.
+Table~\ref{tab:matrix-summary} summarizes the representative matrix. Classical baselines are not weak controls: Gradient Boosting is RMSE-best on FD001 and FD003, and Random Forest is RMSE-best on FD004. Plain GRU is RMSE-best on FD002. Safety-GRU is not universally more accurate, but it substantially reduces risk metrics on FD002 and FD004.
 
 \begin{table*}[t]
 \centering
-\caption{Selected complete three-seed test metrics on FD001 and FD003. RMSE is shown as mean $\pm$ standard deviation over three seeds. Lower is better for RMSE, MAE, NASA score, critical RMSE, and overestimation ratio.}
-\label{tab:main-results}
+\caption{Representative test results from \texttt{reports/paper/matrix\_safety\_benchmark\_summary.csv}. Values are means over three seeds. Lower is better.}
+\label{tab:matrix-summary}
 \small
-\begin{tabular}{llrrrr}
+\begin{tabular}{llllrrrr}
 \toprule
-Subset & Model & RMSE & MAE & NASA score & RMSE$_{50}$ / OverRatio \\
+Subset & Model & Role & RMSE & MAE & RMSE$_{50}$ & OverMag & SARBI \\
 \midrule
-FD001 & Gradient Boosting & $12.81\pm0.38$ & 9.83 & 247.46 & 5.60 / 0.607 \\
-FD001 & Random Forest & $13.01\pm0.57$ & 9.62 & 258.65 & 6.21 / 0.617 \\
-FD001 & GRU safety-w1.5 & $13.99\pm0.26$ & 10.01 & 312.82 & 4.94 / 0.563 \\
-FD001 & GRU safety-w2 & $14.96\pm0.88$ & 10.59 & 421.19 & 4.86 / 0.467 \\
-FD001 & GRU & $15.27\pm0.64$ & 11.33 & 483.23 & 5.71 / 0.587 \\
-FD001 & LSTM & $15.60\pm0.51$ & 11.45 & 563.57 & 6.52 / 0.627 \\
-FD001 & GRU window50 & $15.67\pm0.58$ & 11.65 & 425.21 & 6.13 / 0.523 \\
-FD001 & Ridge & $16.92\pm0.11$ & 13.33 & 510.32 & 16.68 / 0.580 \\
-FD001 & 1D-CNN & $22.47\pm1.17$ & 16.49 & 3867.77 & 25.42 / 0.563 \\
-\midrule
-FD003 & GRU window50 & $12.96\pm0.48$ & 9.30 & 319.96 & 5.50 / 0.533 \\
-FD003 & Gradient Boosting & $13.21\pm0.35$ & 9.67 & 311.85 & 5.53 / 0.573 \\
-FD003 & Random Forest & $13.98\pm0.25$ & 10.14 & 343.90 & 4.76 / 0.583 \\
-FD003 & GRU safety-w1.5 & $14.07\pm1.24$ & 9.96 & 413.74 & 5.25 / 0.437 \\
-FD003 & LSTM & $14.41\pm1.57$ & 10.22 & 550.26 & 5.09 / 0.507 \\
-FD003 & GRU & $15.24\pm1.45$ & 10.55 & 622.27 & 6.19 / 0.553 \\
-FD003 & GRU safety-w2 & $15.99\pm2.61$ & 11.99 & 608.31 & 7.57 / 0.430 \\
-FD003 & Ridge & $18.02\pm0.37$ & 14.90 & 627.31 & 15.87 / 0.600 \\
-FD003 & 1D-CNN & $23.76\pm0.42$ & 17.25 & 3533.32 & 24.91 / 0.570 \\
+FD001 & Gradient Boosting & RMSE/SARBI best & 12.81 & 9.83 & 5.60 & 6.01 & 0.894 \\
+FD001 & Safety-GRU & critical/over best & 14.96 & 10.59 & 4.86 & 4.79 & 0.901 \\
+FD002 & GRU & RMSE best & 17.81 & 13.15 & 10.12 & 6.31 & 0.714 \\
+FD002 & Safety-GRU & SARBI/risk best & 20.35 & 15.19 & 8.12 & 3.41 & 0.645 \\
+FD003 & Gradient Boosting & RMSE best & 13.21 & 9.67 & 5.53 & 6.20 & 0.940 \\
+FD003 & Random Forest & SARBI/critical best & 13.98 & 10.14 & 4.76 & 6.21 & 0.930 \\
+FD003 & Safety-GRU & overestimation best & 15.99 & 11.99 & 7.57 & 4.84 & 1.162 \\
+FD004 & Random Forest & RMSE best & 20.18 & 15.07 & 16.99 & 8.52 & 0.903 \\
+FD004 & Safety-GRU & SARBI/risk best & 21.93 & 16.33 & 14.62 & 5.51 & 0.818 \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-Figure~\ref{fig:model-comparison} visualizes RMSE with seed variability for the same selected complete configurations. It reinforces that tree ensembles are strong FD001 baselines and that longer temporal context is promising for the GRU on FD003, while the bootstrap interval above keeps that comparison appropriately cautious.
+\subsection{RMSE-best models are often not risk-best models}
+
+Table~\ref{tab:winner-split} reports which model wins each ranking axis. The answer to the central research question is negative: RMSE-best and risk-best are not generally the same. FD002 and FD004 are the clearest cases. FD002 selects GRU by RMSE but Safety-GRU by SARBI, critical RMSE, and overestimation metrics. FD004 selects Random Forest by RMSE but Safety-GRU by SARBI and most risk metrics. FD001 keeps Gradient Boosting as SARBI-best because the aggregate accuracy advantage is large, yet Safety-GRU still wins the critical and overestimation metrics. FD003 is mixed: Gradient Boosting is RMSE-best, Random Forest is SARBI-best because of lower critical RMSE, and Safety-GRU has the lowest overestimation magnitude.
+
+\begin{table*}[t]
+\centering
+\caption{Winner split across ranking axes in the representative matrix. This table is generated from \texttt{matrix\_rmse\_vs\_risk\_best.csv}.}
+\label{tab:winner-split}
+\small
+\begin{tabular}{lllll}
+\toprule
+Subset & RMSE-best & Critical RMSE50-best & Overestimation magnitude-best & SARBI-best \\
+\midrule
+FD001 & Gradient Boosting & Safety-GRU & Safety-GRU & Gradient Boosting \\
+FD002 & GRU & Safety-GRU & Safety-GRU & Safety-GRU \\
+FD003 & Gradient Boosting & Random Forest & Safety-GRU & Random Forest \\
+FD004 & Random Forest & Safety-GRU & Safety-GRU & Safety-GRU \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Figure~\ref{fig:rank-heatmap} gives the full rank structure. The heatmap makes the main evidence visible: models move position when the ranking criterion changes from aggregate error to critical-zone or overestimation behavior.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.98\textwidth]{figure_02_model_comparison.pdf}
-\caption{Aggregate RMSE comparison. Error bars indicate standard deviation over completed seeds where available.}
-\label{fig:model-comparison}
+\includegraphics[width=0.98\textwidth]{figure_09_metric_rank_heatmap.pdf}
+\caption{Metric-rank heatmap for the representative matrix. Each panel ranks models within one subset; rank 1 is best. RMSE ranks often differ from critical-zone and overestimation-risk ranks.}
+\label{fig:rank-heatmap}
 \end{figure*}
 
-\subsection{Prediction Calibration and Residual Behavior}
+\subsection{Accuracy-risk trade-offs are subset dependent}
 
-Figure~\ref{fig:prediction-scatter} compares predicted and true RUL for representative FD001 and FD003 models. Prediction scatter reveals structure that table metrics hide: models can be accurate for many mid-life engines while still producing dangerous optimistic outliers near low true RUL.
+Figures~\ref{fig:critical-tradeoff} and \ref{fig:overmag-tradeoff} plot aggregate RMSE against critical RMSE50 and overestimation magnitude. The desirable direction is lower-left. FD002 and FD004 show the clearest trade-off: Safety-GRU moves downward on the risk axis while shifting right on RMSE. FD001 and FD003 show that the trade-off is not uniform. In FD001, Gradient Boosting remains strong enough that SARBI still prefers it, although Safety-GRU has better late-life and overestimation behavior. In FD003, Random Forest offers the best SARBI balance among the five representative models, while Safety-GRU mainly improves overestimation magnitude.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.95\textwidth]{figure_03_predicted_vs_true.pdf}
-\caption{Predicted versus true RUL for representative models. The dashed line marks perfect prediction. Points above the line overestimate RUL.}
-\label{fig:prediction-scatter}
+\includegraphics[width=0.98\textwidth]{figure_10_rmse_vs_critical_rmse50.pdf}
+\caption{RMSE versus critical RMSE50 for representative models. Safety-GRU often reduces late-life error but may require higher aggregate RMSE.}
+\label{fig:critical-tradeoff}
 \end{figure*}
-
-Figure~\ref{fig:critical-residuals} separates residuals inside and outside the $y\leq50$ critical zone. This is the central safety diagnostic. On FD001, safety-weighted GRUs improve critical-zone RMSE relative to the plain GRU and tree models, although they do not beat Gradient Boosting on aggregate RMSE. On FD003, stronger safety weighting reduces overestimation frequency but can worsen RMSE and critical-zone RMSE, exposing a real accuracy--conservatism trade-off.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.98\textwidth]{figure_04_critical_residuals.pdf}
-\caption{Residual distributions inside and outside the critical zone. Positive residuals indicate RUL overestimation.}
-\label{fig:critical-residuals}
+\includegraphics[width=0.98\textwidth]{figure_11_rmse_vs_overestimation_magnitude.pdf}
+\caption{RMSE versus overestimation magnitude for representative models. Optimistic-risk rankings differ from aggregate RMSE rankings, especially on FD002 and FD004.}
+\label{fig:overmag-tradeoff}
 \end{figure*}
 
-\subsection{Engine-Level Failure Cases}
+\subsection{Safety-loss ablation confirms risk movement, not universal accuracy improvement}
 
-RUL evaluation should also inspect which engines are difficult. Figure~\ref{fig:hardest-engines} shows the highest mean absolute error units for representative models. These engine-level diagnostics are useful for identifying whether a model fails on isolated trajectories or exhibits a systematic subset-level weakness.
+The 96-job GRU ablation isolates the effect of loss weighting. Table~\ref{tab:ablation-summary} shows that loss changes move models along the risk curve rather than simply improving all metrics. FD001 selects safety-w3 by SARBI with only a 2.6\% RMSE cost relative to the RMSE-best asymmetric-w2 job. FD004 is the strongest positive case for safety weighting: baseline GRU is RMSE-best, but safety-w2 is SARBI-best with only a 1.2\% RMSE cost, and safety-w3 gives the best critical/overestimation reductions at a larger RMSE cost. FD002 and FD003 are more nuanced, which is useful evidence against overclaiming.
+
+\begin{table*}[t]
+\centering
+\caption{GRU safety-loss ablation summary from \texttt{deep\_ablation\_rmse\_vs\_risk\_best.csv}. The RMSE cost is relative to the subset's ablation RMSE-best job.}
+\label{tab:ablation-summary}
+\small
+\begin{tabular}{llllr}
+\toprule
+Subset & RMSE-best job & SARBI-best job & Main risk winner pattern & RMSE cost \\
+\midrule
+FD001 & Asymmetric w2 & Safety w3 & Safety w3 wins NASA/critical/overestimation metrics & 2.6\% \\
+FD002 & Critical w2 & Critical w3 & Safety/asymmetric losses split risk-metric wins & 3.9--20.6\% \\
+FD003 & Critical w3 & Critical w3 & RMSE and NASA align; overestimation winners differ & 0--18.6\% \\
+FD004 & Baseline GRU & Safety w2 & Safety w2/w3 dominate NASA, critical, and overestimation metrics & 1.2--12.7\% \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.95\textwidth]{figure_05_hardest_engines.pdf}
-\caption{Hardest test engines by mean absolute error. Values are aggregated across available seeds for each model setting.}
-\label{fig:hardest-engines}
+\includegraphics[width=0.98\textwidth]{figure_12_ablation_rmse_vs_overestimation.pdf}
+\caption{Deep GRU ablation trade-off. Safety, critical, and asymmetric losses move the overestimation-risk profile, but the direction and RMSE cost depend on the C-MAPSS subset.}
+\label{fig:ablation-tradeoff}
 \end{figure*}
 
-\subsection{Safety Trade-Offs}
+\subsection{Bootstrap checks and SARBI sensitivity}
 
-Figure~\ref{fig:safety-tradeoff} plots overestimation ratio against critical-zone RMSE. The ideal direction is lower-left. The key observation is that model ranking changes across safety axes. Random Forest has the best FD003 critical RMSE, Gradient Boosting has strong aggregate performance, GRU window50 has the numerically lowest FD003 RMSE, and safety-w2 has the lowest FD003 overestimation ratio among complete three-seed configurations.
+Cluster bootstrap comparisons over paired seed-engine predictions support the main trade-off interpretation. On FD002, SARBI-best Safety-GRU has higher RMSE than RMSE-best GRU by 2.53 cycles (95\% CI 1.60 to 3.40), but lower critical RMSE50 by 2.03 cycles (95\% CI -3.27 to -0.88), lower overestimation ratio by 0.179 (95\% CI -0.207 to -0.151), and lower overestimation magnitude by 2.90 cycles (95\% CI -3.34 to -2.46). On FD004, SARBI-best Safety-GRU has higher RMSE than RMSE-best Random Forest by 1.77 cycles (95\% CI 0.49 to 3.09), lower overestimation ratio by 0.128 (95\% CI -0.161 to -0.094), and lower overestimation magnitude by 3.01 cycles (95\% CI -3.71 to -2.32). The FD004 critical RMSE50 interval (-4.38 to 0.17) is directionally favorable but crosses zero, so it should be interpreted cautiously.
+
+Figure~\ref{fig:sarbi-sensitivity} varies the relative weights assigned to accuracy, critical-zone error, and risk. FD002 and FD004 select Safety-GRU throughout the tested grid. FD003 alternates between Gradient Boosting and Random Forest. FD001 alternates between Gradient Boosting and Safety-GRU, reflecting the tension between strong aggregate accuracy and better risk metrics. This sensitivity analysis supports using SARBI as a transparent reporting layer rather than a hidden optimization target.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.95\textwidth]{figure_06_safety_tradeoff.pdf}
-\caption{Safety trade-off between overestimation frequency and critical-zone RMSE. Circles mark main benchmark models and squares mark focused GRU variants. Error bars show seed variability when available.}
-\label{fig:safety-tradeoff}
+\includegraphics[width=0.98\textwidth]{figure_13_sarbi_weight_sensitivity.pdf}
+\caption{SARBI weight sensitivity. Each cell shows the model selected under a different critical-risk weighting grid, with accuracy weight set to the remaining mass. FD002 and FD004 consistently favor Safety-GRU, while FD001 and FD003 are more trade-off dependent.}
+\label{fig:sarbi-sensitivity}
 \end{figure*}
-
-\subsection{Deep Training Dynamics and Feature Importance}
-
-Figure~\ref{fig:learning-curves} shows validation losses for deep models. The CNN's poor test behavior is consistent with unstable or less effective optimization under the current compact architecture and training budget. Extending epochs alone is therefore not a principled fix; architecture, window length, loss weighting, and regularization matter more.
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.98\textwidth]{figure_07_learning_curves.pdf}
-\caption{Validation-loss trajectories for deep models. Curves are averaged over available seeds for each setting.}
-\label{fig:learning-curves}
-\end{figure*}
-
-For tree models, Figure~\ref{fig:feature-importance} shows Random Forest feature importance. Important features often include mean and slope terms, supporting the intuition that both degradation level and trend carry RUL information.
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.95\textwidth]{figure_08_feature_importance.pdf}
-\caption{Random Forest feature importance summarized across seeds. Mean and slope statistics are frequently important, suggesting that both current degradation level and temporal trend matter.}
-\label{fig:feature-importance}
-\end{figure*}
-
-\clearpage
 
 \section{Discussion}
 
-\subsection{Classical Baselines Remain Strong}
+The main result is not that Safety-GRU is a new state-of-the-art architecture. It is that the choice of evaluation axis changes model selection. Aggregate RMSE favors Gradient Boosting on FD001/FD003, GRU on FD002, and Random Forest on FD004. Critical-zone and overestimation-risk metrics often favor Safety-GRU or different classical baselines. This means a C-MAPSS study that reports only RMSE, or treats the NASA score as the sole safety proxy, can miss important risk behavior.
 
-The FD001 results show that a well-constructed feature-engineered tree baseline can outperform basic deep models. This is an important lesson for student research: using an LSTM does not automatically make the method stronger. When the dataset is small and the operating condition is simple, tabular summaries can capture enough degradation information for tree ensembles to be highly competitive.
+The strong classical baselines are a feature of the benchmark, not a weakness of the study. They make the ranking-discordance result more credible because Safety-GRU is compared against competitive tabular methods rather than weak placeholders. Random Forest's FD004 RMSE strength and Gradient Boosting's FD001/FD003 strength show that deep sequence models should not be assumed superior under small simulated benchmark regimes.
 
-\subsection{Temporal Context Helps More on FD003}
+The safety-loss ablation clarifies what loss weighting can and cannot do. Upweighting late-life samples and overestimation errors can reduce optimistic predictions or critical-zone error, but the effect is subset dependent and sometimes increases aggregate RMSE. FD003 is especially important because it prevents a universal-improvement narrative: RMSE and NASA can align there, while overestimation metrics still prefer other variants.
 
-FD003 introduces two fault modes while keeping one operating condition. In this setting, the 50-cycle GRU improves substantially over the default 30-cycle GRU and has the numerically lowest mean RMSE. However, the paired bootstrap interval against Gradient Boosting crosses zero, so this result supports only a cautious interpretation: longer temporal context may help recurrent models when degradation patterns become more heterogeneous, but the current evidence does not establish a statistically resolved advantage over the tree baseline.
-
-\subsection{Safety-Aware Training Changes the Error Profile}
-
-The safety-aware GRU is not globally best, but it shifts behavior in a useful direction. On FD001 it improves critical-zone RMSE, especially under stronger safety weighting. On FD003 it reduces overestimation ratio, but the w2 setting also worsens RMSE and critical-zone RMSE. These outcomes match the intended purpose of the experiment: changing the risk profile rather than simply minimizing average squared error. A stronger future method could directly optimize differentiable approximations of NASA score or use calibration-aware post-processing.
-
-\subsection{Why the CNN Fails Here}
-
-The CNN configuration performs poorly on both subsets. This should not be interpreted as evidence that CNNs are unsuitable for RUL prediction in general, since stronger CNN designs have been reported \citep{Babu2016,Li2018}. The local explanation is more modest: the current compact CNN and training setup do not extract robust degradation features from the available windows. This failure is still useful because it shows why benchmark papers should include diagnostic curves and not only final scores.
+SARBI should be read as a reporting index, not as a physical safety formula. It is useful because it normalizes heterogeneous metrics, separates accuracy, critical-zone, and risk blocks, and exposes the model selected under a declared preference. It does not replace raw metrics, and it should not be used to claim aviation safety certification. A future method could optimize a differentiable surrogate of SARBI, but that is outside the present paper.
 
 \section{Threats to Validity}
 
-\textbf{Internal validity.} The pipeline controls common leakage risks through engine-level validation splitting and train-only scaler fitting. Remaining internal risks include hyperparameter budget imbalance, stochastic training variability, and incomplete coverage of some wide-sweep ablation cells.
+\textbf{Internal validity.} The workflow controls major leakage risks through engine-level validation splitting, train-only scaling, and last-window test evaluation. Remaining risks include limited hyperparameter search, stochastic training variation beyond three seeds, and the fact that FD001/FD003 contain additional deep baselines not carried into FD002/FD004.
 
-\textbf{Construct validity.} RMSE, MAE, NASA score, critical-zone RMSE, and overestimation ratio are proxies for prognostic usefulness. They do not validate a real maintenance decision policy. The safety-aware loss is a simple benchmark intervention, not a certified safety mechanism.
+\textbf{Construct validity.} RMSE, MAE, NASA score, critical RMSE, overestimation ratio, overestimation magnitude, and SARBI are proxies for benchmark behavior. They do not encode certified maintenance costs, fleet-level constraints, or regulatory safety requirements.
 
-\textbf{External validity.} FD001 and FD003 are simulated single-operating-condition subsets. Results may not transfer to FD002/FD004, real engine fleets, multi-condition normalization settings, or engines with different sensor suites.
-
-\section{Limitations and Future Work}
-
-This work is intentionally scoped. It does not claim state-of-the-art performance, does not tune every model equally, and does not validate on real aircraft engine data. Future work should add FD002/FD004, stronger CNN and attention baselines, differentiable score-based losses, prediction interval calibration, broader paired statistical comparisons, and a clearer model-selection policy under asymmetric maintenance costs.
+\textbf{External validity.} C-MAPSS is simulated turbofan degradation data. Results may not transfer directly to real fleets, different sensor suites, different RUL caps, or deployment settings with distribution shift.
 
 \section{Conclusion}
 
-This paper upgrades a C-MAPSS RUL benchmark from a simple model comparison to a safety-aware evaluation study. The main finding is not that one architecture universally wins. Instead, tree ensembles are strong on FD001, longer-window GRUs are promising on FD003, and safety-aware loss can reduce late-life or overestimation risk while sometimes sacrificing aggregate accuracy. For C-MAPSS RUL research, RMSE alone is not enough; critical-zone error and overestimation behavior should be part of the standard reporting package.
+Across FD001--FD004, aggregate RMSE is not enough for C-MAPSS RUL model selection. The RMSE-best model often differs from the model that minimizes critical-zone error, overestimation ratio, overestimation magnitude, or the composite SARBI score. Lightweight safety losses can shift GRU predictions toward lower optimistic risk, but this shift comes with subset-dependent RMSE costs and should be reported as a trade-off. The resulting contribution is a reproducible safety-oriented C-MAPSS evaluation benchmark, not a new SOTA architecture or an aviation safety certification claim.
 
 \section*{Data and Code Availability}
 
-The raw C-MAPSS data are available from the NASA Prognostics Center of Excellence repository \citep{NASA_PCoE} and are not redistributed in this repository. Code, experiment scripts, generated tables, figures, LaTeX source, and the arXiv source package are available at:
-\url{https://github.com/EthanHuangEbor/Cmaps_RULE}. The intended reproducibility tag for this draft is \texttt{arxiv-draft-2026-06-25}.
+The raw C-MAPSS data are available from the NASA Prognostics Center of Excellence repository \citep{NASA_PCoE} and are not redistributed in this repository. Code, experiment scripts, generated paper tables, figures, and LaTeX source are available at: \url{https://github.com/EthanHuangEbor/Cmaps_RULE}. The paper-facing summary files used for this draft are stored under \texttt{reports/paper/}.
 
 \section*{Ethics, Funding, Conflicts, and AI Disclosure}
 
-This study uses a public simulation benchmark and does not involve human participants, animals, or proprietary operational data. The author reports no external funding and no conflicts of interest. AI assistance was used for coding support, manuscript drafting, figure-generation planning, and reviewer-style critique. The author remains responsible for all claims, code, experimental interpretation, and final submission decisions.
+This study uses a public simulation benchmark and does not involve human participants or proprietary operational data. The author reports no external funding and no conflicts of interest. AI assistance was used for coding support, manuscript restructuring, figure-generation planning, and reviewer-style critique. The author remains responsible for all claims, code, experimental interpretation, and final submission decisions.
 
 \section*{Author Contributions}
 

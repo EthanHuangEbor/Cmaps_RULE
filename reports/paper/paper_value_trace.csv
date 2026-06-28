@@ -1,0 +1,147 @@
+manuscript_location,statement,reported_value,source_file,selector,source_column,source_value,status
+Table matrix-summary,FD001 Gradient Boosting (RMSE/SARBI best) RMSE,12.81,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Gradient Boosting,rmse_mean,12.81370316322021,matched
+Table matrix-summary,FD001 Gradient Boosting (RMSE/SARBI best) MAE,9.83,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Gradient Boosting,mae_mean,9.829174018054887,matched
+Table matrix-summary,FD001 Gradient Boosting (RMSE/SARBI best) RMSE50,5.60,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Gradient Boosting,critical_rmse_50_mean,5.60478798777412,matched
+Table matrix-summary,FD001 Gradient Boosting (RMSE/SARBI best) OverMag,6.01,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Gradient Boosting,overestimation_magnitude_mean,6.008563772728652,matched
+Table matrix-summary,FD001 Gradient Boosting (RMSE/SARBI best) SARBI,0.894,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Gradient Boosting,sarbi_mean,0.8938776374280021,matched
+Table matrix-summary,FD001 Safety-GRU (critical/over best) RMSE,14.96,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Safety-GRU,rmse_mean,14.964994790034952,matched
+Table matrix-summary,FD001 Safety-GRU (critical/over best) MAE,10.59,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Safety-GRU,mae_mean,10.591763962904611,matched
+Table matrix-summary,FD001 Safety-GRU (critical/over best) RMSE50,4.86,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Safety-GRU,critical_rmse_50_mean,4.863028563746762,matched
+Table matrix-summary,FD001 Safety-GRU (critical/over best) OverMag,4.79,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Safety-GRU,overestimation_magnitude_mean,4.792730941666666,matched
+Table matrix-summary,FD001 Safety-GRU (critical/over best) SARBI,0.901,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD001; label=Safety-GRU,sarbi_mean,0.9005228157183222,matched
+Table matrix-summary,FD002 GRU (RMSE best) RMSE,17.81,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=GRU,rmse_mean,17.81181054630617,matched
+Table matrix-summary,FD002 GRU (RMSE best) MAE,13.15,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=GRU,mae_mean,13.148470331496409,matched
+Table matrix-summary,FD002 GRU (RMSE best) RMSE50,10.12,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=GRU,critical_rmse_50_mean,10.121056214342005,matched
+Table matrix-summary,FD002 GRU (RMSE best) OverMag,6.31,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=GRU,overestimation_magnitude_mean,6.309287409371237,matched
+Table matrix-summary,FD002 GRU (RMSE best) SARBI,0.714,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=GRU,sarbi_mean,0.7143171554571448,matched
+Table matrix-summary,FD002 Safety-GRU (SARBI/risk best) RMSE,20.35,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=Safety-GRU,rmse_mean,20.348553701997258,matched
+Table matrix-summary,FD002 Safety-GRU (SARBI/risk best) MAE,15.19,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=Safety-GRU,mae_mean,15.18904433459849,matched
+Table matrix-summary,FD002 Safety-GRU (SARBI/risk best) RMSE50,8.12,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=Safety-GRU,critical_rmse_50_mean,8.123940397647951,matched
+Table matrix-summary,FD002 Safety-GRU (SARBI/risk best) OverMag,3.41,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=Safety-GRU,overestimation_magnitude_mean,3.4096161352621537,matched
+Table matrix-summary,FD002 Safety-GRU (SARBI/risk best) SARBI,0.645,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD002; label=Safety-GRU,sarbi_mean,0.6448300405906247,matched
+Table matrix-summary,FD003 Gradient Boosting (RMSE best) RMSE,13.21,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Gradient Boosting,rmse_mean,13.208707858844647,matched
+Table matrix-summary,FD003 Gradient Boosting (RMSE best) MAE,9.67,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Gradient Boosting,mae_mean,9.665715598304857,matched
+Table matrix-summary,FD003 Gradient Boosting (RMSE best) RMSE50,5.53,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Gradient Boosting,critical_rmse_50_mean,5.533076019549712,matched
+Table matrix-summary,FD003 Gradient Boosting (RMSE best) OverMag,6.20,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Gradient Boosting,overestimation_magnitude_mean,6.1977796200756,matched
+Table matrix-summary,FD003 Gradient Boosting (RMSE best) SARBI,0.940,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Gradient Boosting,sarbi_mean,0.9400608566866314,matched
+Table matrix-summary,FD003 Random Forest (SARBI/critical best) RMSE,13.98,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Random Forest,rmse_mean,13.984279126470726,matched
+Table matrix-summary,FD003 Random Forest (SARBI/critical best) MAE,10.14,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Random Forest,mae_mean,10.139146258278757,matched
+Table matrix-summary,FD003 Random Forest (SARBI/critical best) RMSE50,4.76,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Random Forest,critical_rmse_50_mean,4.761971324153413,matched
+Table matrix-summary,FD003 Random Forest (SARBI/critical best) OverMag,6.21,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Random Forest,overestimation_magnitude_mean,6.205261464307296,matched
+Table matrix-summary,FD003 Random Forest (SARBI/critical best) SARBI,0.930,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Random Forest,sarbi_mean,0.929976524219508,matched
+Table matrix-summary,FD003 Safety-GRU (overestimation best) RMSE,15.99,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Safety-GRU,rmse_mean,15.989394027891764,matched
+Table matrix-summary,FD003 Safety-GRU (overestimation best) MAE,11.99,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Safety-GRU,mae_mean,11.993748893737791,matched
+Table matrix-summary,FD003 Safety-GRU (overestimation best) RMSE50,7.57,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Safety-GRU,critical_rmse_50_mean,7.57426681233646,matched
+Table matrix-summary,FD003 Safety-GRU (overestimation best) OverMag,4.84,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Safety-GRU,overestimation_magnitude_mean,4.842070613,matched
+Table matrix-summary,FD003 Safety-GRU (overestimation best) SARBI,1.162,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD003; label=Safety-GRU,sarbi_mean,1.162078635303005,matched
+Table matrix-summary,FD004 Random Forest (RMSE best) RMSE,20.18,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Random Forest,rmse_mean,20.182965517576413,matched
+Table matrix-summary,FD004 Random Forest (RMSE best) MAE,15.07,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Random Forest,mae_mean,15.065328309795044,matched
+Table matrix-summary,FD004 Random Forest (RMSE best) RMSE50,16.99,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Random Forest,critical_rmse_50_mean,16.99495442022658,matched
+Table matrix-summary,FD004 Random Forest (RMSE best) OverMag,8.52,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Random Forest,overestimation_magnitude_mean,8.515073824609779,matched
+Table matrix-summary,FD004 Random Forest (RMSE best) SARBI,0.903,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Random Forest,sarbi_mean,0.9031037856919544,matched
+Table matrix-summary,FD004 Safety-GRU (SARBI/risk best) RMSE,21.93,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Safety-GRU,rmse_mean,21.93080248259379,matched
+Table matrix-summary,FD004 Safety-GRU (SARBI/risk best) MAE,16.33,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Safety-GRU,mae_mean,16.325898689768646,matched
+Table matrix-summary,FD004 Safety-GRU (SARBI/risk best) RMSE50,14.62,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Safety-GRU,critical_rmse_50_mean,14.6199309756471,matched
+Table matrix-summary,FD004 Safety-GRU (SARBI/risk best) OverMag,5.51,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Safety-GRU,overestimation_magnitude_mean,5.509153607071087,matched
+Table matrix-summary,FD004 Safety-GRU (SARBI/risk best) SARBI,0.818,reports/paper/matrix_safety_benchmark_summary.csv,subset=FD004; label=Safety-GRU,sarbi_mean,0.8179550915679513,matched
+Table winner-split,FD001 rmse winner,gradient_boosting,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD001; metric=rmse,metric_best,gradient_boosting,matched
+Table winner-split,FD001 rmse RMSE cost (%),0.0,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD001; metric=rmse,rmse_change_pct,0.0,matched
+Table winner-split,FD001 critical_rmse_50 winner,gru_safety_mse,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD001; metric=critical_rmse_50,metric_best,gru_safety_mse,matched
+Table winner-split,FD001 critical_rmse_50 RMSE cost (%),16.8,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD001; metric=critical_rmse_50,rmse_change_pct,16.78899221725144,matched
+Table winner-split,FD001 overestimation_magnitude winner,gru_safety_mse,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD001; metric=overestimation_magnitude,metric_best,gru_safety_mse,matched
+Table winner-split,FD001 overestimation_magnitude RMSE cost (%),16.8,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD001; metric=overestimation_magnitude,rmse_change_pct,16.78899221725144,matched
+Table winner-split,FD001 sarbi winner,gradient_boosting,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD001; metric=sarbi,metric_best,gradient_boosting,matched
+Table winner-split,FD001 sarbi RMSE cost (%),0.0,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD001; metric=sarbi,rmse_change_pct,0.0,matched
+Table winner-split,FD002 rmse winner,gru,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD002; metric=rmse,metric_best,gru,matched
+Table winner-split,FD002 rmse RMSE cost (%),0.0,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD002; metric=rmse,rmse_change_pct,0.0,matched
+Table winner-split,FD002 critical_rmse_50 winner,gru_safety_mse,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD002; metric=critical_rmse_50,metric_best,gru_safety_mse,matched
+Table winner-split,FD002 critical_rmse_50 RMSE cost (%),14.2,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD002; metric=critical_rmse_50,rmse_change_pct,14.241916334648868,matched
+Table winner-split,FD002 overestimation_magnitude winner,gru_safety_mse,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD002; metric=overestimation_magnitude,metric_best,gru_safety_mse,matched
+Table winner-split,FD002 overestimation_magnitude RMSE cost (%),14.2,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD002; metric=overestimation_magnitude,rmse_change_pct,14.241916334648868,matched
+Table winner-split,FD002 sarbi winner,gru_safety_mse,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD002; metric=sarbi,metric_best,gru_safety_mse,matched
+Table winner-split,FD002 sarbi RMSE cost (%),14.2,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD002; metric=sarbi,rmse_change_pct,14.241916334648868,matched
+Table winner-split,FD003 rmse winner,gradient_boosting,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD003; metric=rmse,metric_best,gradient_boosting,matched
+Table winner-split,FD003 rmse RMSE cost (%),0.0,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD003; metric=rmse,rmse_change_pct,0.0,matched
+Table winner-split,FD003 critical_rmse_50 winner,random_forest,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD003; metric=critical_rmse_50,metric_best,random_forest,matched
+Table winner-split,FD003 critical_rmse_50 RMSE cost (%),5.9,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD003; metric=critical_rmse_50,rmse_change_pct,5.871666448484215,matched
+Table winner-split,FD003 overestimation_magnitude winner,gru_safety_mse,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD003; metric=overestimation_magnitude,metric_best,gru_safety_mse,matched
+Table winner-split,FD003 overestimation_magnitude RMSE cost (%),21.1,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD003; metric=overestimation_magnitude,rmse_change_pct,21.051916650462893,matched
+Table winner-split,FD003 sarbi winner,random_forest,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD003; metric=sarbi,metric_best,random_forest,matched
+Table winner-split,FD003 sarbi RMSE cost (%),5.9,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD003; metric=sarbi,rmse_change_pct,5.871666448484215,matched
+Table winner-split,FD004 rmse winner,random_forest,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD004; metric=rmse,metric_best,random_forest,matched
+Table winner-split,FD004 rmse RMSE cost (%),0.0,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD004; metric=rmse,rmse_change_pct,0.0,matched
+Table winner-split,FD004 critical_rmse_50 winner,gru_safety_mse,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD004; metric=critical_rmse_50,metric_best,gru_safety_mse,matched
+Table winner-split,FD004 critical_rmse_50 RMSE cost (%),8.7,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD004; metric=critical_rmse_50,rmse_change_pct,8.65996111173686,matched
+Table winner-split,FD004 overestimation_magnitude winner,gru_safety_mse,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD004; metric=overestimation_magnitude,metric_best,gru_safety_mse,matched
+Table winner-split,FD004 overestimation_magnitude RMSE cost (%),8.7,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD004; metric=overestimation_magnitude,rmse_change_pct,8.65996111173686,matched
+Table winner-split,FD004 sarbi winner,gru_safety_mse,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD004; metric=sarbi,metric_best,gru_safety_mse,matched
+Table winner-split,FD004 sarbi RMSE cost (%),8.7,reports/paper/matrix_rmse_vs_risk_best.csv,subset=FD004; metric=sarbi,rmse_change_pct,8.65996111173686,matched
+Table ablation-summary,FD001 rmse winner,asymmetric_w2_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD001; metric=rmse,metric_best,asymmetric_w2_h64_l1_w30,matched
+Table ablation-summary,FD001 rmse RMSE cost (%),0.0,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD001; metric=rmse,rmse_change_pct,0.0,matched
+Table ablation-summary,FD001 critical_rmse_50 winner,safety_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD001; metric=critical_rmse_50,metric_best,safety_w3_h64_l1_w30,matched
+Table ablation-summary,FD001 critical_rmse_50 RMSE cost (%),2.6,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD001; metric=critical_rmse_50,rmse_change_pct,2.621747263931337,matched
+Table ablation-summary,FD001 overestimation_magnitude winner,safety_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD001; metric=overestimation_magnitude,metric_best,safety_w3_h64_l1_w30,matched
+Table ablation-summary,FD001 overestimation_magnitude RMSE cost (%),2.6,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD001; metric=overestimation_magnitude,rmse_change_pct,2.621747263931337,matched
+Table ablation-summary,FD001 sarbi winner,safety_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD001; metric=sarbi,metric_best,safety_w3_h64_l1_w30,matched
+Table ablation-summary,FD001 sarbi RMSE cost (%),2.6,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD001; metric=sarbi,rmse_change_pct,2.621747263931337,matched
+Table ablation-summary,FD002 rmse winner,critical_w2_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD002; metric=rmse,metric_best,critical_w2_h64_l1_w30,matched
+Table ablation-summary,FD002 rmse RMSE cost (%),0.0,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD002; metric=rmse,rmse_change_pct,0.0,matched
+Table ablation-summary,FD002 critical_rmse_50 winner,safety_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD002; metric=critical_rmse_50,metric_best,safety_w3_h64_l1_w30,matched
+Table ablation-summary,FD002 critical_rmse_50 RMSE cost (%),20.6,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD002; metric=critical_rmse_50,rmse_change_pct,20.62748360205933,matched
+Table ablation-summary,FD002 overestimation_magnitude winner,safety_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD002; metric=overestimation_magnitude,metric_best,safety_w3_h64_l1_w30,matched
+Table ablation-summary,FD002 overestimation_magnitude RMSE cost (%),20.6,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD002; metric=overestimation_magnitude,rmse_change_pct,20.62748360205933,matched
+Table ablation-summary,FD002 sarbi winner,critical_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD002; metric=sarbi,metric_best,critical_w3_h64_l1_w30,matched
+Table ablation-summary,FD002 sarbi RMSE cost (%),3.9,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD002; metric=sarbi,rmse_change_pct,3.876732766561537,matched
+Table ablation-summary,FD003 rmse winner,critical_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD003; metric=rmse,metric_best,critical_w3_h64_l1_w30,matched
+Table ablation-summary,FD003 rmse RMSE cost (%),0.0,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD003; metric=rmse,rmse_change_pct,0.0,matched
+Table ablation-summary,FD003 critical_rmse_50 winner,critical_w2_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD003; metric=critical_rmse_50,metric_best,critical_w2_h64_l1_w30,matched
+Table ablation-summary,FD003 critical_rmse_50 RMSE cost (%),1.9,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD003; metric=critical_rmse_50,rmse_change_pct,1.870124601540949,matched
+Table ablation-summary,FD003 overestimation_magnitude winner,safety_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD003; metric=overestimation_magnitude,metric_best,safety_w3_h64_l1_w30,matched
+Table ablation-summary,FD003 overestimation_magnitude RMSE cost (%),11.9,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD003; metric=overestimation_magnitude,rmse_change_pct,11.928537343262114,matched
+Table ablation-summary,FD003 sarbi winner,critical_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD003; metric=sarbi,metric_best,critical_w3_h64_l1_w30,matched
+Table ablation-summary,FD003 sarbi RMSE cost (%),0.0,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD003; metric=sarbi,rmse_change_pct,0.0,matched
+Table ablation-summary,FD004 rmse winner,baseline_lr1e-3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD004; metric=rmse,metric_best,baseline_lr1e-3_h64_l1_w30,matched
+Table ablation-summary,FD004 rmse RMSE cost (%),0.0,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD004; metric=rmse,rmse_change_pct,0.0,matched
+Table ablation-summary,FD004 critical_rmse_50 winner,safety_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD004; metric=critical_rmse_50,metric_best,safety_w3_h64_l1_w30,matched
+Table ablation-summary,FD004 critical_rmse_50 RMSE cost (%),12.7,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD004; metric=critical_rmse_50,rmse_change_pct,12.691090972492054,matched
+Table ablation-summary,FD004 overestimation_magnitude winner,safety_w3_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD004; metric=overestimation_magnitude,metric_best,safety_w3_h64_l1_w30,matched
+Table ablation-summary,FD004 overestimation_magnitude RMSE cost (%),12.7,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD004; metric=overestimation_magnitude,rmse_change_pct,12.691090972492054,matched
+Table ablation-summary,FD004 sarbi winner,safety_w2_h64_l1_w30,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD004; metric=sarbi,metric_best,safety_w2_h64_l1_w30,matched
+Table ablation-summary,FD004 sarbi RMSE cost (%),1.2,reports/paper/deep_ablation_rmse_vs_risk_best.csv,subset=FD004; metric=sarbi,rmse_change_pct,1.1785615166973802,matched
+Bootstrap paragraph,FD002 rmse sarbi_minus_rmse_best,2.53,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=rmse,sarbi_minus_rmse_best,2.532920703661105,matched
+Bootstrap paragraph,FD002 rmse ci95_low,1.60,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=rmse,ci95_low,1.5982528121767174,matched
+Bootstrap paragraph,FD002 rmse ci95_high,3.40,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=rmse,ci95_high,3.395339736059842,matched
+Bootstrap paragraph,FD002 rmse n_paired_seed_engine,777,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=rmse,n_paired_seed_engine,777,matched
+Bootstrap paragraph,FD002 critical_rmse_50 sarbi_minus_rmse_best,-2.03,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=critical_rmse_50,sarbi_minus_rmse_best,-2.034274198568564,matched
+Bootstrap paragraph,FD002 critical_rmse_50 ci95_low,-3.27,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=critical_rmse_50,ci95_low,-3.2734094887859158,matched
+Bootstrap paragraph,FD002 critical_rmse_50 ci95_high,-0.88,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=critical_rmse_50,ci95_high,-0.8801147152721324,matched
+Bootstrap paragraph,FD002 critical_rmse_50 n_paired_seed_engine,777,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=critical_rmse_50,n_paired_seed_engine,777,matched
+Bootstrap paragraph,FD002 overestimation_ratio sarbi_minus_rmse_best,-0.179,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=overestimation_ratio,sarbi_minus_rmse_best,-0.1788931788931789,matched
+Bootstrap paragraph,FD002 overestimation_ratio ci95_low,-0.207,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=overestimation_ratio,ci95_low,-0.2072393822393823,matched
+Bootstrap paragraph,FD002 overestimation_ratio ci95_high,-0.151,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=overestimation_ratio,ci95_high,-0.1505791505791506,matched
+Bootstrap paragraph,FD002 overestimation_ratio n_paired_seed_engine,777,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=overestimation_ratio,n_paired_seed_engine,777,matched
+Bootstrap paragraph,FD002 overestimation_magnitude sarbi_minus_rmse_best,-2.90,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=overestimation_magnitude,sarbi_minus_rmse_best,-2.899671268468469,matched
+Bootstrap paragraph,FD002 overestimation_magnitude ci95_low,-3.34,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=overestimation_magnitude,ci95_low,-3.336834841528315,matched
+Bootstrap paragraph,FD002 overestimation_magnitude ci95_high,-2.46,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=overestimation_magnitude,ci95_high,-2.4577533325321754,matched
+Bootstrap paragraph,FD002 overestimation_magnitude n_paired_seed_engine,777,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD002; metric=overestimation_magnitude,n_paired_seed_engine,777,matched
+Bootstrap paragraph,FD004 rmse sarbi_minus_rmse_best,1.77,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=rmse,sarbi_minus_rmse_best,1.7673405967752984,matched
+Bootstrap paragraph,FD004 rmse ci95_low,0.49,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=rmse,ci95_low,0.4915556480987652,matched
+Bootstrap paragraph,FD004 rmse ci95_high,3.09,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=rmse,ci95_high,3.088950683513632,matched
+Bootstrap paragraph,FD004 rmse n_paired_seed_engine,744,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=rmse,n_paired_seed_engine,744,matched
+Bootstrap paragraph,FD004 critical_rmse_50 sarbi_minus_rmse_best,-2.12,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=critical_rmse_50,sarbi_minus_rmse_best,-2.1171255826366284,matched
+Bootstrap paragraph,FD004 critical_rmse_50 ci95_low,-4.38,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=critical_rmse_50,ci95_low,-4.383181098741721,matched
+Bootstrap paragraph,FD004 critical_rmse_50 ci95_high,0.17,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=critical_rmse_50,ci95_high,0.1665422390818786,matched
+Bootstrap paragraph,FD004 critical_rmse_50 n_paired_seed_engine,744,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=critical_rmse_50,n_paired_seed_engine,744,matched
+Bootstrap paragraph,FD004 overestimation_ratio sarbi_minus_rmse_best,-0.128,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=overestimation_ratio,sarbi_minus_rmse_best,-0.1276881720430107,matched
+Bootstrap paragraph,FD004 overestimation_ratio ci95_low,-0.161,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=overestimation_ratio,ci95_low,-0.1612903225806451,matched
+Bootstrap paragraph,FD004 overestimation_ratio ci95_high,-0.094,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=overestimation_ratio,ci95_high,-0.0940860215053763,matched
+Bootstrap paragraph,FD004 overestimation_ratio n_paired_seed_engine,744,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=overestimation_ratio,n_paired_seed_engine,744,matched
+Bootstrap paragraph,FD004 overestimation_magnitude sarbi_minus_rmse_best,-3.01,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=overestimation_magnitude,sarbi_minus_rmse_best,-3.0059202244753704,matched
+Bootstrap paragraph,FD004 overestimation_magnitude ci95_low,-3.71,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=overestimation_magnitude,ci95_low,-3.7053923671543822,matched
+Bootstrap paragraph,FD004 overestimation_magnitude ci95_high,-2.32,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=overestimation_magnitude,ci95_high,-2.3168691212160804,matched
+Bootstrap paragraph,FD004 overestimation_magnitude n_paired_seed_engine,744,reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv,subset=FD004; metric=overestimation_magnitude,n_paired_seed_engine,744,matched
+Methods counts,representative subsets,4,reports/paper/matrix_safety_benchmark_seed_scores.csv,all rows,subset.nunique,4,matched
+Methods counts,representative models per subset,5,reports/paper/matrix_safety_benchmark_seed_scores.csv,groupby subset,model.nunique.min,5,matched
+Methods counts,representative seeds per subset/model,3,reports/paper/matrix_safety_benchmark_seed_scores.csv,groupby subset/model,seed.nunique.min,3,matched
+Methods counts,deep ablation jobs,96,reports/paper/deep_ablation_sarbi_seed_scores.csv,drop duplicates subset/seed/job,row_count,96,matched
+Methods counts,deep ablation subsets,4,reports/paper/deep_ablation_sarbi_seed_scores.csv,all rows,subset.nunique,4,matched
