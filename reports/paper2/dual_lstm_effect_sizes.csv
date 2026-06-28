@@ -1,0 +1,81 @@
+subset,contrast_id,baseline,candidate,label,metric,baseline_mean,candidate_mean,candidate_minus_baseline,candidate_change_pct
+FD001,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,rmse,14.97962383425699,14.856520763636292,-0.12310307062069903,-0.8218034844050882
+FD001,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,mae,11.336837436358133,11.13461008389791,-0.2022273524602234,-1.7838074647843525
+FD001,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,critical_rmse_50,5.831029440416462,5.960050546137917,0.12902110572145453,2.2126642823507954
+FD001,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,overestimation_ratio,0.63,0.6533333333333333,0.023333333333333317,3.7037037037037015
+FD001,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,overestimation_magnitude,7.171127802530925,7.366327808698018,0.19520000616709332,2.7220265980784903
+FD001,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,rmse,15.50602288630518,14.856520763636292,-0.6495021226688884,-4.188708654896443
+FD001,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,mae,11.606479020118712,11.13461008389791,-0.47186893622080284,-4.0655648918407
+FD001,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,critical_rmse_50,6.864056192547037,5.960050546137917,-0.9040056464091197,-13.170137613248055
+FD001,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,overestimation_ratio,0.6233333333333333,0.6533333333333333,0.030000000000000027,4.8128342245989355
+FD001,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,overestimation_magnitude,6.974278890291849,7.366327808698018,0.39204891840616884,5.621354186909537
+FD001,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,rmse,14.856520763636292,14.880539467630234,0.024018703993942125,0.16167112324664695
+FD001,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,mae,11.13461008389791,10.65529366016388,-0.47931642373402994,-4.304743678695886
+FD001,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,critical_rmse_50,5.960050546137917,5.394459197648961,-0.5655913484889563,-9.489707245108125
+FD001,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,overestimation_ratio,0.6533333333333333,0.4866666666666666,-0.16666666666666674,-25.510204081632665
+FD001,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,overestimation_magnitude,7.366327808698018,4.225973490079244,-3.1403543186187743,-42.63120512924641
+FD001,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,rmse,14.856520763636292,14.880539467630234,0.024018703993942125,0.16167112324664695
+FD001,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,mae,11.13461008389791,10.65529366016388,-0.47931642373402994,-4.304743678695886
+FD001,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,critical_rmse_50,5.960050546137917,5.394459197648961,-0.5655913484889563,-9.489707245108125
+FD001,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,overestimation_ratio,0.6533333333333333,0.4866666666666666,-0.16666666666666674,-25.510204081632665
+FD001,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,overestimation_magnitude,7.366327808698018,4.225973490079244,-3.1403543186187743,-42.63120512924641
+FD002,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,rmse,18.38359500697821,18.05913155698264,-0.324463449995573,-1.7649619123594171
+FD002,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,mae,13.582144717912415,13.51998695704314,-0.062157760869276046,-0.4576431937682205
+FD002,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,critical_rmse_50,8.866845109081227,9.536494184460151,0.6696490753789242,7.55228119066932
+FD002,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,overestimation_ratio,0.3873873873873873,0.4298584298584298,0.0424710424710425,10.963455149501671
+FD002,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,overestimation_magnitude,4.605291543319879,5.501070490214816,0.8957789468949366,19.451080099245665
+FD002,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,rmse,17.948433442379542,18.05913155698264,0.11069811460309609,0.6167564147504793
+FD002,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,mae,13.35349543920048,13.51998695704314,0.16649151784266003,1.2468010237522384
+FD002,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,critical_rmse_50,9.062434053284202,9.536494184460151,0.4740601311759498,5.2310464097021665
+FD002,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,overestimation_ratio,0.3989703989703989,0.4298584298584298,0.030888030888030937,7.741935483870982
+FD002,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,overestimation_magnitude,5.120100488994113,5.501070490214816,0.3809700012207031,7.440674300037966
+FD002,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,rmse,18.05913155698264,20.320798761161868,2.261667204179229,12.523676440602404
+FD002,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,mae,13.51998695704314,15.349034150901756,1.8290471938586172,13.528468627004026
+FD002,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,critical_rmse_50,9.536494184460151,8.823402161467683,-0.713092022992468,-7.477507029307072
+FD002,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,overestimation_ratio,0.4298584298584298,0.3474903474903474,-0.08236808236808241,-19.1616766467066
+FD002,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,overestimation_magnitude,5.501070490214816,3.831595672450317,-1.669474817764499,-30.348180790159375
+FD002,safety_vs_rmse_best,dual_no_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,rmse,17.948433442379542,20.320798761161868,2.3723653187823253,13.217673433162897
+FD002,safety_vs_rmse_best,dual_no_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,mae,13.35349543920048,15.349034150901756,1.9955387117012773,14.94394273609575
+FD002,safety_vs_rmse_best,dual_no_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,critical_rmse_50,9.062434053284202,8.823402161467683,-0.23903189181651818,-2.6376124825967002
+FD002,safety_vs_rmse_best,dual_no_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,overestimation_ratio,0.3989703989703989,0.3474903474903474,-0.05148005148005147,-12.903225806451612
+FD002,safety_vs_rmse_best,dual_no_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,overestimation_magnitude,5.120100488994113,3.831595672450317,-1.2885048165437958,-25.16561577870386
+FD003,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,rmse,14.706612569903944,14.766685725605806,0.060073155701861225,0.40847717593918764
+FD003,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,mae,10.491405270894369,10.505563944180809,0.014158673286440049,0.1349549742942401
+FD003,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,critical_rmse_50,5.97725869177637,5.477424936870308,-0.49983375490606274,-8.362257360447588
+FD003,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,overestimation_ratio,0.5666666666666668,0.5566666666666666,-0.01000000000000012,-1.764705882352962
+FD003,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,overestimation_magnitude,6.755628110567728,6.558964273134868,-0.19666383743285998,-2.9111110649389014
+FD003,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,rmse,15.336580585310632,14.766685725605806,-0.5698948597048261,-3.7159186595392137
+FD003,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,mae,11.03748049259186,10.505563944180809,-0.5319165484110506,-4.819184493853127
+FD003,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,critical_rmse_50,6.081821892079323,5.477424936870308,-0.6043969552090154,-9.937761511828445
+FD003,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,overestimation_ratio,0.6066666666666667,0.5566666666666666,-0.050000000000000044,-8.241758241758248
+FD003,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,overestimation_magnitude,7.553613224029541,6.558964273134868,-0.994648950894673,-13.167856513098892
+FD003,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,rmse,14.766685725605806,14.373488430366884,-0.393197295238922,-2.6627321969553934
+FD003,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,mae,10.505563944180809,10.00353688319524,-0.5020270609855686,-4.77867788586113
+FD003,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,critical_rmse_50,5.477424936870308,4.332481615826178,-1.1449433210441295,-20.902948634442218
+FD003,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,overestimation_ratio,0.5566666666666666,0.4266666666666667,-0.12999999999999995,-23.353293413173645
+FD003,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,overestimation_magnitude,6.558964273134868,4.651013118426005,-1.9079511547088632,-29.089214016970928
+FD003,safety_vs_rmse_best,dual_cycle_safety_w2_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,rmse,14.373488430366884,14.373488430366884,0.0,0.0
+FD003,safety_vs_rmse_best,dual_cycle_safety_w2_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,mae,10.00353688319524,10.00353688319524,0.0,0.0
+FD003,safety_vs_rmse_best,dual_cycle_safety_w2_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,critical_rmse_50,4.332481615826178,4.332481615826178,0.0,0.0
+FD003,safety_vs_rmse_best,dual_cycle_safety_w2_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,overestimation_ratio,0.4266666666666667,0.4266666666666667,0.0,0.0
+FD003,safety_vs_rmse_best,dual_cycle_safety_w2_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,overestimation_magnitude,4.651013118426005,4.651013118426005,0.0,0.0
+FD004,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,rmse,23.39807272116636,22.31934655671697,-1.0787261644493924,-4.610320590522635
+FD004,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,mae,17.50376478061881,16.54492509749628,-0.9588396831225303,-5.477905440001192
+FD004,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,critical_rmse_50,22.01267633964865,19.190733678201696,-2.821942661446954,-12.819625464460882
+FD004,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,overestimation_ratio,0.5120967741935484,0.5483870967741935,0.03629032258064513,7.086614173228341
+FD004,cycle_vs_lstm,lstm_baseline_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus LSTM baseline,overestimation_magnitude,9.2035401803191,9.000270243613953,-0.2032699367051478,-2.2086059573013146
+FD004,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,rmse,22.42964076220973,22.31934655671697,-0.11029420549276026,-0.4917341595527822
+FD004,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,mae,16.801000663990617,16.54492509749628,-0.2560755664943386,-1.5241685398131213
+FD004,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,critical_rmse_50,19.97199687708164,19.190733678201696,-0.7812631988799446,-3.911793115572051
+FD004,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,overestimation_ratio,0.5376344086021505,0.5483870967741935,0.010752688172043001,1.9999999999999982
+FD004,cycle_vs_no_cycle,dual_no_cycle_h64_l1_w30,dual_cycle_h64_l1_w30,Cycle minus no-cycle,overestimation_magnitude,9.112318690105152,9.000270243613953,-0.11204844649119927,-1.229637047405618
+FD004,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,rmse,22.31934655671697,22.38463806366109,0.06529150694412067,0.2925332369305915
+FD004,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,mae,16.54492509749628,16.570549630349685,0.02562453285340638,0.15487850626343486
+FD004,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,critical_rmse_50,19.190733678201696,15.107342935803226,-4.083390742398469,-21.277929290617468
+FD004,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,overestimation_ratio,0.5483870967741935,0.4448924731182795,-0.103494623655914,-18.87254901960785
+FD004,safety_vs_cycle,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus cycle,overestimation_magnitude,9.000270243613953,5.963591871082142,-3.036678372531811,-33.739857696900316
+FD004,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,rmse,22.31934655671697,22.38463806366109,0.06529150694412067,0.2925332369305915
+FD004,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,mae,16.54492509749628,16.570549630349685,0.02562453285340638,0.15487850626343486
+FD004,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,critical_rmse_50,19.190733678201696,15.107342935803226,-4.083390742398469,-21.277929290617468
+FD004,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,overestimation_ratio,0.5483870967741935,0.4448924731182795,-0.103494623655914,-18.87254901960785
+FD004,safety_vs_rmse_best,dual_cycle_h64_l1_w30,dual_cycle_safety_w2_h64_l1_w30,Cycle+safety minus Paper2 RMSE-best,overestimation_magnitude,9.000270243613953,5.963591871082142,-3.036678372531811,-33.739857696900316

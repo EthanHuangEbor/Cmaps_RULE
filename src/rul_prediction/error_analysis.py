@@ -60,6 +60,10 @@ def main() -> None:
             "critical_threshold",
             "critical_weight",
             "over_weight",
+            "pair_horizon",
+            "lambda_cycle",
+            "lambda_latent",
+            "lambda_mono",
         ]
         if col in predictions.columns
     ]

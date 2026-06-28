@@ -1,0 +1,139 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,margin=0.85in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
+\graphicspath{{figures/}}
+\title{Supplementary Information: Cycle-Consistent Safety-Oriented Dual-LSTM for Aero-Engine RUL Prediction}
+\author{Ethan Huang}
+\date{June 28, 2026}
+\begin{document}
+\maketitle
+
+\section{Experiment Matrix}
+The full matrix contains four C-MAPSS subsets, three seeds, and four jobs: LSTM baseline, Dual-LSTM no-cycle, Dual-LSTM cycle, and Dual-LSTM cycle+safety-w2. Each job writes metrics, predictions, training history, and selected-feature files. The paired-window horizon is $k=1$, the window size is 30, and the RUL cap is 130.
+
+\section{Full Three-Seed Test Summary}
+\scriptsize
+\begin{longtable}{llrrrrr}
+\caption{Full Paper 2 three-seed test summary. Lower values are better.}\\
+\toprule
+Subset & Job & RMSE & MAE & Critical RMSE50 & OverRatio & OverMag \\
+\midrule
+\endfirsthead
+\toprule
+Subset & Job & RMSE & MAE & Critical RMSE50 & OverRatio & OverMag \\
+\midrule
+\endhead
+FD001 & LSTM baseline & 14.98 & 11.34 & 5.83 & 0.630 & 7.17 \\
+FD001 & Dual-LSTM no-cycle & 15.51 & 11.61 & 6.86 & 0.623 & 6.97 \\
+FD001 & Dual-LSTM cycle & 14.86 & 11.13 & 5.96 & 0.653 & 7.37 \\
+FD001 & Dual-LSTM cycle safety-w2 & 14.88 & 10.66 & 5.39 & 0.487 & 4.23 \\
+FD002 & LSTM baseline & 18.38 & 13.58 & 8.87 & 0.387 & 4.61 \\
+FD002 & Dual-LSTM no-cycle & 17.95 & 13.35 & 9.06 & 0.399 & 5.12 \\
+FD002 & Dual-LSTM cycle & 18.06 & 13.52 & 9.54 & 0.430 & 5.50 \\
+FD002 & Dual-LSTM cycle safety-w2 & 20.32 & 15.35 & 8.82 & 0.347 & 3.83 \\
+FD003 & LSTM baseline & 14.71 & 10.49 & 5.98 & 0.567 & 6.76 \\
+FD003 & Dual-LSTM no-cycle & 15.34 & 11.04 & 6.08 & 0.607 & 7.55 \\
+FD003 & Dual-LSTM cycle & 14.77 & 10.51 & 5.48 & 0.557 & 6.56 \\
+FD003 & Dual-LSTM cycle safety-w2 & 14.37 & 10.00 & 4.33 & 0.427 & 4.65 \\
+FD004 & LSTM baseline & 23.40 & 17.50 & 22.01 & 0.512 & 9.20 \\
+FD004 & Dual-LSTM no-cycle & 22.43 & 16.80 & 19.97 & 0.538 & 9.11 \\
+FD004 & Dual-LSTM cycle & 22.32 & 16.54 & 19.19 & 0.548 & 9.00 \\
+FD004 & Dual-LSTM cycle safety-w2 & 22.38 & 16.57 & 15.11 & 0.445 & 5.96 \\
+\bottomrule
+\end{longtable}
+\normalsize
+
+\section{Paired Seed-Engine Bootstrap}
+The bootstrap pairs predictions by subset, seed, and test engine. The table reports candidate minus baseline. Negative values indicate lower error for the candidate job.
+
+\scriptsize
+\begin{longtable}{lllrrl}
+\caption{Bootstrap comparison table for the main Paper 2 contrasts.}\\
+\toprule
+Subset & Contrast & Metric & Difference & 95\% CI & Interpretation \\
+\midrule
+\endfirsthead
+\toprule
+Subset & Contrast & Metric & Difference & 95\% CI & Interpretation \\
+\midrule
+\endhead
+FD001 & cycle\_vs\_lstm & rmse & -0.13 & [-0.91, 0.65] & uncertain \\
+FD001 & cycle\_vs\_lstm & critical\_rmse\_50 & 0.13 & [-0.87, 1.31] & uncertain \\
+FD001 & cycle\_vs\_lstm & overestimation\_magnitude & 0.20 & [-0.33, 0.75] & uncertain \\
+FD001 & safety\_vs\_cycle & rmse & 0.02 & [-0.94, 1.06] & uncertain \\
+FD001 & safety\_vs\_cycle & critical\_rmse\_50 & -0.49 & [-1.35, 0.29] & uncertain \\
+FD001 & safety\_vs\_cycle & overestimation\_magnitude & -3.14 & [-3.78, -2.51] & improvement \\
+FD002 & cycle\_vs\_lstm & rmse & -0.33 & [-1.05, 0.33] & uncertain \\
+FD002 & cycle\_vs\_lstm & critical\_rmse\_50 & 0.67 & [-0.50, 1.98] & uncertain \\
+FD002 & cycle\_vs\_lstm & overestimation\_magnitude & 0.90 & [0.56, 1.23] & cost\_or\_worse \\
+FD002 & safety\_vs\_cycle & rmse & 2.28 & [1.52, 3.03] & cost\_or\_worse \\
+FD002 & safety\_vs\_cycle & critical\_rmse\_50 & -0.68 & [-1.94, 0.54] & uncertain \\
+FD002 & safety\_vs\_cycle & overestimation\_magnitude & -1.67 & [-2.04, -1.33] & improvement \\
+FD003 & cycle\_vs\_lstm & rmse & 0.06 & [-1.09, 1.17] & uncertain \\
+FD003 & cycle\_vs\_lstm & critical\_rmse\_50 & -0.52 & [-2.19, 0.89] & uncertain \\
+FD003 & cycle\_vs\_lstm & overestimation\_magnitude & -0.20 & [-0.86, 0.45] & uncertain \\
+FD003 & safety\_vs\_cycle & rmse & -0.41 & [-1.65, 0.75] & uncertain \\
+FD003 & safety\_vs\_cycle & critical\_rmse\_50 & -1.20 & [-2.17, -0.30] & improvement \\
+FD003 & safety\_vs\_cycle & overestimation\_magnitude & -1.91 & [-2.57, -1.28] & improvement \\
+FD004 & cycle\_vs\_lstm & rmse & -1.08 & [-1.97, -0.31] & improvement \\
+FD004 & cycle\_vs\_lstm & critical\_rmse\_50 & -2.84 & [-4.28, -1.48] & improvement \\
+FD004 & cycle\_vs\_lstm & overestimation\_magnitude & -0.20 & [-0.67, 0.21] & uncertain \\
+FD004 & safety\_vs\_cycle & rmse & 0.07 & [-1.02, 1.15] & uncertain \\
+FD004 & safety\_vs\_cycle & critical\_rmse\_50 & -4.46 & [-6.29, -2.50] & improvement \\
+FD004 & safety\_vs\_cycle & overestimation\_magnitude & -3.04 & [-3.63, -2.49] & improvement \\
+\bottomrule
+\end{longtable}
+\normalsize
+
+\section{Paper 1 to Paper 2 Bridge}
+This bridge compares the best Paper 2 job with the best Paper 1 representative-matrix value. It is designed to prevent overclaiming.
+
+\scriptsize
+\begin{longtable}{lllrrrr}
+\caption{Paper 1 representative matrix versus Paper 2 best job. Negative change means Paper 2 is lower.}\\
+\toprule
+Subset & Metric & Paper1 best & Paper1 value & Paper2 best & Paper2 value & Change \\
+\midrule
+\endfirsthead
+\toprule
+Subset & Metric & Paper1 best & Paper1 value & Paper2 best & Paper2 value & Change \\
+\midrule
+\endhead
+FD001 & rmse & Gradient Boosting & 12.81 & Dual-LSTM cycle & 14.86 & +15.9\% \\
+FD001 & critical\_rmse\_50 & Safety-GRU & 4.86 & Dual-LSTM cycle safety-w2 & 5.39 & +10.9\% \\
+FD001 & overestimation\_magnitude & Safety-GRU & 4.79 & Dual-LSTM cycle safety-w2 & 4.23 & -11.8\% \\
+FD002 & rmse & GRU & 17.81 & Dual-LSTM no-cycle & 17.95 & +0.8\% \\
+FD002 & critical\_rmse\_50 & Safety-GRU & 8.12 & Dual-LSTM cycle safety-w2 & 8.82 & +8.6\% \\
+FD002 & overestimation\_magnitude & Safety-GRU & 3.41 & Dual-LSTM cycle safety-w2 & 3.83 & +12.4\% \\
+FD003 & rmse & Gradient Boosting & 13.21 & Dual-LSTM cycle safety-w2 & 14.37 & +8.8\% \\
+FD003 & critical\_rmse\_50 & Random Forest & 4.76 & Dual-LSTM cycle safety-w2 & 4.33 & -9.0\% \\
+FD003 & overestimation\_magnitude & Safety-GRU & 4.84 & Dual-LSTM cycle safety-w2 & 4.65 & -3.9\% \\
+FD004 & rmse & Random Forest & 20.18 & Dual-LSTM cycle & 22.32 & +10.6\% \\
+FD004 & critical\_rmse\_50 & Safety-GRU & 14.62 & Dual-LSTM cycle safety-w2 & 15.11 & +3.3\% \\
+FD004 & overestimation\_magnitude & Safety-GRU & 5.51 & Dual-LSTM cycle safety-w2 & 5.96 & +8.2\% \\
+\bottomrule
+\end{longtable}
+\normalsize
+
+\section{Supplementary Figure Index}
+All figures are generated by Python/matplotlib from CSV outputs. Editable SVG and PDF files are retained, with PNG/TIFF previews.
+\begin{itemize}
+\item Figure 1: Dual-LSTM architecture and inference boundary.
+\item Figure 2: metric-rank heatmap.
+\item Figure 3: RMSE versus Critical RMSE50.
+\item Figure 4: RMSE versus overestimation magnitude.
+\item Figure 5: Paper 1 to Paper 2 bridge.
+\end{itemize}
+
+\section{Claim Boundaries}
+This supplementary file follows the same claim boundaries as the main manuscript: no first-ever Dual-LSTM RUL claim, no full-portfolio SOTA claim, no aviation safety certification claim, and no real-fleet validation claim.
+\end{document}

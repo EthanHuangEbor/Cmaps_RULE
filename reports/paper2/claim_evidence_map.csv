@@ -1,0 +1,5 @@
+claim_id,claim,evidence_file,gate,status
+P2-C1,Dual-LSTM full matrix covers FD001-FD004 with 3 seeds and 4 jobs.,reports/paper2/dual_lstm_seed_metrics.csv,"Exactly 48 test rows, 96 metric rows, expected seeds 42/43/44, and complete metrics/predictions/history/feature files.",pass
+P2-C2,Cycle consistency is the RMSE-oriented representation control.,reports/paper2/dual_lstm_full_summary.csv,Dual-LSTM cycle RMSE should improve over LSTM baseline on at least 2 of 4 subsets.,pass
+P2-C3,Cycle safety-w2 shifts the risk profile toward lower late-life or optimistic overestimation risk.,reports/paper2/dual_lstm_rmse_vs_risk_best.csv,Risk improvement on at least 3 of 4 subsets before manuscript claim.,pass
+P2-C4,All conclusions are benchmark-limited and do not claim aviation certification or first-ever Dual-LSTM RUL.,reports/paper2/positioning_memo.md,Boundary statement present before writing manuscript.,pass

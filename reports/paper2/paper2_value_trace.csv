@@ -1,0 +1,10 @@
+location,claim,reported_value,source_file,selector,source_column,status
+Abstract/Results,safety_vs_cycle RMSE min pct,-2.7,dual_lstm_effect_sizes.csv,contrast_id=safety_vs_cycle,candidate_change_pct,matched
+Abstract/Results,safety_vs_cycle RMSE max pct,+12.5,dual_lstm_effect_sizes.csv,contrast_id=safety_vs_cycle,candidate_change_pct,matched
+Abstract/Results,safety_vs_cycle Critical RMSE50 min pct,-21.3,dual_lstm_effect_sizes.csv,contrast_id=safety_vs_cycle,candidate_change_pct,matched
+Abstract/Results,safety_vs_cycle Critical RMSE50 max pct,-7.5,dual_lstm_effect_sizes.csv,contrast_id=safety_vs_cycle,candidate_change_pct,matched
+Abstract/Results,safety_vs_cycle OverMag min pct,-42.6,dual_lstm_effect_sizes.csv,contrast_id=safety_vs_cycle,candidate_change_pct,matched
+Abstract/Results,safety_vs_cycle OverMag max pct,-29.1,dual_lstm_effect_sizes.csv,contrast_id=safety_vs_cycle,candidate_change_pct,matched
+Abstract/Results,cycle_vs_lstm RMSE min pct,-4.6,dual_lstm_effect_sizes.csv,contrast_id=cycle_vs_lstm; metric=rmse,candidate_change_pct,matched
+Abstract/Results,cycle_vs_lstm RMSE max pct,+0.4,dual_lstm_effect_sizes.csv,contrast_id=cycle_vs_lstm; metric=rmse,candidate_change_pct,matched
+Results bridge,Paper2 lower than Paper1 matrix count,4,paper1_paper2_comparison.csv,paper2_best_minus_matrix_pct<0,paper2_best_minus_matrix_pct,matched
