@@ -1,0 +1,37 @@
+subset,accuracy_weight,critical_weight,risk_weight,best_entity,best_label,best_sarbi
+FD001,0.5,0.2,0.3,gradient_boosting,Gradient Boosting,0.8968878260089898
+FD002,0.5,0.2,0.3,gru_safety_mse,Safety-GRU,0.7381258795977313
+FD003,0.5,0.2,0.3,gradient_boosting,Gradient Boosting,0.9358168035936156
+FD004,0.5,0.2,0.3,gru_safety_mse,Safety-GRU,0.8678402225796558
+FD001,0.4,0.2,0.4,gradient_boosting,Gradient Boosting,0.8880324582599979
+FD002,0.4,0.2,0.4,gru_safety_mse,Safety-GRU,0.7026761208671214
+FD003,0.4,0.2,0.4,gradient_boosting,Gradient Boosting,0.9313351591211315
+FD004,0.4,0.2,0.4,gru_safety_mse,Safety-GRU,0.8465789402806768
+FD001,0.3,0.2,0.5,gradient_boosting,Gradient Boosting,0.879273957288258
+FD002,0.3,0.2,0.5,gru_safety_mse,Safety-GRU,0.6689295155203427
+FD003,0.3,0.2,0.5,gradient_boosting,Gradient Boosting,0.9268896365726343
+FD004,0.3,0.2,0.5,gru_safety_mse,Safety-GRU,0.8260649250387284
+FD001,0.5,0.3,0.2,gradient_boosting,Gradient Boosting,0.9057977572056449
+FD002,0.5,0.3,0.2,gru_safety_mse,Safety-GRU,0.7093111355906739
+FD003,0.5,0.3,0.2,random_forest,Random Forest,0.9400689955072433
+FD004,0.5,0.3,0.2,gru_safety_mse,Safety-GRU,0.8558692857514343
+FD001,0.4,0.3,0.3,gradient_boosting,Gradient Boosting,0.8968459509841439
+FD002,0.4,0.3,0.3,gru_safety_mse,Safety-GRU,0.6752407642312607
+FD003,0.4,0.3,0.3,random_forest,Random Forest,0.9359054941522619
+FD004,0.4,0.3,0.3,gru_safety_mse,Safety-GRU,0.8350784633749669
+FD001,0.3,0.3,0.4,gradient_boosting,Gradient Boosting,0.8879921867358167
+FD002,0.3,0.3,0.4,gru_safety_mse,Safety-GRU,0.6428074882379553
+FD003,0.3,0.3,0.4,random_forest,Random Forest,0.9317731081322869
+FD004,0.3,0.3,0.4,gru_safety_mse,Safety-GRU,0.8150134418049912
+FD001,0.4,0.4,0.2,gru_safety_mse,Safety-GRU,0.8882502260271253
+FD002,0.4,0.4,0.2,gru_safety_mse,Safety-GRU,0.6489076679509677
+FD003,0.4,0.4,0.2,random_forest,Random Forest,0.9263944782984734
+FD004,0.4,0.4,0.2,gru_safety_mse,Safety-GRU,0.8238773058553382
+FD001,0.3,0.4,0.3,gru_safety_mse,Safety-GRU,0.8819550128210448
+FD002,0.3,0.4,0.3,gru_safety_mse,Safety-GRU,0.6177351325554181
+FD003,0.3,0.4,0.3,random_forest,Random Forest,0.9223130662336426
+FD004,0.3,0.4,0.3,gru_safety_mse,Safety-GRU,0.8042475861502988
+FD001,0.3,0.5,0.2,gru_safety_mse,Safety-GRU,0.8578719523305942
+FD002,0.3,0.5,0.2,gru_safety_mse,Safety-GRU,0.5936690496721096
+FD003,0.3,0.5,0.2,random_forest,Random Forest,0.9129566160484689
+FD004,0.3,0.5,0.2,gru_safety_mse,Safety-GRU,0.7937586010098056
