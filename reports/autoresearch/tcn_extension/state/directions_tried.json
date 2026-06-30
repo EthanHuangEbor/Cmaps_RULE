@@ -1,28 +1,38 @@
 {
-  "tried": [
-    {
-      "direction": "baseline_tcn_matrix",
-      "status": "completed",
-      "result": "Useful as a stronger sequence baseline; supports ranking-discordance narrative but should not be promoted as risk-best."
-    },
-    {
-      "direction": "direct_git_push_from_local_branch",
-      "status": "deferred",
-      "result": "Local branch history is based on stale Paper 2 branch; use clean GitHub API branch from remote main instead."
-    }
-  ],
-  "next_candidates": [
-    {
-      "direction": "decision_proxy_from_existing_predictions",
-      "reason": "Uses existing predictions without retraining and directly strengthens the safety-oriented evaluation claim."
-    },
-    {
-      "direction": "critical_threshold_sensitivity",
-      "reason": "Low-cost check that ranking discordance is not an artifact of one critical-zone threshold."
-    },
-    {
-      "direction": "tcn_safety_loss_small",
-      "reason": "Tests whether TCN can be risk-shaped, but requires extra GPU jobs and should follow decision/sensitivity if time is limited."
-    }
-  ]
+    "tried":  [
+                  {
+                      "direction":  "baseline_tcn_matrix",
+                      "status":  "completed",
+                      "result":  "Useful as a stronger sequence baseline; supports ranking-discordance narrative but should not be promoted as risk-best."
+                  },
+                  {
+                      "direction":  "direct_git_push_from_local_branch",
+                      "status":  "deferred",
+                      "result":  "Local branch history is based on stale Paper 2 branch; use clean GitHub API branch from remote main instead."
+                  },
+                  {
+                      "direction":  "clean_pr_branch_from_remote_main",
+                      "status":  "completed",
+                      "result":  "Draft PR #6 opened from clean GitHub branch."
+                  },
+                  {
+                      "direction":  "decision_proxy_next",
+                      "status":  "selected",
+                      "result":  "Chosen as next research iteration because it strengthens maintenance-risk framing without new deep training."
+                  }
+              ],
+    "next_candidates":  [
+                            {
+                                "direction":  "decision_proxy_from_existing_predictions",
+                                "reason":  "Uses existing predictions without retraining and directly strengthens the safety-oriented evaluation claim."
+                            },
+                            {
+                                "direction":  "critical_threshold_sensitivity",
+                                "reason":  "Low-cost check that ranking discordance is not an artifact of one critical-zone threshold."
+                            },
+                            {
+                                "direction":  "tcn_safety_loss_small",
+                                "reason":  "Tests whether TCN can be risk-shaped, but requires extra GPU jobs and should follow decision/sensitivity if time is limited."
+                            }
+                        ]
 }
