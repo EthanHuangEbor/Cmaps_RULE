@@ -1,0 +1,17 @@
+subset,lead_time,policy,rmse_best_model,rmse_best_rmse,decision_best_model,decision_best_expected_cost,same_model
+FD001,10.0,mean,gradient_boosting,12.81370316322021,ridge,3.766666666666667,False
+FD001,20.0,mean,gradient_boosting,12.81370316322021,tcn,2.4225333333333334,False
+FD001,30.0,mean,gradient_boosting,12.81370316322021,gradient_boosting,1.0305333333333333,True
+FD001,50.0,mean,gradient_boosting,12.81370316322021,gru_safety_mse,0.48133333333333334,False
+FD002,10.0,mean,tcn,16.760625770170805,gru_safety_mse,3.1944658944658944,False
+FD002,20.0,mean,tcn,16.760625770170805,gru_safety_mse,1.3283655083655084,False
+FD002,30.0,mean,tcn,16.760625770170805,gru_safety_mse,0.4831402831402831,False
+FD002,50.0,mean,tcn,16.760625770170805,gru_safety_mse,0.5679794079794079,False
+FD003,10.0,mean,gradient_boosting,13.208707858844647,tcn,2.3322666666666665,False
+FD003,20.0,mean,gradient_boosting,13.208707858844647,tcn,1.4163333333333332,False
+FD003,30.0,mean,gradient_boosting,13.208707858844647,gru_safety_mse,0.6044666666666667,False
+FD003,50.0,mean,gradient_boosting,13.208707858844647,lstm,0.33159999999999995,False
+FD004,10.0,mean,tcn,19.279861410159125,ridge,3.7830913978494625,False
+FD004,20.0,mean,tcn,19.279861410159125,gru_safety_mse,2.0854032258064517,False
+FD004,30.0,mean,tcn,19.279861410159125,gru_safety_mse,1.1498387096774192,False
+FD004,50.0,mean,tcn,19.279861410159125,tcn,0.736505376344086,True

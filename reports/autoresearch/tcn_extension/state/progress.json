@@ -1,7 +1,7 @@
 {
-    "iteration":  2,
-    "status":  "pr_opened",
-    "total_findings":  3,
+    "iteration":  3,
+    "status":  "decision_proxy_completed",
+    "total_findings":  5,
     "key_metrics":  {
                         "tcn_full_jobs":  12,
                         "tcn_combined_metric_rows":  24,
@@ -9,7 +9,12 @@
                         "pytest_status":  "passed",
                         "pr_number":  6,
                         "pr_url":  "https://github.com/EthanHuangEbor/Cmaps_RULE/pull/6",
-                        "remote_clean_branch_sha":  "1996ac82ac7ee3d4f6d2ec532f8d7e108ae128dd"
+                        "remote_clean_branch_sha":  "1996ac82ac7ee3d4f6d2ec532f8d7e108ae128dd",
+                        "pr_head_sha_observed":  "1a2aee4dca0e0ebc8637b986e1e588e86a9999e1",
+                        "decision_proxy_seed_rows":  336,
+                        "decision_proxy_summary_rows":  112,
+                        "rmse_decision_agreement_cells":  "2/16",
+                        "next_direction":  "sensitivity_checks"
                     },
     "stale_count":  0,
     "last_seen":  "2026-06-30T00:00:00+08:00",

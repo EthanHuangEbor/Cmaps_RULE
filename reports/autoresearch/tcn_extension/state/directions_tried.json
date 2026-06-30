@@ -19,20 +19,30 @@
                       "direction":  "decision_proxy_next",
                       "status":  "selected",
                       "result":  "Chosen as next research iteration because it strengthens maintenance-risk framing without new deep training."
+                  },
+                  {
+                      "direction":  "decision_proxy_from_existing_predictions",
+                      "status":  "completed",
+                      "result":  "Generated seed-level, summary, best-by-cost, RMSE-vs-cost-best, and note outputs."
+                  },
+                  {
+                      "direction":  "tcn_safety_loss_small",
+                      "status":  "deferred",
+                      "result":  "Deferred because decision proxy already shows RMSE-decision discordance and sensitivity should be checked before new GPU jobs."
                   }
               ],
     "next_candidates":  [
                             {
-                                "direction":  "decision_proxy_from_existing_predictions",
-                                "reason":  "Uses existing predictions without retraining and directly strengthens the safety-oriented evaluation claim."
+                                "direction":  "sensitivity_checks",
+                                "reason":  "Check whether decision/SARBI/risk ranking conclusions depend on declared cost weights or critical thresholds."
                             },
                             {
-                                "direction":  "critical_threshold_sensitivity",
-                                "reason":  "Low-cost check that ranking discordance is not an artifact of one critical-zone threshold."
+                                "direction":  "paper_claim_trace_update",
+                                "reason":  "Map decision proxy claims to new CSV outputs before manuscript edits."
                             },
                             {
                                 "direction":  "tcn_safety_loss_small",
-                                "reason":  "Tests whether TCN can be risk-shaped, but requires extra GPU jobs and should follow decision/sensitivity if time is limited."
+                                "reason":  "Run only if sensitivity indicates TCN changes model-selection conclusions enough to justify risk-shaping follow-up."
                             }
                         ]
 }
