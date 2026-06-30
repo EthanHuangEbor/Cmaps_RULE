@@ -10,7 +10,7 @@
                         "pr_number":  6,
                         "pr_url":  "https://github.com/EthanHuangEbor/Cmaps_RULE/pull/6",
                         "remote_clean_branch_sha":  "1996ac82ac7ee3d4f6d2ec532f8d7e108ae128dd",
-                        "pr_head_sha_observed":  "77fe4bafa222c6cca1d7d2a2f743efc9231963a1",
+                        "pr_head_sha_observed":  "not_tracked_in_state_to_avoid_self_reference",
                         "decision_proxy_seed_rows":  336,
                         "decision_proxy_summary_rows":  112,
                         "rmse_decision_agreement_cells":  "2/16",
