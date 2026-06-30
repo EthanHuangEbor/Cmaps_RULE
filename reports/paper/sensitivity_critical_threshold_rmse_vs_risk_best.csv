@@ -1,0 +1,17 @@
+subset,critical_threshold_checked,rmse_best_model,rmse_best_rmse,critical_best_model,critical_best_rmse,same_model
+FD001,20.0,gradient_boosting,12.81370316322021,gru_safety_mse,3.7270312494862807,False
+FD001,30.0,gradient_boosting,12.81370316322021,gru_safety_mse,3.7518960000233896,False
+FD001,50.0,gradient_boosting,12.81370316322021,gru_safety_mse,4.863028433616554,False
+FD001,70.0,gradient_boosting,12.81370316322021,random_forest,9.796415050820684,False
+FD002,20.0,tcn,16.760625770170805,gru_safety_mse,4.890309994449971,False
+FD002,30.0,tcn,16.760625770170805,gru_safety_mse,5.053460556879737,False
+FD002,50.0,tcn,16.760625770170805,gru_safety_mse,8.123940520060343,False
+FD002,70.0,tcn,16.760625770170805,gru_safety_mse,10.90969586502858,False
+FD003,20.0,gradient_boosting,13.208707858844647,random_forest,2.4738973156703685,False
+FD003,30.0,gradient_boosting,13.208707858844647,random_forest,3.5912163909188606,False
+FD003,50.0,gradient_boosting,13.208707858844647,random_forest,4.761971324153413,False
+FD003,70.0,gradient_boosting,13.208707858844647,gradient_boosting,9.785511726188162,True
+FD004,20.0,tcn,19.279861410159125,gru_safety_mse,9.350959612307618,False
+FD004,30.0,tcn,19.279861410159125,gru_safety_mse,11.18988212525808,False
+FD004,50.0,tcn,19.279861410159125,tcn,13.720765018552592,True
+FD004,70.0,tcn,19.279861410159125,gru_safety_mse,15.966572116946951,False

@@ -29,20 +29,21 @@
                       "direction":  "tcn_safety_loss_small",
                       "status":  "deferred",
                       "result":  "Deferred because decision proxy already shows RMSE-decision discordance and sensitivity should be checked before new GPU jobs."
+                  },
+                  {
+                      "direction":  "sensitivity_checks",
+                      "status":  "completed",
+                      "result":  "Generated critical-threshold and decision-cost sensitivity outputs; ranking discordance remains low-agreement across thresholds and cost schemas."
                   }
               ],
     "next_candidates":  [
                             {
-                                "direction":  "sensitivity_checks",
-                                "reason":  "Check whether decision/SARBI/risk ranking conclusions depend on declared cost weights or critical thresholds."
-                            },
-                            {
                                 "direction":  "paper_claim_trace_update",
-                                "reason":  "Map decision proxy claims to new CSV outputs before manuscript edits."
+                                "reason":  "Map TCN, decision proxy, and sensitivity claims to CSV evidence before manuscript integration."
                             },
                             {
                                 "direction":  "tcn_safety_loss_small",
-                                "reason":  "Run only if sensitivity indicates TCN changes model-selection conclusions enough to justify risk-shaping follow-up."
+                                "reason":  "Run only if manuscript framing needs a TCN risk-shaping follow-up after claim tracing."
                             }
                         ]
 }

@@ -3,3 +3,4 @@
 {"ts":"2026-06-30T00:00:00+08:00","source":"orchestrator","level":"info","event":"iteration_completed","detail":"Completed decision proxy outputs and selected sensitivity checks as the next iteration; TCN safety-loss remains gated."}
 {"ts":"2026-06-30T00:00:00+08:00","source":"orchestrator","level":"info","event":"state_corrected","detail":"Updated pytest count to 21 and PR head SHA after decision proxy PR update."}
 {"ts":"2026-06-30T00:00:00+08:00","source":"orchestrator","level":"decision","event":"avoid_self_referential_pr_head","detail":"Stopped tracking exact PR head SHA inside branch state because every state commit necessarily changes the PR head."}
+{"detail":"Completed no-retraining sensitivity checks for critical-zone thresholds and decision cost schemas; selected paper claim trace update as the next iteration.","level":"info","source":"orchestrator","event":"iteration_completed","ts":"2026-06-30T00:00:00+08:00"}
