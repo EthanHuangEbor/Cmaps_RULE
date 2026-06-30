@@ -32,11 +32,14 @@
                         "tcn_claim_trace_table_rows":  6,
                         "figure_table_manifest_date":  "2026-06-30",
                         "latex_compile_status":  "passed via direct pdflatex/bibtex/pdflatex/pdflatex",
-                        "latexmk_status":  "local TeX Live wrapper failed; direct compile succeeded",
+                        "latexmk_status":  "root-caused to missing WINDIR in Codex shell; reports/paper/build_paper.ps1 workaround verified",
                         "pdf_pages":  10,
-                        "arxiv_package_refreshed":  "yes; main.bbl included"
+                        "arxiv_package_refreshed":  "yes; main.bbl included",
+                        "latexmk_wrapper_root_cause":  "WINDIR empty while SystemRoot is C:\\WINDOWS; TeX Live runscript.tlu expects WINDIR for font path handling",
+                        "latexmk_build_script":  "reports/paper/build_paper.ps1",
+                        "latexmk_pdf_sha256":  "904C3780589625C15DA8689B5FBADACF94470B2E862AB41CC4D4A402C2A5D218"
                     },
     "stale_count":  0,
     "last_seen":  "2026-06-30T00:00:00+08:00",
-    "last_progress_ts":  "2026-06-30T20:04:33+08:00"
+    "last_progress_ts":  "2026-06-30T20:55:46+08:00"
 }

@@ -49,6 +49,11 @@
                       "direction":  "pdf_and_package_refresh",
                       "status":  "completed",
                       "result":  "Direct pdflatex/bibtex build succeeded, build/main.pdf was refreshed, and arxiv_upload.zip was rebuilt with main.bbl."
+                  },
+                  {
+                      "direction":  "latexmk_wrapper_root_cause",
+                      "status":  "completed",
+                      "result":  "Root cause is missing WINDIR in the Codex shell; reports/paper/build_paper.ps1 sets WINDIR from SystemRoot and latexmk succeeds."
                   }
               ],
     "next_candidates":  [

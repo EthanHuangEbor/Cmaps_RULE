@@ -7,3 +7,4 @@
 {"detail":"Completed paper claim trace update and deferred TCN safety-loss until manuscript integration or reviewer-triggered need.","level":"info","source":"orchestrator","event":"claim_trace_iteration_completed","ts":"2026-06-30T00:00:00+08:00"}
 {"detail":"CSV-backed claims were integrated into main.tex; next step is manual readthrough and LaTeX/PDF rebuild.","level":"info","source":"orchestrator","event":"manuscript_integration_completed","ts":"2026-06-30T00:00:00+08:00"}
 {"ts":"2026-06-30T20:04:33+08:00","event":"pdf_and_package_refreshed","status":"completed","details":"Direct pdflatex/bibtex compile passed; arxiv_upload.zip refreshed with current main.tex and main.bbl."}
+{"ts":"2026-06-30T20:55:46+08:00","event":"latexmk_wrapper_root_cause_resolved","status":"completed","details":"latexmk wrapper failure was caused by missing WINDIR in the Codex shell; build_paper.ps1 sets WINDIR from SystemRoot before invoking latexmk."}
