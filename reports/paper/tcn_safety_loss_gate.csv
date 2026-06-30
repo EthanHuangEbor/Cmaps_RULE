@@ -1,0 +1,6 @@
+gate_item,evidence,decision
+Current manuscript claims need TCN safety-loss,Claim map frames TCN as baseline/evaluation extension; no current claim requires architecture-specific risk shaping.,no
+Baseline TCN already dominates risk metrics,critical_rmse_50=1/4; overestimation_magnitude=0/2 comparable rows,no
+Ranking-discordance thesis lacks evidence without new training,agreement=2/16; agreement=2/16; agreement=10/80; balanced_low=2/16; baseline=2/16; early_penalty=2/16; high_late=2/16; high_missed=2/16,no
+Recommended immediate action,All TCN/decision/sensitivity claims now have CSV-backed trace rows.,defer TCN safety-loss; integrate claim trace into manuscript first
+Conditional trigger for future TCN safety-loss,Run only if manuscript adds architecture-independent safety-loss claims or reviewers ask whether risk shaping transfers from GRU to TCN.,conditional future experiment

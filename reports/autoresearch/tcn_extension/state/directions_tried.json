@@ -27,23 +27,28 @@
                   },
                   {
                       "direction":  "tcn_safety_loss_small",
-                      "status":  "deferred",
-                      "result":  "Deferred because decision proxy already shows RMSE-decision discordance and sensitivity should be checked before new GPU jobs."
+                      "status":  "conditionally_deferred",
+                      "result":  "Deferred until manuscript integration shows an architecture-independent safety-loss claim gap or reviewer feedback requests transfer beyond GRU."
                   },
                   {
                       "direction":  "sensitivity_checks",
                       "status":  "completed",
                       "result":  "Generated critical-threshold and decision-cost sensitivity outputs; ranking discordance remains low-agreement across thresholds and cost schemas."
+                  },
+                  {
+                      "direction":  "paper_claim_trace_update",
+                      "status":  "completed",
+                      "result":  "Generated tcn_claim_evidence_map.csv, tcn_safety_loss_gate.csv, and tcn_claim_trace_note.md; deferred TCN safety-loss small experiment."
                   }
               ],
     "next_candidates":  [
                             {
-                                "direction":  "paper_claim_trace_update",
-                                "reason":  "Map TCN, decision proxy, and sensitivity claims to CSV evidence before manuscript integration."
+                                "direction":  "manuscript_integration",
+                                "reason":  "Insert only CSV-backed TCN, decision proxy, and sensitivity claims into the manuscript and keep TCN safety-loss as future/conditional work."
                             },
                             {
-                                "direction":  "tcn_safety_loss_small",
-                                "reason":  "Run only if manuscript framing needs a TCN risk-shaping follow-up after claim tracing."
+                                "direction":  "reviewer_triggered_tcn_safety_loss",
+                                "reason":  "Run a small FD001+FD004 TCN safety-loss ablation only if manuscript claims or reviewer feedback require architecture-independent risk-shaping evidence."
                             }
                         ]
 }

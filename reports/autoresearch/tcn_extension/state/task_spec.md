@@ -25,6 +25,7 @@ the next safety-oriented C-MAPSS benchmark step.
 - `reports/paper/tcn_matrix_extension_note.md`
 - AutoResearch state files under `reports/autoresearch/tcn_extension/state/`.
 - `reports/paper/sensitivity_checks_note.md` and companion sensitivity CSVs.
+- `reports/paper/tcn_claim_evidence_map.csv`, `reports/paper/tcn_safety_loss_gate.csv`, and `reports/paper/tcn_claim_trace_note.md`.
 
 ## Success Criteria
 
