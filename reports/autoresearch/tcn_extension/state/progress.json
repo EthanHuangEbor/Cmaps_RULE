@@ -1,0 +1,14 @@
+{
+  "iteration": 1,
+  "status": "in_progress",
+  "total_findings": 3,
+  "key_metrics": {
+    "tcn_full_jobs": 12,
+    "tcn_combined_metric_rows": 24,
+    "pytest_count": 19,
+    "pytest_status": "passed"
+  },
+  "stale_count": 0,
+  "last_seen": "2026-06-30T00:00:00+08:00",
+  "last_progress_ts": "2026-06-30T00:00:00+08:00"
+}

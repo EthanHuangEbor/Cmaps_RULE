@@ -20,6 +20,39 @@ class SequenceDataset(Dataset):
         return self.x[index], self.y[index]
 
 
+class Chomp1d(nn.Module):
+    def __init__(self, chomp_size: int) -> None:
+        super().__init__()
+        self.chomp_size = chomp_size
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if self.chomp_size == 0:
+            return x
+        return x[:, :, :-self.chomp_size].contiguous()
+
+
+class TemporalBlock(nn.Module):
+    def __init__(self, in_channels: int, out_channels: int, *, dilation: int, dropout: float) -> None:
+        super().__init__()
+        kernel_size = 3
+        padding = (kernel_size - 1) * dilation
+        self.net = nn.Sequential(
+            nn.Conv1d(in_channels, out_channels, kernel_size, padding=padding, dilation=dilation),
+            Chomp1d(padding),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Conv1d(out_channels, out_channels, kernel_size, padding=padding, dilation=dilation),
+            Chomp1d(padding),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+        )
+        self.downsample = nn.Conv1d(in_channels, out_channels, kernel_size=1) if in_channels != out_channels else None
+        self.activation = nn.ReLU()
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        residual = x if self.downsample is None else self.downsample(x)
+        return self.activation(self.net(x) + residual)
+
 class RULSequenceModel(nn.Module):
     def __init__(
         self,
@@ -59,6 +92,20 @@ class RULSequenceModel(nn.Module):
                 nn.AdaptiveAvgPool1d(1),
             )
             encoder_size = 64
+        elif self.model_type == "tcn":
+            layers: list[nn.Module] = []
+            for layer_index in range(max(1, num_layers)):
+                in_channels = input_size if layer_index == 0 else hidden_size
+                layers.append(
+                    TemporalBlock(
+                        in_channels,
+                        hidden_size,
+                        dilation=2**layer_index,
+                        dropout=dropout,
+                    )
+                )
+            self.encoder = nn.Sequential(*layers)
+            encoder_size = hidden_size
         else:
             raise ValueError(f"Unsupported model_type: {model_type}")
 
@@ -75,6 +122,8 @@ class RULSequenceModel(nn.Module):
             if isinstance(hidden, tuple):
                 hidden = hidden[0]
             encoded = hidden[-1]
+        elif self.model_type == "tcn":
+            encoded = self.encoder(x.transpose(1, 2))[:, :, -1]
         else:
             encoded = self.encoder(x.transpose(1, 2)).squeeze(-1)
         return self.head(encoded)
