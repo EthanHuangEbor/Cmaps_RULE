@@ -28,13 +28,13 @@
 
 \title{\textbf{Safety-Oriented Evaluation of Classical and Deep Sequence Models for Aero-Engine RUL Prediction on C-MAPSS}}
 \author{Ethan Huang\\Beihang University}
-\date{June 28, 2026}
+\date{June 30, 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Remaining useful life (RUL) prediction for aero-engines is often evaluated by aggregate error metrics such as RMSE and the NASA score. These metrics are useful, but they do not by themselves show whether the model that is most accurate on average is also safest near end of life or least prone to optimistic overestimation. This paper reframes NASA C-MAPSS RUL prediction as a safety-oriented benchmark problem rather than a new state-of-the-art architecture claim. Across FD001--FD004, we compare Ridge regression, Random Forest, Gradient Boosting, GRU, and a lightweight Safety-GRU under engine-level validation splits, train-only scaling, capped RUL labels, 30-cycle windows, last-window test evaluation, and three random seeds. We report RMSE, MAE, NASA score, critical-zone RMSE at RUL $\leq 30$ and $\leq 50$, overestimation ratio, and overestimation magnitude, and define a relative composite index, SARBI, to summarize aggregate accuracy, late-life error, and optimistic-risk behavior without replacing the raw metrics. The results show systematic rank discordance. In the representative matrix, FD002 and FD004 select Safety-GRU under SARBI even though GRU and Random Forest are RMSE-best, respectively; FD001 and FD003 also show separations between RMSE-best and critical or overestimation-risk winners. A 96-job GRU safety-loss ablation confirms that critical, asymmetric, and combined safety losses can move the risk profile, but with subset-dependent RMSE costs. The contribution is a reproducible, benchmark-level evaluation protocol and risk-trade-off evidence for C-MAPSS, not a certified aviation safety method.
+Remaining useful life (RUL) prediction for aero-engines is often evaluated by aggregate error metrics such as RMSE and the NASA score. These metrics are useful, but they do not by themselves show whether the model that is most accurate on average is also safest near end of life or least prone to optimistic overestimation. This paper reframes NASA C-MAPSS RUL prediction as a safety-oriented benchmark problem rather than a new state-of-the-art architecture claim. Across FD001--FD004, we compare Ridge regression, Random Forest, Gradient Boosting, GRU, and a lightweight Safety-GRU under engine-level validation splits, train-only scaling, capped RUL labels, 30-cycle windows, last-window test evaluation, and three random seeds. We report RMSE, MAE, NASA score, critical-zone RMSE at RUL $\leq 30$ and $\leq 50$, overestimation ratio, and overestimation magnitude, and define a relative composite index, SARBI, to summarize aggregate accuracy, late-life error, and optimistic-risk behavior without replacing the raw metrics. The results show systematic rank discordance. In the representative matrix, FD002 and FD004 select Safety-GRU under SARBI even though GRU and Random Forest are RMSE-best, respectively; FD001 and FD003 also show separations between RMSE-best and critical or overestimation-risk winners. A 96-job GRU safety-loss ablation confirms that critical, asymmetric, and combined safety losses can move the risk profile, but with subset-dependent RMSE costs. A post hoc temporal convolutional network (TCN) baseline, decision-cost proxy, and threshold/cost sensitivity checks further show that the discordance is not tied to one model family or one declared preference setting. The contribution is a reproducible, benchmark-level evaluation protocol and risk-trade-off evidence for C-MAPSS, not a certified aviation safety method.
 \end{abstract}
 
 \noindent\textbf{Keywords:} remaining useful life; prognostics and health management; C-MAPSS; turbofan engine; safety-oriented evaluation; overestimation risk; GRU
@@ -53,6 +53,7 @@ The contributions are:
     \item A safety-oriented metric set combining RMSE, MAE, NASA score, critical RMSE30/50, overestimation ratio, and overestimation magnitude.
     \item A relative composite index, SARBI, that summarizes accuracy, late-life error, and optimistic-risk behavior while keeping every raw metric visible.
     \item A four-subset empirical analysis showing that RMSE-best and risk-best rankings frequently diverge for both representative classical/deep models and GRU safety-loss ablations.
+    \item A post hoc TCN baseline, decision proxy, and sensitivity trace showing that the ranking-discordance conclusion persists under architecture, critical-threshold, and declared-cost perturbations.
 \end{enumerate}
 
 \section{Related Work and Positioning}
@@ -100,6 +101,8 @@ The representative matrix compares Ridge regression, Random Forest, Gradient Boo
 \end{equation}
 This loss upweights late-life samples and optimistic predictions. It is a benchmark intervention, not a certified safety mechanism. The deep ablation contains eight GRU jobs on each subset and seed: baseline MSE, critical losses, asymmetric losses, and combined safety losses, for 4 subsets $\times$ 3 seeds $\times$ 8 jobs = 96 training jobs.
 
+We also add a baseline-only temporal convolutional network (TCN) as a post hoc architecture stress test. The TCN uses the same FD001--FD004 protocol, seeds, 30-cycle windows, and capped labels as the representative matrix. It is trained as a plain sequence baseline, not with safety losses, so it tests whether a stronger temporal architecture changes the evaluation conclusion without opening a new architecture-optimization study.
+
 \subsection{Safety-oriented metrics}
 
 We report seven lower-is-better metrics. RMSE and MAE measure aggregate accuracy. The NASA score penalizes overestimation more strongly than underestimation:
@@ -134,6 +137,12 @@ The per-seed score is
 \operatorname{SARBI}_{m,d,r}=\exp\left(\frac{A+C+R}{3}\right),
 \end{equation}
 and model-level SARBI is the geometric mean across seeds. Values below 1 indicate improvement relative to the reference portfolio. Ranking consistency is reported separately using top-1 agreement and Spearman rank correlation between RMSE ranks and each risk metric rank.
+
+\subsection{Decision proxy and sensitivity checks}
+
+To test whether ranking discordance survives a decision-oriented reading, we evaluate a simple benchmark-derived maintenance proxy on existing test predictions. A model triggers maintenance when $\hat{y}\leq L$, where $L\in\{10,20,30,50\}$ is a lead-time threshold. The oracle decision uses $y\leq L$. The baseline declared cost schema assigns cost 1 to preventive maintenance, 0.02 per early cycle, 10 to late decisions, and 20 to missed critical cases at $y\leq30$. This proxy is not a fleet scheduler; it is a controlled way to ask whether aggregate-RMSE winners would also be preferred under a transparent cost preference.
+
+We then run two no-retraining sensitivity checks. First, critical-zone RMSE rankings are recomputed for thresholds 20, 30, 50, and 70 cycles. Second, the decision proxy is recomputed under five declared cost schemas: baseline, high-late, high-missed, early-penalty, and balanced-low. These checks are generated from existing predictions and are reported as robustness evidence, not as additional trained models.
 
 \section{Results}
 
@@ -252,27 +261,57 @@ Figure~\ref{fig:sarbi-sensitivity} varies the relative weights assigned to accur
 \label{fig:sarbi-sensitivity}
 \end{figure*}
 
+\subsection{TCN, decision proxy, and sensitivity checks}
+
+The TCN baseline acts as an architecture stress test rather than a replacement for the safety-oriented comparison. It matches or improves the representative-matrix RMSE best on 2/4 subsets, showing that temporal convolution is a competitive baseline. Its risk-side behavior is mixed: it matches or improves the representative best on critical RMSE50 in 1/4 subsets, and it does not improve the comparable overestimation-magnitude rows. This supports using TCN as an additional comparator, but not promoting it as the central risk-best model.
+
+The decision proxy gives the same message from a different angle. Under the baseline declared cost schema, the RMSE-best model and the decision-cost-best model agree in only 2/16 subset--lead-time cells. TCN is decision-cost-best in 4/16 of those cells, mostly where a lead-time trigger rewards its prediction distribution, but Safety-GRU and classical models still explain many risk-preferred cells. Thus, the post hoc decision reading strengthens the rank-discordance claim instead of converting the paper into an architecture claim. Table~\ref{tab:tcn-claim-trace} summarizes the CSV trace for these added claims.
+
+\begin{table*}[t]
+\centering
+\caption{CSV-backed claim trace for the TCN, decision-proxy, and sensitivity checks. Values are generated from \texttt{tcn\_claim\_evidence\_map.csv}; the gate row is generated from \texttt{tcn\_safety\_loss\_gate.csv}.}
+\label{tab:tcn-claim-trace}
+\small
+\begin{tabularx}{\textwidth}{p{0.18\textwidth}p{0.14\textwidth}p{0.22\textwidth}X}
+\toprule
+Check & Trace row & Extracted value & Interpretation \\
+\midrule
+TCN aggregate accuracy & \texttt{TCN-002} & RMSE best-or-better in 2/4 subsets & TCN is competitive, but does not dominate the matrix. \\
+TCN risk behavior & \texttt{TCN-003} & RMSE$_{50}$ best-or-better in 1/4; OverMag best-or-better in 0/2 comparable rows & Baseline TCN cannot be promoted as a risk-best model. \\
+Baseline decision proxy & \texttt{DEC-001} & RMSE-best equals cost-best in 2/16 cells & Decision-cost rankings usually differ from aggregate-RMSE rankings. \\
+Threshold sensitivity & \texttt{SENS-001} & RMSE-best equals critical-best in 2/16 cells & Critical-zone discordance is not caused by one threshold choice. \\
+Cost sensitivity & \texttt{SENS-002} & RMSE-best equals cost-best in 10/80 cells & Decision discordance remains under all tested cost schemas. \\
+TCN safety-loss gate & gate row & defer & TCN safety-loss is a conditional future experiment, not required before this manuscript pass. \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+The sensitivity checks make the robustness claim explicit. Across thresholds 20, 30, 50, and 70, the RMSE-best model equals the critical-zone-best model in only 2/16 subset--threshold cells. Across five declared cost schemas and four lead times, RMSE-best equals decision-cost-best in 10/80 scenario--subset--lead-time cells; each cost scenario contributes only 2/16 agreements. These counts show that the ranking-discordance conclusion is not an artifact of the original 50-cycle critical zone, SARBI weights, or one hand-picked cost schema.
 \section{Discussion}
 
 The main result is not that Safety-GRU is a new state-of-the-art architecture. It is that the choice of evaluation axis changes model selection. Aggregate RMSE favors Gradient Boosting on FD001/FD003, GRU on FD002, and Random Forest on FD004. Critical-zone and overestimation-risk metrics often favor Safety-GRU or different classical baselines. This means a C-MAPSS study that reports only RMSE, or treats the NASA score as the sole safety proxy, can miss important risk behavior.
 
 The strong classical baselines are a feature of the benchmark, not a weakness of the study. They make the ranking-discordance result more credible because Safety-GRU is compared against competitive tabular methods rather than weak placeholders. Random Forest's FD004 RMSE strength and Gradient Boosting's FD001/FD003 strength show that deep sequence models should not be assumed superior under small simulated benchmark regimes.
 
+The TCN extension reinforces this point from the deep-sequence side. A stronger temporal architecture improves aggregate RMSE on some subsets and appears as decision-cost-best in some lead-time cells, but it does not remove the separation between aggregate accuracy and risk-oriented rankings. We therefore treat TCN as a stress test of the evaluation protocol. We do not run a TCN safety-loss ablation in the present manuscript because the current claims are already evaluation claims; adding architecture-specific risk shaping would create a separate model-family ablation rather than close a necessary evidence gap.
+
 The safety-loss ablation clarifies what loss weighting can and cannot do. Upweighting late-life samples and overestimation errors can reduce optimistic predictions or critical-zone error, but the effect is subset dependent and sometimes increases aggregate RMSE. FD003 is especially important because it prevents a universal-improvement narrative: RMSE and NASA can align there, while overestimation metrics still prefer other variants.
 
 SARBI should be read as a reporting index, not as a physical safety formula. It is useful because it normalizes heterogeneous metrics, separates accuracy, critical-zone, and risk blocks, and exposes the model selected under a declared preference. It does not replace raw metrics, and it should not be used to claim aviation safety certification. A future method could optimize a differentiable surrogate of SARBI, but that is outside the present paper.
+
+The decision proxy should be interpreted with the same restraint. It provides a declared-preference stress test for ranking, not a validated maintenance policy. Its role is to show that the model preferred by RMSE can differ from the model preferred by simple lead-time and cost assumptions, and that this difference persists under cost sensitivity. Real maintenance scheduling would require fleet logistics, inspection opportunities, uncertainty calibration, spare-part constraints, and organization-specific costs that are absent from C-MAPSS.
 
 \section{Threats to Validity}
 
 \textbf{Internal validity.} The workflow controls major leakage risks through engine-level validation splitting, train-only scaling, and last-window test evaluation. Remaining risks include limited hyperparameter search, stochastic training variation beyond three seeds, and the fact that FD001/FD003 contain additional deep baselines not carried into FD002/FD004.
 
-\textbf{Construct validity.} RMSE, MAE, NASA score, critical RMSE, overestimation ratio, overestimation magnitude, and SARBI are proxies for benchmark behavior. They do not encode certified maintenance costs, fleet-level constraints, or regulatory safety requirements.
+\textbf{Construct validity.} RMSE, MAE, NASA score, critical RMSE, overestimation ratio, overestimation magnitude, SARBI, and the decision-cost proxy are proxies for benchmark behavior. They do not encode certified maintenance costs, fleet-level constraints, or regulatory safety requirements. The threshold and cost sensitivity checks reduce dependence on one declared preference, but they do not validate a real operational cost model.
 
 \textbf{External validity.} C-MAPSS is simulated turbofan degradation data. Results may not transfer directly to real fleets, different sensor suites, different RUL caps, or deployment settings with distribution shift.
 
 \section{Conclusion}
 
-Across FD001--FD004, aggregate RMSE is not enough for C-MAPSS RUL model selection. The RMSE-best model often differs from the model that minimizes critical-zone error, overestimation ratio, overestimation magnitude, or the composite SARBI score. Lightweight safety losses can shift GRU predictions toward lower optimistic risk, but this shift comes with subset-dependent RMSE costs and should be reported as a trade-off. The resulting contribution is a reproducible safety-oriented C-MAPSS evaluation benchmark, not a new SOTA architecture or an aviation safety certification claim.
+Across FD001--FD004, aggregate RMSE is not enough for C-MAPSS RUL model selection. The RMSE-best model often differs from the model that minimizes critical-zone error, overestimation ratio, overestimation magnitude, the composite SARBI score, or a declared decision-cost proxy. Lightweight safety losses can shift GRU predictions toward lower optimistic risk, but this shift comes with subset-dependent RMSE costs and should be reported as a trade-off. A post hoc TCN baseline and sensitivity trace show that the main conclusion is not tied to one architecture, critical threshold, or cost schema. The resulting contribution is a reproducible safety-oriented C-MAPSS evaluation benchmark, not a new SOTA architecture or an aviation safety certification claim.
 
 \section*{Data and Code Availability}
 

@@ -1,7 +1,7 @@
 {
-    "iteration":  5,
-    "status":  "claim_trace_completed",
-    "total_findings":  9,
+    "iteration":  6,
+    "status":  "manuscript_integration_completed",
+    "total_findings":  10,
     "key_metrics":  {
                         "tcn_full_jobs":  12,
                         "tcn_combined_metric_rows":  24,
@@ -14,7 +14,7 @@
                         "decision_proxy_seed_rows":  336,
                         "decision_proxy_summary_rows":  112,
                         "rmse_decision_agreement_cells":  "2/16",
-                        "next_direction":  "manuscript_integration",
+                        "next_direction":  "manual_readthrough_and_submission_package_check",
                         "sensitivity_prediction_files":  48,
                         "sensitivity_critical_seed_rows":  336,
                         "sensitivity_critical_summary_rows":  112,
@@ -26,9 +26,17 @@
                         "tcn_safety_loss_gate_rows":  5,
                         "tcn_safety_loss_decision":  "defer",
                         "tcn_decision_best_cells":  "baseline 4/16; sensitivity 19/80",
-                        "tcn_risk_best_cells":  "critical_rmse_50 1/4; overestimation_magnitude 0/2 comparable rows"
+                        "tcn_risk_best_cells":  "critical_rmse_50 1/4; overestimation_magnitude 0/2 comparable rows",
+                        "manuscript_claims_integrated":  "main.tex updated with TCN, decision proxy, and sensitivity claims",
+                        "paper_value_trace_rows":  152,
+                        "tcn_claim_trace_table_rows":  6,
+                        "figure_table_manifest_date":  "2026-06-30",
+                        "latex_compile_status":  "passed via direct pdflatex/bibtex/pdflatex/pdflatex",
+                        "latexmk_status":  "local TeX Live wrapper failed; direct compile succeeded",
+                        "pdf_pages":  10,
+                        "arxiv_package_refreshed":  "yes; main.bbl included"
                     },
     "stale_count":  0,
     "last_seen":  "2026-06-30T00:00:00+08:00",
-    "last_progress_ts":  "2026-06-30T00:00:00+08:00"
+    "last_progress_ts":  "2026-06-30T20:04:33+08:00"
 }

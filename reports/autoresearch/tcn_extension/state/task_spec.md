@@ -26,6 +26,7 @@ the next safety-oriented C-MAPSS benchmark step.
 - AutoResearch state files under `reports/autoresearch/tcn_extension/state/`.
 - `reports/paper/sensitivity_checks_note.md` and companion sensitivity CSVs.
 - `reports/paper/tcn_claim_evidence_map.csv`, `reports/paper/tcn_safety_loss_gate.csv`, and `reports/paper/tcn_claim_trace_note.md`.
+- CSV-backed claims integrated into `reports/paper/main.tex`, traced in `reports/paper/paper_value_trace.csv`, and reflected in the refreshed PDF/source package.
 
 ## Success Criteria
 

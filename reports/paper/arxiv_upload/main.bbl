@@ -1,0 +1,111 @@
+\begin{thebibliography}{13}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Jardine et~al.(2006)Jardine, Lin, and Banjevic]{Jardine2006}
+Andrew K.~S. Jardine, Daming Lin, and Dragan Banjevic.
+\newblock A review on machinery diagnostics and prognostics implementing
+  condition-based maintenance.
+\newblock \emph{Mechanical Systems and Signal Processing}, 20\penalty0
+  (7):\penalty0 1483--1510, 2006.
+\newblock \doi{10.1016/j.ymssp.2005.09.012}.
+
+\bibitem[{NASA Prognostics Center of Excellence}(n.d.)]{NASA_PCoE}
+{NASA Prognostics Center of Excellence}.
+\newblock Prognostics center of excellence data set repository.
+\newblock
+  \url{https://www.nasa.gov/intelligent-systems-division/discovery-and-systems-health/pcoe/pcoe-data-set-repository/},
+  n.d.
+\newblock Accessed 2026-06-25.
+
+\bibitem[Saxena et~al.(2008)Saxena, Goebel, Simon, and Eklund]{Saxena2008}
+Abhinav Saxena, Kai Goebel, Don Simon, and Neil Eklund.
+\newblock Damage propagation modeling for aircraft engine run-to-failure
+  simulation.
+\newblock In \emph{2008 International Conference on Prognostics and Health
+  Management}, pages 1--9, 2008.
+\newblock \doi{10.1109/PHM.2008.4711414}.
+
+\bibitem[Babu et~al.(2016)Babu, Zhao, and Li]{Babu2016}
+Giduthuri~Sateesh Babu, Peilin Zhao, and Xiao-Li Li.
+\newblock Deep convolutional neural network based regression approach for
+  estimation of remaining useful life.
+\newblock In \emph{Database Systems for Advanced Applications}, pages 214--228.
+  Springer, 2016.
+\newblock \doi{10.1007/978-3-319-32025-0_14}.
+
+\bibitem[Zheng et~al.(2017)Zheng, Ristovski, Farahat, and Gupta]{Zheng2017}
+Shuai Zheng, Kristijan Ristovski, Ahmed Farahat, and Chetan Gupta.
+\newblock Long short-term memory network for remaining useful life estimation.
+\newblock In \emph{2017 IEEE International Conference on Prognostics and Health
+  Management}, pages 88--95, 2017.
+\newblock \doi{10.1109/ICPHM.2017.7998311}.
+
+\bibitem[Li et~al.(2018)Li, Ding, and Sun]{Li2018}
+Xiang Li, Qian Ding, and Jian-Qiao Sun.
+\newblock Remaining useful life estimation in prognostics using deep
+  convolution neural networks.
+\newblock \emph{Reliability Engineering \& System Safety}, 172:\penalty0 1--11,
+  2018.
+\newblock \doi{10.1016/j.ress.2017.11.021}.
+
+\bibitem[Liu et~al.(2023)Liu, Xiong, Zhang, and Luo]{Liu2023SAETCN}
+Xiaofeng Liu, Liuqi Xiong, Yiming Zhang, and Chenshuang Luo.
+\newblock Remaining useful life prediction for turbofan engine using sae-tcn
+  model.
+\newblock \emph{Aerospace}, 10\penalty0 (8):\penalty0 715, 2023.
+\newblock \doi{10.3390/aerospace10080715}.
+
+\bibitem[Fan et~al.(2024)Fan, Li, and Chang]{Fan2024STAR}
+Zhengyang Fan, Wanru Li, and Kuo-Chu Chang.
+\newblock A two-stage attention-based hierarchical transformer for turbofan
+  engine remaining useful life prediction.
+\newblock \emph{Sensors}, 24\penalty0 (3):\penalty0 824, 2024.
+\newblock \doi{10.3390/s24030824}.
+
+\bibitem[Kim et~al.(2025)Kim, Park, Lee, Ko, and
+  Hwang]{Kim2025KoopmanTransformer}
+Eden Kim, Sangjun Park, Hyunyong Lee, Seokkap Ko, and Euiseok Hwang.
+\newblock Enhanced remaining useful life prediction for turbofan engines using
+  spatiotemporal koopman dual-branch transformer.
+\newblock \emph{IEEE Transactions on Instrumentation and Measurement},
+  74:\penalty0 1--16, 2025.
+\newblock \doi{10.1109/TIM.2025.3625335}.
+
+\bibitem[Hu et~al.(2023)Hu, Bai, Fu, and Liu]{Hu2023Bayesian}
+Yanyan Hu, Yating Bai, En~Fu, and Pengpeng Liu.
+\newblock A novel remaining useful life probability prediction approach for
+  aero-engine with improved bayesian uncertainty estimation based on
+  degradation data.
+\newblock \emph{Applied Sciences}, 13\penalty0 (16):\penalty0 9194, 2023.
+\newblock \doi{10.3390/app13169194}.
+
+\bibitem[Xiang et~al.(2024)Xiang, Zhang, Zhang, Wang, Qiu, and
+  Choi]{Xiang2024BayesianGated}
+Feifan Xiang, Yiming Zhang, Shuyou Zhang, Zili Wang, Lemiao Qiu, and Joo-Ho
+  Choi.
+\newblock Bayesian gated-transformer model for risk-aware prediction of
+  aero-engine remaining useful life.
+\newblock \emph{Expert Systems with Applications}, 238:\penalty0 121859, 2024.
+\newblock \doi{10.1016/j.eswa.2023.121859}.
+
+\bibitem[de~Pater et~al.(2022)de~Pater, Reijns, and Mitici]{DePater2022}
+Ingeborg de~Pater, Arthur Reijns, and Mihaela Mitici.
+\newblock Alarm-based predictive maintenance scheduling for aircraft engines
+  with imperfect remaining useful life prognostics.
+\newblock \emph{Reliability Engineering \& System Safety}, 221:\penalty0
+  108341, 2022.
+\newblock \doi{10.1016/j.ress.2022.108341}.
+
+\bibitem[Mitici et~al.(2023)Mitici, de~Pater, Barros, and Zeng]{Mitici2023}
+Mihaela Mitici, Ingeborg de~Pater, Anne Barros, and Zhiguo Zeng.
+\newblock Dynamic predictive maintenance for multiple components using
+  data-driven probabilistic rul prognostics: The case of turbofan engines.
+\newblock \emph{Reliability Engineering \& System Safety}, 234:\penalty0
+  109199, 2023.
+\newblock \doi{10.1016/j.ress.2023.109199}.
+
+\end{thebibliography}

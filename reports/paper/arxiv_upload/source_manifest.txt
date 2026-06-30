@@ -3,6 +3,7 @@ C-MAPSS RUL arXiv source package
 Included files:
 - main.tex
 - references.bib
+- main.bbl
 - figures/figure_09_metric_rank_heatmap.pdf
 - figures/figure_10_rmse_vs_critical_rmse50.pdf
 - figures/figure_11_rmse_vs_overestimation_magnitude.pdf
