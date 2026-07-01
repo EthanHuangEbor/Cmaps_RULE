@@ -1,0 +1,23 @@
+{
+  "iteration": 1,
+  "status": "preprint_cleanup_audit_completed",
+  "total_findings": 2,
+  "key_metrics": {
+    "pdf_build": "completed",
+    "arxiv_package": "completed",
+    "delete_without_approval": "false",
+    "pdf_agent": "019f1cb2-3cbb-7c92-9484-7f4e994456bb",
+    "bibtex_agent": "019f1cb2-6f44-71e1-be47-2d0af495246b",
+    "cleanup_agent": "019f1cb2-ac99-7322-882d-3ce9c74a343c",
+    "pdf_pages_after_layout_fix": 11,
+    "latex_overfull_after_layout_fix": 0,
+    "paper_pdf_sha256": "0864B0A71D56F6C50DD28067DEBBE2F1D751029E36BDE077DCDADB836A36FEB5",
+    "arxiv_zip_sha256": "2FD8018BA7FBE932D0AB34DFD10D8FA5F103248F65CD1B8FE244DBE95FDA094F",
+    "paper_value_trace_rows": 152,
+    "paper_value_trace_status": "all matched",
+    "repo_cleanup_action": "audit only; no deletion"
+  },
+  "stale_count": 0,
+  "last_seen": "2026-07-01T16:00:57+08:00",
+  "last_progress_ts": "2026-07-01T17:10:00+08:00"
+}

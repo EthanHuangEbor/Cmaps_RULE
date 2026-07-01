@@ -1,6 +1,6 @@
 # arXiv / Preprint Readiness Checklist
 
-Date: 2026-06-30
+Date: 2026-07-01
 
 ## Manuscript
 
@@ -30,7 +30,7 @@ Date: 2026-06-30
 - [x] Source package includes `main.tex`, `references.bib`, `source_manifest.txt`, and referenced figure PDFs.
 - [x] Source package excludes raw NASA data, model checkpoints, joblib files, local build intermediates, reviewer reports, response drafts, and large experiment tables.
 - [x] Zip contents match the clean upload directory and contain only the current FD001-FD004 figure set.
-- [x] `main.bbl` is included from the fresh 2026-06-30 BibTeX build.
+- [x] `main.bbl` is included from the fresh 2026-07-01 BibTeX build.
 - [x] Source package contents have been refreshed from the current manuscript and figures.
 
 ## Reproducibility and Scope
@@ -43,10 +43,10 @@ Date: 2026-06-30
 
 ## Artifact Hashes
 
-- [x] `reports/paper/arxiv_upload.zip` SHA256: `DAFD3A415E69CD94FFB061FC0B6A4382E5D6CED51F31FC19E589862E19761E96`.
-- [x] `reports/paper/main.tex` SHA256: `E6C87366D0AED49558692DA96DD38ECF22B7ED4992644F291955EBEC7AB4F013`.
+- [x] `reports/paper/arxiv_upload.zip` SHA256: `2FD8018BA7FBE932D0AB34DFD10D8FA5F103248F65CD1B8FE244DBE95FDA094F`.
+- [x] `reports/paper/main.tex` SHA256: `99FEE3D3CE8B167359F6A63386E4C56DE3E9A8474CFDDA6FEFD31CC63E4C0FE8`.
 - [x] `reports/paper/paper_value_trace.csv` SHA256: `E65026670B0BDA9696D3364689060DCA904A8C101FDFBDA1F2747FDE13A318B8`.
-- [x] `reports/paper/build/main.pdf` SHA256: `904C3780589625C15DA8689B5FBADACF94470B2E862AB41CC4D4A402C2A5D218`.
+- [x] `reports/paper/build/main.pdf` SHA256: `0864B0A71D56F6C50DD28067DEBBE2F1D751029E36BDE077DCDADB836A36FEB5`.
 
 ## Remaining Human Submission Tasks
 

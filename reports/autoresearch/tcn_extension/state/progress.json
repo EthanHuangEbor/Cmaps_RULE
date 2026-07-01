@@ -33,13 +33,15 @@
                         "figure_table_manifest_date":  "2026-06-30",
                         "latex_compile_status":  "passed via direct pdflatex/bibtex/pdflatex/pdflatex",
                         "latexmk_status":  "root-caused to missing WINDIR in Codex shell; reports/paper/build_paper.ps1 workaround verified",
-                        "pdf_pages":  10,
+                        "pdf_pages":  11,
                         "arxiv_package_refreshed":  "yes; main.bbl included",
                         "latexmk_wrapper_root_cause":  "WINDIR empty while SystemRoot is C:\\WINDOWS; TeX Live runscript.tlu expects WINDIR for font path handling",
                         "latexmk_build_script":  "reports/paper/build_paper.ps1",
-                        "latexmk_pdf_sha256":  "904C3780589625C15DA8689B5FBADACF94470B2E862AB41CC4D4A402C2A5D218"
+                        "latexmk_pdf_sha256":  "0864B0A71D56F6C50DD28067DEBBE2F1D751029E36BDE077DCDADB836A36FEB5",
+                        "arxiv_zip_sha256":  "2FD8018BA7FBE932D0AB34DFD10D8FA5F103248F65CD1B8FE244DBE95FDA094F",
+                        "final_preprint_package_refresh":  "reports/paper/build_paper.ps1 and scripts/package_arxiv_source.py rerun after layout fixes on 2026-07-01"
                     },
     "stale_count":  0,
     "last_seen":  "2026-06-30T00:00:00+08:00",
-    "last_progress_ts":  "2026-06-30T20:55:46+08:00"
+    "last_progress_ts":  "2026-07-01T17:10:00+08:00"
 }

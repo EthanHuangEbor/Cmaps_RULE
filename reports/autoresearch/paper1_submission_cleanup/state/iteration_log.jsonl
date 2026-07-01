@@ -1,0 +1,3 @@
+{"ts":"2026-07-01T16:00:57+08:00","source":"orchestrator","level":"info","event":"started","detail":"Started Paper 1 preprint readthrough and repository cleanup audit."}
+{"ts":"2026-07-01T16:01:58+08:00","source":"orchestrator","level":"info","event":"agents_dispatched","detail":"Dispatched PDF readthrough, BibTeX/package audit, and repository cleanup audit agents."}
+{"ts":"2026-07-01T16:58:11+08:00","source":"orchestrator","level":"finding","event":"layout_fixes_applied","detail":"Changed Table 4 to tabularx, softened pre-registered wording, referenced Figure 4, added clearpage before Discussion, rebuilt PDF/source package; overfull hbox cleared."}

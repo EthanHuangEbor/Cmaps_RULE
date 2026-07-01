@@ -1,0 +1,19 @@
+{
+    "tried":  [
+                  {
+                      "direction":  "preprint_package_rerun",
+                      "status":  "completed",
+                      "result":  "build_paper.ps1 and package_arxiv_source.py rerun before audits."
+                  }
+              ],
+    "next_candidates":  [
+                            {
+                                "direction":  "manual_pdf_readthrough",
+                                "reason":  "Check prose, references, pagination, and claim strength."
+                            },
+                            {
+                                "direction":  "repo_cleanup_audit",
+                                "reason":  "Classify repository artifacts before future extensions."
+                            }
+                        ]
+}

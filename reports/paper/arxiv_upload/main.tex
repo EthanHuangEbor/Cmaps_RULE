@@ -118,7 +118,7 @@ Critical-zone RMSE is computed for $y\leq30$ and $y\leq50$. Overestimation ratio
 
 \subsection{Safety-Aware Relative Benchmark Index}
 
-To summarize model behavior without hiding raw metrics, we define the Safety-Aware Relative Benchmark Index (SARBI). For metric $M_k$ on subset $d$, seed $r$, and model $m$, let $M^{ref}_{k,d}$ be the subset-specific median of a pre-registered reference portfolio. For the representative matrix, the reference portfolio is Ridge, Random Forest, Gradient Boosting, and plain GRU. NASA score is first normalized per test engine. We then compute
+To summarize model behavior without hiding raw metrics, we define the Safety-Aware Relative Benchmark Index (SARBI). For metric $M_k$ on subset $d$, seed $r$, and model $m$, let $M^{ref}_{k,d}$ be the subset-specific median of a predefined reference portfolio. For the representative matrix, the reference portfolio is Ridge, Random Forest, Gradient Boosting, and plain GRU. NASA score is normalized per test engine before computing
 \begin{equation}
  z_k = \log\frac{M_{k,m,d,r}+\epsilon}{M^{ref}_{k,d}+\epsilon}.
 \end{equation}
@@ -222,14 +222,14 @@ Figures~\ref{fig:critical-tradeoff} and \ref{fig:overmag-tradeoff} plot aggregat
 
 \subsection{Safety-loss ablation confirms risk movement, not universal accuracy improvement}
 
-The 96-job GRU ablation isolates the effect of loss weighting. Table~\ref{tab:ablation-summary} shows that loss changes move models along the risk curve rather than simply improving all metrics. FD001 selects safety-w3 by SARBI with only a 2.6\% RMSE cost relative to the RMSE-best asymmetric-w2 job. FD004 is the strongest positive case for safety weighting: baseline GRU is RMSE-best, but safety-w2 is SARBI-best with only a 1.2\% RMSE cost, and safety-w3 gives the best critical/overestimation reductions at a larger RMSE cost. FD002 and FD003 are more nuanced, which is useful evidence against overclaiming.
+The 96-job GRU ablation isolates the effect of loss weighting. Table~\ref{tab:ablation-summary} and Figure~\ref{fig:ablation-tradeoff} show that loss changes move models along the risk curve rather than simply improving all metrics. FD001 selects safety-w3 by SARBI with only a 2.6\% RMSE cost relative to the RMSE-best asymmetric-w2 job. FD004 is the strongest positive case for safety weighting: baseline GRU is RMSE-best, but safety-w2 is SARBI-best with only a 1.2\% RMSE cost, and safety-w3 gives the best critical/overestimation reductions at a larger RMSE cost. FD002 and FD003 are more nuanced, which is useful evidence against overclaiming.
 
 \begin{table*}[t]
 \centering
 \caption{GRU safety-loss ablation summary from \texttt{deep\_ablation\_rmse\_vs\_risk\_best.csv}. The RMSE cost is relative to the subset's ablation RMSE-best job.}
 \label{tab:ablation-summary}
 \small
-\begin{tabular}{llllr}
+\begin{tabularx}{\textwidth}{p{0.10\textwidth}p{0.17\textwidth}p{0.17\textwidth}Xr}
 \toprule
 Subset & RMSE-best job & SARBI-best job & Main risk winner pattern & RMSE cost \\
 \midrule
@@ -238,7 +238,7 @@ FD002 & Critical w2 & Critical w3 & Safety/asymmetric losses split risk-metric w
 FD003 & Critical w3 & Critical w3 & RMSE and NASA align; overestimation winners differ & 0--18.6\% \\
 FD004 & Baseline GRU & Safety w2 & Safety w2/w3 dominate NASA, critical, and overestimation metrics & 1.2--12.7\% \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{table*}
 
 \begin{figure*}[t]
@@ -272,7 +272,7 @@ The decision proxy gives the same message from a different angle. Under the base
 \caption{CSV-backed claim trace for the TCN, decision-proxy, and sensitivity checks. Values are generated from \texttt{tcn\_claim\_evidence\_map.csv}; the gate row is generated from \texttt{tcn\_safety\_loss\_gate.csv}.}
 \label{tab:tcn-claim-trace}
 \small
-\begin{tabularx}{\textwidth}{p{0.18\textwidth}p{0.14\textwidth}p{0.22\textwidth}X}
+\begin{tabularx}{\textwidth}{p{0.17\textwidth}p{0.12\textwidth}p{0.24\textwidth}X}
 \toprule
 Check & Trace row & Extracted value & Interpretation \\
 \midrule
@@ -287,6 +287,7 @@ TCN safety-loss gate & gate row & defer & TCN safety-loss is a conditional futur
 \end{table*}
 
 The sensitivity checks make the robustness claim explicit. Across thresholds 20, 30, 50, and 70, the RMSE-best model equals the critical-zone-best model in only 2/16 subset--threshold cells. Across five declared cost schemas and four lead times, RMSE-best equals decision-cost-best in 10/80 scenario--subset--lead-time cells; each cost scenario contributes only 2/16 agreements. These counts show that the ranking-discordance conclusion is not an artifact of the original 50-cycle critical zone, SARBI weights, or one hand-picked cost schema.
+\clearpage
 \section{Discussion}
 
 The main result is not that Safety-GRU is a new state-of-the-art architecture. It is that the choice of evaluation axis changes model selection. Aggregate RMSE favors Gradient Boosting on FD001/FD003, GRU on FD002, and Random Forest on FD004. Critical-zone and overestimation-risk metrics often favor Safety-GRU or different classical baselines. This means a C-MAPSS study that reports only RMSE, or treats the NASA score as the sole safety proxy, can miss important risk behavior.
