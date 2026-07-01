@@ -1,6 +1,6 @@
 # Paper Figure and Table Manifest
 
-Date: 2026-06-28
+Date: 2026-06-30
 
 This manifest maps the FD001-FD004 safety-oriented manuscript artifacts to their source data files.
 
@@ -16,7 +16,10 @@ This manifest maps the FD001-FD004 safety-oriented manuscript artifacts to their
 - Table winner-split: source `reports/paper/matrix_rmse_vs_risk_best.csv`; traced in `reports/paper/paper_value_trace.csv`.
 - Table ablation-summary: source `reports/paper/deep_ablation_rmse_vs_risk_best.csv`; traced in `reports/paper/paper_value_trace.csv`.
 - Bootstrap paragraph: source `reports/paper/matrix_bootstrap_rmse_vs_sarbi.csv`; traced in `reports/paper/paper_value_trace.csv`.
+- Table tcn-claim-trace: source `reports/paper/tcn_claim_evidence_map.csv; tcn_safety_loss_gate.csv`; traced in `reports/paper/paper_value_trace.csv`.
 
 ## Scope Boundary
 - SARBI is a transparent reporting index, not a physical RUL model or aviation certification formula.
-- Safety-GRU and Dual-LSTM prototype work are not part of the Paper 1 contribution unless explicitly added in a later manuscript revision.
+- TCN is included as a baseline and stress test, not as a new state-of-the-art architecture claim.
+- TCN safety-loss training is deferred unless manuscript scope or reviewer feedback requires architecture-transfer evidence.
+- Dual-LSTM prototype work is not part of the Paper 1 contribution unless explicitly added in a later manuscript revision.

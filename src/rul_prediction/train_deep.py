@@ -149,7 +149,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--subset", default="FD001")
     parser.add_argument("--out-dir", default="reports/tables/fd001_deep")
     parser.add_argument("--job-name", default="", help="Optional experiment/job label for aggregation and traceability.")
-    parser.add_argument("--models", nargs="+", default=["lstm", "gru", "cnn"], choices=["lstm", "gru", "cnn"])
+    parser.add_argument("--models", nargs="+", default=["lstm", "gru", "cnn"], choices=["lstm", "gru", "cnn", "tcn"])
     parser.add_argument("--max-rul", type=int, default=130)
     parser.add_argument("--window-size", type=int, default=30)
     parser.add_argument("--stride", type=int, default=1)

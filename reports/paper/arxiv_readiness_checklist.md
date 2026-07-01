@@ -1,6 +1,6 @@
 # arXiv / Preprint Readiness Checklist
 
-Date: 2026-06-28
+Date: 2026-06-30
 
 ## Manuscript
 
@@ -9,8 +9,8 @@ Date: 2026-06-28
 - [x] Manuscript scope is FD001-FD004 and explicitly avoids SOTA, aircraft certification, and SARBI-as-physical-formula claims.
 - [x] Results are organized around RMSE-best versus risk-best rank discordance.
 - [x] Numeric claims are traced in `reports/paper/paper_value_trace.csv`.
-- [ ] Current PDF has not been rebuilt from the 2026-06-28 manuscript in this Codex environment because no TeX engine was available (`pdflatex`, `latexmk`, `xelatex`, `tectonic`, and `bibtex` were not found).
-- [ ] Independent LaTeX compilation of the upload source package remains a human/environment task before public submission.
+- [x] Current PDF has been rebuilt from the 2026-06-30 manuscript and re-verified with `latexmk`.
+- [x] `latexmk` wrapper issue is root-caused to the Codex shell process missing `WINDIR`; `reports/paper/build_paper.ps1` applies the process-local workaround `$env:WINDIR = $env:SystemRoot` before running `latexmk`.
 
 ## Figures, Tables, and Data Trace
 
@@ -30,27 +30,27 @@ Date: 2026-06-28
 - [x] Source package includes `main.tex`, `references.bib`, `source_manifest.txt`, and referenced figure PDFs.
 - [x] Source package excludes raw NASA data, model checkpoints, joblib files, local build intermediates, reviewer reports, response drafts, and large experiment tables.
 - [x] Zip contents match the clean upload directory and contain only the current FD001-FD004 figure set.
-- [ ] `main.bbl` is not included because no fresh LaTeX/BibTeX build exists for the 2026-06-28 manuscript. Regenerate it during final TeX build if arXiv requires a bbl.
-- [ ] Source package independent compilation is not verified in this environment.
+- [x] `main.bbl` is included from the fresh 2026-06-30 BibTeX build.
+- [x] Source package contents have been refreshed from the current manuscript and figures.
 
 ## Reproducibility and Scope
 
 - [x] Raw C-MAPSS data are referenced but not redistributed.
 - [x] Code availability points to the public GitHub repository.
-- [x] Main paper artifacts are reproducible with `scripts/make_safety_benchmark_outputs.py`, `scripts/audit_paper_submission.py`, and `scripts/package_arxiv_source.py`.
+- [x] Main paper artifacts are reproducible with `scripts/make_safety_benchmark_outputs.py`, `scripts/audit_paper_submission.py`, `scripts/package_arxiv_source.py`, and `reports/paper/build_paper.ps1`.
 - [x] Paper 1 claims are scoped to simulated benchmark evidence and do not claim certified maintenance decisions.
 - [x] AI assistance disclosure is included in `main.tex`.
 
 ## Artifact Hashes
 
-- [x] `reports/paper/arxiv_upload.zip` SHA256: `13E5DD6989D7EE64A950BD7A34D0A5147C1F701336CC1426F60F94C41DDDA7A0`.
-- [x] `reports/paper/main.tex` SHA256: `1B9C95735F9F06A7D52B8BD130458388A2A75788CFC85853F577A4204E21F430`.
-- [x] `reports/paper/paper_value_trace.csv` SHA256: `0CE33D3AF13158542AF6CF0A45B8561310C2CBB647CB1DA9858C5C884A2375FF`.
-- [ ] `reports/paper/build/main.pdf` SHA256 is intentionally not listed as current because the PDF is still the older 2026-06-26 build artifact.
+- [x] `reports/paper/arxiv_upload.zip` SHA256: `DAFD3A415E69CD94FFB061FC0B6A4382E5D6CED51F31FC19E589862E19761E96`.
+- [x] `reports/paper/main.tex` SHA256: `E6C87366D0AED49558692DA96DD38ECF22B7ED4992644F291955EBEC7AB4F013`.
+- [x] `reports/paper/paper_value_trace.csv` SHA256: `E65026670B0BDA9696D3364689060DCA904A8C101FDFBDA1F2747FDE13A318B8`.
+- [x] `reports/paper/build/main.pdf` SHA256: `904C3780589625C15DA8689B5FBADACF94470B2E862AB41CC4D4A402C2A5D218`.
 
 ## Remaining Human Submission Tasks
 
-- [ ] Install/configure a TeX distribution or use Overleaf/GitHub Actions to compile `reports/paper/main.tex`.
+- [x] Resolve or bypass the local `latexmk` wrapper issue if the final workflow requires `latexmk`: set process-local `WINDIR` from `SystemRoot` before invoking `latexmk`.
 - [ ] Verify all BibTeX metadata manually before public submission.
 - [ ] Confirm author affiliation and author order.
 - [ ] Choose arXiv category, likely `cs.LG`, `cs.AI`, or `eess.SY` depending on positioning.

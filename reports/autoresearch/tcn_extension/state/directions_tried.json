@@ -1,0 +1,69 @@
+{
+    "tried":  [
+                  {
+                      "direction":  "baseline_tcn_matrix",
+                      "status":  "completed",
+                      "result":  "Useful as a stronger sequence baseline; supports ranking-discordance narrative but should not be promoted as risk-best."
+                  },
+                  {
+                      "direction":  "direct_git_push_from_local_branch",
+                      "status":  "deferred",
+                      "result":  "Local branch history is based on stale Paper 2 branch; use clean GitHub API branch from remote main instead."
+                  },
+                  {
+                      "direction":  "clean_pr_branch_from_remote_main",
+                      "status":  "completed",
+                      "result":  "Draft PR #6 opened from clean GitHub branch."
+                  },
+                  {
+                      "direction":  "decision_proxy_next",
+                      "status":  "selected",
+                      "result":  "Chosen as next research iteration because it strengthens maintenance-risk framing without new deep training."
+                  },
+                  {
+                      "direction":  "decision_proxy_from_existing_predictions",
+                      "status":  "completed",
+                      "result":  "Generated seed-level, summary, best-by-cost, RMSE-vs-cost-best, and note outputs."
+                  },
+                  {
+                      "direction":  "tcn_safety_loss_small",
+                      "status":  "conditionally_deferred",
+                      "result":  "Deferred until manuscript integration shows an architecture-independent safety-loss claim gap or reviewer feedback requests transfer beyond GRU."
+                  },
+                  {
+                      "direction":  "sensitivity_checks",
+                      "status":  "completed",
+                      "result":  "Generated critical-threshold and decision-cost sensitivity outputs; ranking discordance remains low-agreement across thresholds and cost schemas."
+                  },
+                  {
+                      "direction":  "paper_claim_trace_update",
+                      "status":  "completed",
+                      "result":  "Generated tcn_claim_evidence_map.csv, tcn_safety_loss_gate.csv, and tcn_claim_trace_note.md; deferred TCN safety-loss small experiment."
+                  },
+                  {
+                      "direction":  "manuscript_integration",
+                      "status":  "completed",
+                      "result":  "Inserted CSV-backed TCN, decision proxy, and sensitivity claims into main.tex and regenerated trace/manifest outputs."
+                  },
+                  {
+                      "direction":  "pdf_and_package_refresh",
+                      "status":  "completed",
+                      "result":  "Direct pdflatex/bibtex build succeeded, build/main.pdf was refreshed, and arxiv_upload.zip was rebuilt with main.bbl."
+                  },
+                  {
+                      "direction":  "latexmk_wrapper_root_cause",
+                      "status":  "completed",
+                      "result":  "Root cause is missing WINDIR in the Codex shell; reports/paper/build_paper.ps1 sets WINDIR from SystemRoot and latexmk succeeds."
+                  }
+              ],
+    "next_candidates":  [
+                            {
+                                "direction":  "manual_readthrough_and_submission_package_check",
+                                "reason":  "Human-read the revised TCN/decision/sensitivity prose and inspect the regenerated PDF before public preprint submission."
+                            },
+                            {
+                                "direction":  "reviewer_triggered_tcn_safety_loss",
+                                "reason":  "Keep TCN safety-loss small ablation conditional on manuscript or reviewer need for architecture-transfer evidence."
+                            }
+                        ]
+}

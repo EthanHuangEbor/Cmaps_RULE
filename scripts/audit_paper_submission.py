@@ -134,6 +134,46 @@ def trace_counts(rows: list[dict[str, object]]) -> None:
     add_trace(rows, "Methods counts", "deep ablation subsets", ablation_seed["subset"].nunique(), "reports/paper/deep_ablation_sarbi_seed_scores.csv", "all rows", "subset.nunique", ablation_seed["subset"].nunique())
 
 
+def trace_tcn_claims(rows: list[dict[str, object]]) -> None:
+    claim_map = pd.read_csv(PAPER / "tcn_claim_evidence_map.csv")
+    gate = pd.read_csv(PAPER / "tcn_safety_loss_gate.csv")
+    claim_rows = [
+        ("TCN-002", "TCN aggregate accuracy", "2/4"),
+        ("TCN-003", "TCN risk behavior", "critical_rmse_50=1/4; overestimation_magnitude=0/2 comparable rows"),
+        ("DEC-001", "Baseline decision proxy", "agreement=2/16"),
+        ("SENS-001", "Threshold sensitivity", "agreement=2/16"),
+        ("SENS-002", "Cost sensitivity", "agreement=10/80"),
+    ]
+    for claim_id, statement, reported in claim_rows:
+        match = claim_map[claim_map["claim_id"].eq(claim_id)]
+        if match.empty:
+            raise ValueError(f"Missing claim trace row {claim_id}")
+        source_value = match.iloc[0]["extracted_value"]
+        add_trace(
+            rows,
+            "Table tcn-claim-trace",
+            statement,
+            reported,
+            "reports/paper/tcn_claim_evidence_map.csv",
+            f"claim_id={claim_id}",
+            "extracted_value",
+            source_value,
+        )
+
+    gate_match = gate[gate["gate_item"].eq("Recommended immediate action")]
+    if gate_match.empty:
+        raise ValueError("Missing TCN safety-loss gate recommendation")
+    add_trace(
+        rows,
+        "Table tcn-claim-trace",
+        "TCN safety-loss gate",
+        "defer",
+        "reports/paper/tcn_safety_loss_gate.csv",
+        "gate_item=Recommended immediate action",
+        "decision",
+        gate_match.iloc[0]["decision"],
+    )
+
 def write_manifest() -> None:
     figures = [
         ("Figure 9", "figure_09_metric_rank_heatmap.pdf", "matrix_safety_benchmark_summary.csv"),
@@ -147,11 +187,12 @@ def write_manifest() -> None:
         ("Table winner-split", "matrix_rmse_vs_risk_best.csv"),
         ("Table ablation-summary", "deep_ablation_rmse_vs_risk_best.csv"),
         ("Bootstrap paragraph", "matrix_bootstrap_rmse_vs_sarbi.csv"),
+        ("Table tcn-claim-trace", "tcn_claim_evidence_map.csv; tcn_safety_loss_gate.csv"),
     ]
     lines = [
         "# Paper Figure and Table Manifest",
         "",
-        "Date: 2026-06-28",
+        "Date: 2026-06-30",
         "",
         "This manifest maps the FD001-FD004 safety-oriented manuscript artifacts to their source data files.",
         "",
@@ -168,7 +209,9 @@ def write_manifest() -> None:
             "",
             "## Scope Boundary",
             "- SARBI is a transparent reporting index, not a physical RUL model or aviation certification formula.",
-            "- Safety-GRU and Dual-LSTM prototype work are not part of the Paper 1 contribution unless explicitly added in a later manuscript revision.",
+            "- TCN is included as a baseline and stress test, not as a new state-of-the-art architecture claim.",
+            "- TCN safety-loss training is deferred unless manuscript scope or reviewer feedback requires architecture-transfer evidence.",
+            "- Dual-LSTM prototype work is not part of the Paper 1 contribution unless explicitly added in a later manuscript revision.",
         ]
     )
     (PAPER / "figure_table_manifest.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
@@ -180,6 +223,7 @@ def main() -> None:
     trace_winner_tables(rows)
     trace_bootstrap(rows)
     trace_counts(rows)
+    trace_tcn_claims(rows)
     pd.DataFrame(rows).to_csv(PAPER / "paper_value_trace.csv", index=False)
     write_manifest()
     print(f"Wrote {PAPER / 'paper_value_trace.csv'}")

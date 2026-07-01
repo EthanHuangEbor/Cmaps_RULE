@@ -51,7 +51,7 @@ def main() -> None:
     parser.add_argument("--seeds", nargs="+", type=int, default=[42])
     parser.add_argument("--epochs", type=int, default=60)
     parser.add_argument("--patience", type=int, default=8)
-    parser.add_argument("--models", nargs="+", default=["gru"], choices=["lstm", "gru", "cnn"])
+    parser.add_argument("--models", nargs="+", default=["gru"], choices=["lstm", "gru", "cnn", "tcn"])
     parser.add_argument(
         "--jobs",
         nargs="+",

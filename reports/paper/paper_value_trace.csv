@@ -145,3 +145,9 @@ Methods counts,representative models per subset,5,reports/paper/matrix_safety_be
 Methods counts,representative seeds per subset/model,3,reports/paper/matrix_safety_benchmark_seed_scores.csv,groupby subset/model,seed.nunique.min,3,matched
 Methods counts,deep ablation jobs,96,reports/paper/deep_ablation_sarbi_seed_scores.csv,drop duplicates subset/seed/job,row_count,96,matched
 Methods counts,deep ablation subsets,4,reports/paper/deep_ablation_sarbi_seed_scores.csv,all rows,subset.nunique,4,matched
+Table tcn-claim-trace,TCN aggregate accuracy,2/4,reports/paper/tcn_claim_evidence_map.csv,claim_id=TCN-002,extracted_value,2/4,matched
+Table tcn-claim-trace,TCN risk behavior,critical_rmse_50=1/4; overestimation_magnitude=0/2 comparable rows,reports/paper/tcn_claim_evidence_map.csv,claim_id=TCN-003,extracted_value,critical_rmse_50=1/4; overestimation_magnitude=0/2 comparable rows,matched
+Table tcn-claim-trace,Baseline decision proxy,agreement=2/16,reports/paper/tcn_claim_evidence_map.csv,claim_id=DEC-001,extracted_value,agreement=2/16,matched
+Table tcn-claim-trace,Threshold sensitivity,agreement=2/16,reports/paper/tcn_claim_evidence_map.csv,claim_id=SENS-001,extracted_value,agreement=2/16,matched
+Table tcn-claim-trace,Cost sensitivity,agreement=10/80,reports/paper/tcn_claim_evidence_map.csv,claim_id=SENS-002,extracted_value,agreement=10/80; balanced_low=2/16; baseline=2/16; early_penalty=2/16; high_late=2/16; high_missed=2/16,matched
+Table tcn-claim-trace,TCN safety-loss gate,defer,reports/paper/tcn_safety_loss_gate.csv,gate_item=Recommended immediate action,decision,defer TCN safety-loss; integrate claim trace into manuscript first,matched
