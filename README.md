@@ -2,7 +2,7 @@
 
 NASA C-MAPSS turbofan Remaining Useful Life (RUL) prediction research repo.
 
-本仓库面向 NASA C-MAPSS 航空发动机剩余寿命预测任务，定位为一个“进可写学生科研论文，退可作为多模型复现仓库”的研究型代码库。当前固定方向不是追逐单一模型的 SOTA，而是研究不同评价偏好下模型选择是否会发生变化。
+This repository is a reproducible safety-oriented RUL benchmark for NASA C-MAPSS. It is designed to support a student research paper while remaining useful as a multi-model reproduction codebase. The fixed direction is not single-model SOTA chasing, but model-selection behavior under different evaluation preferences.
 
 ## Fixed Research Position
 
@@ -16,7 +16,6 @@ Core question:
 
 Current answer: often no. The existing results show that RMSE-best, critical-zone-best, overestimation-risk-best, and SARBI-best rankings can diverge.
 
-中文定位：本项目的创新点是“安全偏好下的模型选择与排序分歧”，而不是宣称某个新网络结构首次提出或全面领先。Paper 1 负责建立评价协议与排序分歧证据；Paper 2 / Dual-LSTM 作为 risk-profile shaping 的方法响应与扩展证据。
 
 ## Contributions
 
@@ -33,6 +32,9 @@ Paper 1:
 - Representative FD001-FD004 matrix for Ridge, Random Forest, Gradient Boosting, GRU, and Safety-GRU.
 - 96-job GRU safety-loss ablation across 4 subsets, 3 seeds, and 8 loss/job settings.
 - Bootstrap checks and SARBI sensitivity tables for RMSE-best versus risk-best comparisons.
+- Baseline extensions now include FD001-FD004 x 3-seed TCN and MLP matrices. These are benchmark-strengthening comparators, not new Paper 1 headline claims unless the manuscript is intentionally expanded.
+- MLP full-matrix summary: `reports/mlp_full_matrix_summary_2026-07-02.csv`
+- MLP versus existing test-rank summary: `reports/mlp_full_matrix_vs_existing_test_ranks_2026-07-02.csv`
 - Main manuscript: `reports/paper/main.tex`
 - Compiled reading PDF: `reports/paper/paper1_main.pdf`
 
@@ -62,13 +64,12 @@ Planned expansion:
 
 | Layer | Planned additions | Purpose |
 | --- | --- | --- |
-| Temporal CNN | TCN / dilated causal CNN | stronger sequence baseline than the current small CNN |
 | Attention / Transformer | attention pooling, Transformer encoder, lightweight temporal Transformer | test whether ranking discordance survives stronger deep models |
+| Safety-loss transfer | optional TCN/MLP safety-loss checks only if a claim or reviewer question requires them | avoid opening new ablations without a claim-backed reason |
 | Uncertainty / calibration | MC dropout, deep ensembles, conformal or quantile intervals | connect RUL point estimates to risk-aware decision support |
 | Decision proxy | preventive/late/missed-critical cost simulation | make the evaluation preference explicit rather than only metric-driven |
 | Robustness / transfer | sensor noise, masking, FD-to-FD domain shift | support the repo-as-benchmark fallback route |
 
-The detailed execution plan is in [`实施计划.md`](实施计划.md).
 
 ## Repository Layout
 
@@ -151,7 +152,7 @@ python scripts\run_deep_ablation_matrix.py --subsets FD001 FD002 FD003 FD004 --s
 
 ### MLP Neural Baseline
 
-A multilayer perceptron is now available as a lightweight neural baseline:
+A multilayer perceptron is available as a formal fixed-window neural baseline:
 
 ```powershell
 python -m rul_prediction.train_deep --data-dir data\raw --subset FD001 --out-dir reports\tables\mlp_baseline\fd001\seed_42\deep --models mlp --epochs 20 --patience 4 --window-size 30 --device cuda
@@ -161,9 +162,10 @@ Implementation scope:
 
 - MLP uses the same engine-level split, train-only scaling, capped RUL labels, sliding windows, last-window test evaluation, metrics, and CSV schema as LSTM/GRU/CNN/TCN.
 - The model flattens each `(window_size, n_features)` tensor and feeds it through dense hidden blocks; `num_layers` controls the number of hidden dense blocks.
-- MLP is now available as a formal neural baseline matrix, while Paper 1's main narrative still remains centered on the original representative models unless the manuscript is intentionally expanded.
+- MLP is now a completed formal neural baseline matrix, while Paper 1's main narrative still remains centered on the original representative models unless the manuscript is intentionally expanded.
 - A CUDA smoke matrix has been run on FD001 and FD004 with seed 42; the small summary is stored in `reports/mlp_baseline_cuda_summary_2026-07-02.csv`, with notes in `reports/mlp_baseline_note_2026-07-02.md`.
 - A full FD001-FD004 x 3-seed MLP matrix has been run with CUDA; compact summaries are stored in `reports/mlp_full_matrix_summary_2026-07-02.csv` and `reports/mlp_full_matrix_vs_existing_test_ranks_2026-07-02.csv`.
+- Current interpretation: MLP is not RMSE-best overall, but it is a useful non-recurrent neural comparator and is competitive on selected optimistic-risk metrics, especially overestimation magnitude on FD001 and FD003.
 
 Full CUDA matrix command:
 
@@ -199,6 +201,8 @@ Generated full experiment outputs under `reports/tables/` are local-only and ign
 - Synthetic smoke data must not be mixed with official C-MAPSS results.
 - No aviation safety certification, real-fleet deployment, or SOTA claim should be made from the current evidence alone.
 
-## 中文摘要
+## Project Summary
 
-本项目当前固定为“安全偏好下的 C-MAPSS RUL 多模型评估与复现”。论文主线是：在 FD001-FD004 上，若评价目标从整体 RMSE 扩展到临近失效误差、过度乐观预测风险和维护决策代理，模型排序会不会改变。仓库主线是：保留完整实验脚手架、指标、论文表图和 LaTeX 产物，使其既能支撑学生会议论文，也能作为 NASA C-MAPSS 多模型复现基线继续扩展。
+The project is fixed around safety-oriented C-MAPSS RUL evaluation and reproduction. The central question is whether model rankings on FD001-FD004 change when evaluation expands from aggregate RMSE to late-life error, optimistic overestimation risk, and decision-proxy costs. Current evidence says they often do.
+
+Current evidence includes classical ML, GRU/Safety-GRU, TCN, MLP, Dual-LSTM, and safety-loss ablations. MLP has completed the FD001-FD004 x 3-seed CUDA full matrix as a fixed-window neural baseline, but it is not yet a core Paper 1 novelty claim. The repository keeps the experiment runners, metrics, paper tables/figures, and LaTeX artifacts together so the work can serve both as a student-paper package and as a continuing NASA C-MAPSS benchmark baseline.
