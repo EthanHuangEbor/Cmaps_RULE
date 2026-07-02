@@ -161,13 +161,14 @@ Implementation scope:
 
 - MLP uses the same engine-level split, train-only scaling, capped RUL labels, sliding windows, last-window test evaluation, metrics, and CSV schema as LSTM/GRU/CNN/TCN.
 - The model flattens each `(window_size, n_features)` tensor and feeds it through dense hidden blocks; `num_layers` controls the number of hidden dense blocks.
-- MLP is currently treated as a runnable baseline and smoke-tested extension, not as part of Paper 1's five-model representative matrix.
+- MLP is now available as a formal neural baseline matrix, while Paper 1's main narrative still remains centered on the original representative models unless the manuscript is intentionally expanded.
 - A CUDA smoke matrix has been run on FD001 and FD004 with seed 42; the small summary is stored in `reports/mlp_baseline_cuda_summary_2026-07-02.csv`, with notes in `reports/mlp_baseline_note_2026-07-02.md`.
+- A full FD001-FD004 x 3-seed MLP matrix has been run with CUDA; compact summaries are stored in `reports/mlp_full_matrix_summary_2026-07-02.csv` and `reports/mlp_full_matrix_vs_existing_test_ranks_2026-07-02.csv`.
 
-Optional CUDA mini-matrix:
+Full CUDA matrix command:
 
 ```powershell
-python scripts\run_research_matrix.py --out-root reports\tables\mlp_baseline --subsets FD001 FD004 --seeds 42 --deep-models mlp --deep-epochs 20 --patience 4 --skip-ml --skip-safety --device cuda
+python scripts\run_research_matrix.py --out-root reports\tables\mlp_full_matrix --subsets FD001 FD002 FD003 FD004 --seeds 42 43 44 --deep-models mlp --deep-epochs 60 --patience 8 --skip-ml --skip-safety --device cuda
 ```
 
 Dual-LSTM matrix:

@@ -46,7 +46,7 @@ Not changed:
 
 - Paper 1 five-model representative matrix remains Ridge, Random Forest, Gradient Boosting, GRU, and Safety-GRU.
 - `scripts/make_safety_benchmark_outputs.py` intentionally keeps `CORE_MATRIX_MODELS` unchanged.
-- Full FD001-FD004 multi-seed MLP matrix is not yet claimed as paper evidence.
+- Full FD001-FD004 multi-seed MLP matrix is now completed as a formal neural baseline comparison, but not yet folded into Paper 1 manuscript claims.
 
 ## CUDA Check
 
@@ -90,12 +90,11 @@ Test split only:
 
 These are single-seed, short-training smoke results. They verify integration and schema compatibility, but they should not be used as final paper evidence.
 
-## Next Decision
+## Full Matrix Follow-up
 
-If MLP should become a formal comparison model, run:
+The FD001-FD004 x 3-seed CUDA matrix has now been completed under `reports/tables/mlp_full_matrix`. Compact tracked summaries are available at:
 
-```powershell
-.\.venv\Scripts\python.exe scripts\run_research_matrix.py --out-root reports\tables\mlp_full_matrix --subsets FD001 FD002 FD003 FD004 --seeds 42 43 44 --deep-models mlp --deep-epochs 60 --patience 8 --skip-ml --skip-safety --device cuda
-```
+- `reports/mlp_full_matrix_summary_2026-07-02.csv`
+- `reports/mlp_full_matrix_vs_existing_test_ranks_2026-07-02.csv`
 
-Then decide whether to keep MLP as a supplement-only neural baseline or expand Paper 1 tables and figures from five representative models to six.
+Current interpretation: MLP is useful as a formal fixed-window neural baseline. It is not RMSE-best, but it provides a valuable contrast point because it performs competitively on selected optimistic-risk metrics, especially overestimation magnitude on FD001 and FD003.
