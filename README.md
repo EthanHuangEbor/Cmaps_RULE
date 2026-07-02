@@ -52,7 +52,7 @@ Implemented:
 | Layer | Models / modules | Status |
 | --- | --- | --- |
 | Classical ML | Ridge, Random Forest, Gradient Boosting, optional XGBoost | implemented |
-| Deep sequence | LSTM, GRU, 1D CNN | implemented |
+| Deep sequence | MLP, LSTM, GRU, 1D CNN, TCN | implemented |
 | Safety losses | MSE, critical MSE, asymmetric MSE, safety MSE | implemented |
 | Risk shaping | Cycle-consistent Dual-LSTM | implemented |
 | Evaluation | RMSE, MAE, NASA S-score, critical RMSE30/50, overestimation metrics, SARBI tables | implemented |
@@ -130,7 +130,7 @@ This verifies the pipeline with synthetic C-MAPSS-shaped data. It is not a resea
 ```powershell
 python scripts\make_demo_data.py --out-dir work\demo_raw --subset FD001
 python -m rul_prediction.train_ml --data-dir work\demo_raw --subset FD001 --out-dir work\demo_results\ml --window-size 20
-python -m rul_prediction.train_deep --data-dir work\demo_raw --subset FD001 --out-dir work\demo_results\deep --models lstm --epochs 2 --window-size 20
+python -m rul_prediction.train_deep --data-dir work\demo_raw --subset FD001 --out-dir work\demo_results\deep --models lstm mlp --epochs 2 --window-size 20
 python -m pytest -q
 ```
 
@@ -146,6 +146,28 @@ Focused GRU safety-loss ablation:
 
 ```powershell
 python scripts\run_deep_ablation_matrix.py --subsets FD001 FD002 FD003 FD004 --seeds 42 43 44 --models gru --skip-existing
+```
+
+
+### MLP Neural Baseline
+
+A multilayer perceptron is now available as a lightweight neural baseline:
+
+```powershell
+python -m rul_prediction.train_deep --data-dir data\raw --subset FD001 --out-dir reports\tables\mlp_baseline\fd001\seed_42\deep --models mlp --epochs 20 --patience 4 --window-size 30 --device cuda
+```
+
+Implementation scope:
+
+- MLP uses the same engine-level split, train-only scaling, capped RUL labels, sliding windows, last-window test evaluation, metrics, and CSV schema as LSTM/GRU/CNN/TCN.
+- The model flattens each `(window_size, n_features)` tensor and feeds it through dense hidden blocks; `num_layers` controls the number of hidden dense blocks.
+- MLP is currently treated as a runnable baseline and smoke-tested extension, not as part of Paper 1's five-model representative matrix.
+- A CUDA smoke matrix has been run on FD001 and FD004 with seed 42; the small summary is stored in `reports/mlp_baseline_cuda_summary_2026-07-02.csv`, with notes in `reports/mlp_baseline_note_2026-07-02.md`.
+
+Optional CUDA mini-matrix:
+
+```powershell
+python scripts\run_research_matrix.py --out-root reports\tables\mlp_baseline --subsets FD001 FD004 --seeds 42 --deep-models mlp --deep-epochs 20 --patience 4 --skip-ml --skip-safety --device cuda
 ```
 
 Dual-LSTM matrix:

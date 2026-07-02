@@ -149,7 +149,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--subset", default="FD001")
     parser.add_argument("--out-dir", default="reports/tables/fd001_deep")
     parser.add_argument("--job-name", default="", help="Optional experiment/job label for aggregation and traceability.")
-    parser.add_argument("--models", nargs="+", default=["lstm", "gru", "cnn"], choices=["lstm", "gru", "cnn", "tcn"])
+    parser.add_argument("--models", nargs="+", default=["lstm", "gru", "cnn"], choices=["lstm", "gru", "cnn", "tcn", "mlp"])
     parser.add_argument("--max-rul", type=int, default=130)
     parser.add_argument("--window-size", type=int, default=30)
     parser.add_argument("--stride", type=int, default=1)
@@ -171,7 +171,7 @@ def parse_args() -> argparse.Namespace:
         "--loss",
         default="mse",
         choices=["mse", "critical_mse", "asymmetric_mse", "safety_mse"],
-        help="Training loss. Safety-aware losses are intended for GRU/LSTM follow-up experiments.",
+        help="Training loss. Safety-aware losses are intended for neural follow-up experiments and should be interpreted as risk-profile shaping, not certification evidence.",
     )
     parser.add_argument("--critical-threshold", type=float, default=50.0)
     parser.add_argument("--critical-weight", type=float, default=2.0)

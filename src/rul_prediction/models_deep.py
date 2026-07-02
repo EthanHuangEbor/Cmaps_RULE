@@ -61,6 +61,7 @@ class RULSequenceModel(nn.Module):
         hidden_size: int = 64,
         dropout: float = 0.2,
         num_layers: int = 1,
+        window_size: int | None = None,
     ) -> None:
         super().__init__()
         self.model_type = model_type.lower()
@@ -106,6 +107,22 @@ class RULSequenceModel(nn.Module):
                 )
             self.encoder = nn.Sequential(*layers)
             encoder_size = hidden_size
+        elif self.model_type == "mlp":
+            if window_size is None:
+                raise ValueError("window_size is required for MLP models.")
+            layers = [nn.Flatten()]
+            in_features = window_size * input_size
+            for _ in range(max(1, num_layers)):
+                layers.extend(
+                    [
+                        nn.Linear(in_features, hidden_size),
+                        nn.ReLU(),
+                        nn.Dropout(dropout),
+                    ]
+                )
+                in_features = hidden_size
+            self.encoder = nn.Sequential(*layers)
+            encoder_size = hidden_size
         else:
             raise ValueError(f"Unsupported model_type: {model_type}")
 
@@ -124,6 +141,8 @@ class RULSequenceModel(nn.Module):
             encoded = hidden[-1]
         elif self.model_type == "tcn":
             encoded = self.encoder(x.transpose(1, 2))[:, :, -1]
+        elif self.model_type == "mlp":
+            encoded = self.encoder(x)
         else:
             encoded = self.encoder(x.transpose(1, 2)).squeeze(-1)
         return self.head(encoded)
@@ -222,6 +241,7 @@ def train_model(
         hidden_size=hidden_size,
         dropout=dropout,
         num_layers=num_layers,
+        window_size=x_train.shape[1],
     ).to(torch_device)
     train_loader = DataLoader(SequenceDataset(x_train, y_train), batch_size=batch_size, shuffle=True)
     validation_loader = DataLoader(SequenceDataset(x_validation, y_validation), batch_size=batch_size)

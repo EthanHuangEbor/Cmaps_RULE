@@ -22,11 +22,12 @@ def main() -> None:
     parser.add_argument("--seeds", nargs="+", type=int, default=[42, 43, 44])
     parser.add_argument("--window-size", type=int, default=30)
     parser.add_argument("--max-rul", type=int, default=130)
-    parser.add_argument("--deep-models", nargs="+", default=["lstm", "gru", "cnn"], choices=["lstm", "gru", "cnn", "tcn"])
+    parser.add_argument("--deep-models", nargs="+", default=["lstm", "gru", "cnn"], choices=["lstm", "gru", "cnn", "tcn", "mlp"])
     parser.add_argument("--deep-epochs", type=int, default=60)
     parser.add_argument("--deep-hidden-size", type=int, default=64)
     parser.add_argument("--deep-num-layers", type=int, default=1)
     parser.add_argument("--deep-dropout", type=float, default=0.2)
+    parser.add_argument("--device", default=None, help="Torch device for deep models, e.g. cuda or cpu.")
     parser.add_argument("--patience", type=int, default=8)
     parser.add_argument("--n-jobs", type=int, default=4)
     parser.add_argument("--skip-existing", action="store_true")
@@ -101,6 +102,7 @@ def main() -> None:
                         str(args.deep_num_layers),
                         "--dropout",
                         str(args.deep_dropout),
+                        *(["--device", args.device] if args.device else []),
                     ],
                     project_root,
                     deep_out / "metrics.csv" if args.skip_existing else None,

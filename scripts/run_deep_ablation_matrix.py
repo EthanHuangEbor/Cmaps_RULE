@@ -51,7 +51,8 @@ def main() -> None:
     parser.add_argument("--seeds", nargs="+", type=int, default=[42])
     parser.add_argument("--epochs", type=int, default=60)
     parser.add_argument("--patience", type=int, default=8)
-    parser.add_argument("--models", nargs="+", default=["gru"], choices=["lstm", "gru", "cnn", "tcn"])
+    parser.add_argument("--device", default=None, help="Torch device for deep models, e.g. cuda or cpu.")
+    parser.add_argument("--models", nargs="+", default=["gru"], choices=["lstm", "gru", "cnn", "tcn", "mlp"])
     parser.add_argument(
         "--jobs",
         nargs="+",
@@ -117,6 +118,7 @@ def main() -> None:
                     str(job["critical_weight"]),
                     "--over-weight",
                     str(job["over_weight"]),
+                    *(["--device", args.device] if args.device else []),
                 ]
                 run_command(command, project_root, out_dir / "metrics.csv" if args.skip_existing else None)
 
